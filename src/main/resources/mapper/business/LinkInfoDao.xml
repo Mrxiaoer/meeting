@@ -89,6 +89,9 @@
 			<if test="remarks != null">
 				remarks,
 			</if>
+			<if test="hasTarget != null">
+				has_target,
+			</if>
 			<if test="state != null">
 				state,
 			</if>
@@ -120,6 +123,9 @@
 			</if>
 			<if test="remarks != null">
 				#{remarks},
+			</if>
+			<if test="hasTarget != null">
+				#{hasTarget},
 			</if>
 			<if test="state != null">
 				#{state},
