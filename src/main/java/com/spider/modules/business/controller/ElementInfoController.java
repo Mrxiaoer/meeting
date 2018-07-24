@@ -16,7 +16,7 @@ import com.spider.common.utils.R;
 import com.spider.modules.business.entity.ElementInfoEntity;
 import com.spider.modules.business.service.ElementInfoService;
 /**
- * 信息项表信息
+ * 采集结果转化存储表
  * @author yaonuan
  * @data 2018年7月11日
  * version 1.0
