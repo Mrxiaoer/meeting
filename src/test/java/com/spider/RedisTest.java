@@ -11,7 +11,7 @@ import com.spider.common.utils.RedisUtils;
 import com.spider.modules.sys.entity.SysUserEntity;
 
 /**
- * redis测试
+ * redis的测试
  * 
  * @author maoxinmin
  */
