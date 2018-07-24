@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spider.modules.business.dao.LinkInfoDao">
+	<resultMap
+		type="com.spider.modules.business.entity.LinkInfoEntity"
+		id="resultMap">
+		<id column="link_id" property="linkId"/>
+		<result column="analog_id" property="analogId"/>
+		<result column="system" property="system"/>
+		<result column="module" property="module"/>
+		<result column="url" property="url"/>
+		<result column="is_login" property="isLogin"/>
+		<result column="create_time" property="createTime"/>
+		<result column="update_time" property="updateTime"/>
+		<result column="remarks" property="remarks"/>
+		<result column="has_target" property="hasTarget"/>
+		<result column="state" property="state"/>
+	</resultMap>
+	<sql id="Base_Column_List">
+		link_id,analog_id,system,module,url,is_login,create_time,update_time,remarks,has_target,state
+	</sql>
+	<!-- 查询所有数据 -->
+	<select id="selectAll"
+		resultType="com.spider.modules.business.entity.LinkInfoEntity">
+		select * from spider_link_info where state = 1 ORDER BY link_id DESC
+	</select>
+	<!-- 根据主键id查询数据 -->
+	<select id="queryById" parameterType="java.lang.Integer"
+		resultType="com.spider.modules.business.entity.LinkInfoEntity">
+		SELECT
+		*
+		FROM
+		spider_link_info
+		WHERE
+		state = 1 and link_id =
+		#{linkId}
+	</select>
+	<!-- 根据自定义条件查询数据 -->
+	<select id="queryTerm"
+		parameterType="com.spider.modules.business.entity.LinkInfoEntity"
+		resultMap="resultMap">
+		SELECT
+		*
+		FROM
+		spider_link_info
+		<where>
+			<!-- state = true -->
+			<if test="system != null and system.trim() != ''">
+				AND system LIKE CONCAT('%',#{ system },'%')
+			</if>
+			<if test="module != null and module.trim() != ''">
+				AND module LIKE CONCAT('%',#{ module },'%')
+			</if>
+			AND state = 1
+		</where>
+		ORDER BY link_id DESC
+	</select>
+	<!-- 添加数据 -->
+	<insert id="insert"
+		parameterType="com.spider.modules.business.entity.LinkInfoEntity"
+		useGeneratedKeys="true" keyProperty="linkId">
+		insert into spider_link_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="linkId != null">
+				link_id,
+			</if>
+			<if test="analogId != null">
+				analog_id,
+			</if>
+			<if test="system != null">
+				system,
+			</if>
+			<if test="module != null">
+				module,
+			</if>
+			<if test="url != null">
+				url,
+			</if>
+			<if test="isLogin != null">
+				is_login,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="remarks != null">
+				remarks,
+			</if>
+			<if test="state != null">
+				state,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="linkId != null">
+				#{linkId},
+			</if>
+			<if test="analogId != null">
+				#{analogId},
+			</if>
+			<if test="system != null">
+				#{system},
+			</if>
+			<if test="module != null">
+				#{module},
+			</if>
+			<if test="url != null">
+				#{url},
+			</if>
+			<if test="isLogin != null">
+				#{isLogin},
+			</if>
+			<if test="createTime != null">
+				#{createTime},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime},
+			</if>
+			<if test="remarks != null">
+				#{remarks},
+			</if>
+			<if test="state != null">
+				#{state},
+			</if>
+		</trim>
+	</insert>
+	<!-- 更新数据 -->
+	<update id="update"
+		parameterType="com.spider.modules.business.entity.LinkInfoEntity">
+		UPDATE spider_link_info
+		<set>
+			<if test="system != null and system.trim() != ''">
+				system = #{system},
+			</if>
+			<if test="module != null and module.trim() != ''">
+				module = #{module},
+			</if>
+			<if test="url != null and url.trim() != ''">
+				url = #{url},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime},
+			</if>
+			<if test="remarks != null and remarks.trim() != ''">
+				remarks = #{remarks},
+			</if>
+			<if test="hasTarget != null">
+				has_target = #{hasTarget},
+			</if>
+		</set>
+		where link_id = #{linkId}
+	</update>
+	<!-- 删除数据，逻辑删除 -->
+	<update id="deletebyLinkId">
+		UPDATE spider_link_info
+		<set>
+			state = 0
+		</set>
+		where link_id in
+		<foreach item="linkId" collection="linkIds" open="("
+			separator="," close=")">
+			#{linkId}
+		</foreach>
+	</update>
+</mapper>

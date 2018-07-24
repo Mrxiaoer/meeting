@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spider.modules.spider.dao.AnalogLoginDao">
+
+    <insert id="insertAnalogLogin" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `spider_analog_login`
+        (
+        <trim suffixOverrides=",">
+            <if test="id!=null">
+                `id`,
+            </if>
+            <if test="cookie!=null">
+                `cookie`,
+            </if>
+            <if test="host!=null">
+                `host`,
+            </if>
+            <if test="domain!=null">
+                `domain`,
+            </if>
+            <if test="loginButtonXpath!=null">
+                `login_button_xpath`,
+            </if>
+            <if test="isEnable!=null">
+                `is_enable`,
+            </if>
+            <if test="passwordXpath!=null">
+                `password_xpath`,
+            </if>
+            <if test="usernameXpath!=null">
+                `username_xpath`,
+            </if>
+            <if test="verifycodeXpath!=null">
+                `verifycode_xpath`,
+            </if>
+            <if test="password!=null">
+                `password`,
+            </if>
+            <if test="username!=null">
+                `username`,
+            </if>
+            <if test="verifycodeUrl!=null">
+                `verifycode_url`,
+            </if>
+            <if test="targetUrl!=null">
+                `target_url`,
+            </if>
+            <if test="nowUrl!=null">
+                `now_url`,
+            </if>
+            <if test="strOfIndex!=null">
+                `str_of_index`,
+            </if>
+        </trim>
+        )
+        VALUES
+        (
+        <trim suffixOverrides=",">
+            <if test="id!=null">
+                #{id},
+            </if>
+            <if test="cookie!=null">
+                #{cookie},
+            </if>
+            <if test="host!=null">
+                #{host},
+            </if>
+            <if test="domain!=null">
+                #{domain},
+            </if>
+            <if test="loginButtonXpath!=null">
+                #{loginButtonXpath},
+            </if>
+            <if test="isEnable!=null">
+                #{isEnable},
+            </if>
+            <if test="passwordXpath!=null">
+                #{passwordXpath},
+            </if>
+            <if test="usernameXpath!=null">
+                #{usernameXpath},
+            </if>
+            <if test="verifycodeXpath!=null">
+                #{verifycodeXpath},
+            </if>
+            <if test="password!=null">
+                #{password},
+            </if>
+            <if test="username!=null">
+                #{username},
+            </if>
+            <if test="verifycodeUrl!=null">
+                #{verifycodeUrl},
+            </if>
+            <if test="targetUrl!=null">
+                #{targetUrl},
+            </if>
+            <if test="nowUrl!=null">
+                #{nowUrl},
+            </if>
+            <if test="strOfIndex!=null">
+                #{strOfIndex},
+            </if>
+        </trim>
+        )
+    </insert>
+
+    <update id="updateAnalogLogin">
+        UPDATE `spider_analog_login`
+        SET
+        <trim suffixOverrides=",">
+            <if test="cookie != null and cookie!=''">
+                `cookie` = #{cookie},
+            </if>
+            <if test="host != null and host!=''">
+                `host` = #{host},
+            </if>
+            <if test="domain != null and domain!=''">
+                `domain` = #{domain},
+            </if>
+            <if test="loginButtonXpath != null and loginButtonXpath!=''">
+                `login_button_xpath` = #{loginButtonXpath},
+            </if>
+            <if test="isEnable != null">
+                `is_enable` = #{isEnable},
+            </if>
+            <if test="passwordXpath != null and passwordXpath!=''">
+                `password_xpath` = #{passwordXpath},
+            </if>
+            <if test="usernameXpath != null and usernameXpath!=''">
+                `username_xpath` = #{usernameXpath},
+            </if>
+            <if test="verifycodeXpath != null and verifycodeXpath!=''">
+                `verifycode_xpath` = #{verifycodeXpath},
+            </if>
+            <if test="password != null and password!=''">
+                `password` = #{password},
+            </if>
+            <if test="username != null and username!=''">
+                `username` = #{username},
+            </if>
+            <if test="verifycodeUrl != null and verifycodeUrl!=''">
+                `verifycode_url` = #{verifycodeUrl},
+            </if>
+            <if test="targetUrl != null and targetUrl!=''">
+                `target_url` = #{targetUrl},
+            </if>
+            <if test="nowUrl!=null and nowUrl!=''">
+                `now_url` = #{nowUrl},
+            </if>
+            <if test="strOfIndex!=null and strOfIndex!=''">
+                `str_of_index` = #{strOfIndex},
+            </if>
+        </trim>
+        WHERE
+        <trim suffixOverrides="and">
+            <if test="id != null and id!=''">
+                `id` = #{id} and
+            </if>
+            <if test="host != null and host!=''">
+                `host` = #{host} and
+            </if>
+        </trim>
+    </update>
+
+    <resultMap type="com.spider.modules.spider.entity.AnalogLoginEntity" id="AnalogLoginMap">
+        <result property="id" column="id"/>
+        <result property="cookie" column="cookie"/>
+        <result property="host" column="host"/>
+        <result property="domain" column="domain"/>
+        <result property="login_button_xpath" column="loginButtonXpath"/>
+        <result property="is_enable" column="isEnable"/>
+        <result property="password_xpath" column="passwordXpath"/>
+        <result property="username_xpath" column="usernameXpath"/>
+        <result property="verifycode_xpath" column="verifycodeXpath"/>
+        <result property="password" column="password"/>
+        <result property="username" column="username"/>
+        <result property="verifycode_url" column="verifycodeUrl"/>
+        <result property="target_url" column="targetUrl"/>
+        <result property="now_url" column="nowUrl"/>
+        <result property="str_of_index" column="strOfIndex"/>
+    </resultMap>
+
+    <select id="queryAnalogLogin" resultMap="AnalogLoginMap">
+        select
+        <include refid="allResult"></include>
+        from `spider_analog_login`
+        <trim prefix="where" suffixOverrides="and | or">
+            <if test="id != null">
+                `id` = #{id} and
+            </if>
+            <if test="cookie != null and cookie!=''">
+                `cookie` = #{cookie} and
+            </if>
+            <if test="host != null and host!=''">
+                `host` = #{host} and
+            </if>
+            <if test="domain != null and domain!=''">
+                `domain` = #{domain} and
+            </if>
+            <if test="loginButtonXpath != null">
+                `login_button_xpath` = #{loginButtonXpath} and
+            </if>
+            <if test="isEnable != null">
+                `is_enable` = #{isEnable} and
+            </if>
+            <if test="passwordXpath != null and passwordXpath!=''">
+                `password_xpath` = #{passwordXpath} and
+            </if>
+            <if test="usernameXpath != null and usernameXpath!=''">
+                `username_xpath` = #{usernameXpath} and
+            </if>
+            <if test="verifycodeXpath != null and verifycodeXpath!=''">
+                `verifycode_xpath` = #{verifycodeXpath} and
+            </if>
+            <if test="password != null and password!=''">
+                `password` = #{password} and
+            </if>
+            <if test="username != null and username!=''">
+                `username` = #{username} and
+            </if>
+            <if test="verifycodeUrl != null and verifycodeUrl!=''">
+                `verifycode_url` = #{verifycodeUrl} and
+            </if>
+            <if test="targetUrl != null and targetUrl!=''">
+                `target_url` = #{targetUrl} and
+            </if>
+            <if test="nowUrl != null and nowUrl!=''">
+                `now_url` = #{nowUrl} and
+            </if>
+            <if test="strOfIndex != null and strOfIndex!=''">
+                `str_of_index` = #{strOfIndex} and
+            </if>
+        </trim>
+    </select>
+
+    <select id="queryAnalogLoginLimit1" resultMap="AnalogLoginMap">
+        select
+        <include refid="allResult"></include>
+        from `spider_analog_login`
+        <trim prefix="where" suffixOverrides="and | or">
+            <if test="id != null">
+                `id` = #{id} and
+            </if>
+            <if test="cookie != null and cookie!=''">
+                `cookie` = #{cookie} and
+            </if>
+            <if test="host != null and host!=''">
+                `host` = #{host} and
+            </if>
+            <if test="domain != null and domain!=''">
+                `domain` = #{domain} and
+            </if>
+            <if test="loginButtonXpath != null">
+                `login_button_xpath` = #{loginButtonXpath} and
+            </if>
+            <if test="isEnable != null">
+                `is_enable` = #{isEnable} and
+            </if>
+            <if test="passwordXpath != null and passwordXpath!=''">
+                `password_xpath` = #{passwordXpath} and
+            </if>
+            <if test="usernameXpath != null and usernameXpath!=''">
+                `username_xpath` = #{usernameXpath} and
+            </if>
+            <if test="verifycodeXpath != null and verifycodeXpath!=''">
+                `verifycode_xpath` = #{verifycodeXpath} and
+            </if>
+            <if test="password != null and password!=''">
+                `password` = #{password} and
+            </if>
+            <if test="username != null and username!=''">
+                `username` = #{username} and
+            </if>
+            <if test="verifycodeUrl != null and verifycodeUrl!=''">
+                `verifycode_url` = #{verifycodeUrl} and
+            </if>
+            <if test="targetUrl != null and targetUrl!=''">
+                `target_url` = #{targetUrl} and
+            </if>
+            <if test="nowUrl != null and nowUrl!=''">
+                `now_url` = #{nowUrl} and
+            </if>
+            <if test="strOfIndex != null and strOfIndex!=''">
+                `str_of_index` = #{strOfIndex} and
+            </if>
+        </trim>
+        limit 1
+    </select>
+
+    <select id="queryAnalogLoginByLinkId" resultMap="AnalogLoginMap">
+        select
+          sal.*
+        from spider_analog_login sal
+        LEFT JOIN spider_link_info sli
+          ON sal.id = sli.`analog_id`
+        WHERE sli.link_id=#{linkId}
+    </select>
+
+    <sql id="allResult">
+        <trim suffixOverrides=",">
+            `id`,
+            `cookie`,
+            `host`,
+            `domain`,
+            `login_button_xpath`,
+            `is_enable`,
+            `password_xpath`,
+            `username_xpath`,
+            `verifycode_xpath`,
+            `password`,
+            `username`,
+            `verifycode_url`,
+            `target_url`,
+            `now_url`,
+            `str_of_index`,
+        </trim>
+    </sql>
+
+</mapper>

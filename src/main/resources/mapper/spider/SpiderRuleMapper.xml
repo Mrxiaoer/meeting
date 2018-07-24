@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spider.modules.spider.dao.SpigerRuleDao">
+
+    <insert id="insertOne" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `spider_rule`
+        (
+        <trim suffixOverrides=",">
+            <if test="id!=null">
+                `id`,
+            </if>
+            <if test="isGetText!=null">
+                `is_get_text`,
+            </if>
+            <if test="regex!=null">
+                `regex`,
+            </if>
+            <if test="replacement!=null">
+                `replacement`,
+            </if>
+            <if test="xpath!=null">
+                `xpath`,
+            </if>
+        </trim>
+        )
+        VALUES
+        (
+        <trim suffixOverrides=",">
+            <if test="id!=null">
+                #{id},
+            </if>
+            <if test="isGetText!=null">
+                #{isGetText},
+            </if>
+            <if test="regex!=null">
+                #{regex},
+            </if>
+            <if test="replacement!=null">
+                #{replacement},
+            </if>
+            <if test="xpath!=null">
+                #{xpath},
+            </if>
+        </trim>
+        )
+    </insert>
+
+
+    <update id="updateOne">
+        UPDATE `spider_rule`
+        SET
+        <trim suffixOverrides=",">
+            <if test="isGetText != null">
+                `is_get_text` = #{isGetText},
+            </if>
+            <if test="regex != null and regex!=''">
+                `regex` = #{regex},
+            </if>
+            <if test="replacement != null and replacement!=''">
+                `replacement` = #{replacement},
+            </if>
+            <if test="xpath != null and xpath!=''">
+                `xpath` = #{xpath},
+            </if>
+        </trim>
+        WHERE
+        <trim suffixOverrides="and">
+            `id` = #{id} and
+        </trim>
+    </update>
+
+    <resultMap type="com.spider.modules.spider.entity.SpiderRule" id="SpiderRuleMap">
+        <result property="id" column="id"/>
+        <result property="isGetText" column="is_get_text"/>
+        <result property="regex" column="regex"/>
+        <result property="replacement" column="replacement"/>
+        <result property="xpath" column="xpath"/>
+    </resultMap>
+
+    <select id="queryOne" resultMap="SpiderRuleMap">
+        select
+        <include refid="allResult"></include>
+        from `spider_rule`
+        <trim prefix="where" suffixOverrides="and | or">
+            <if test="id != null">
+                `id` = #{id} and
+            </if>
+            <if test="isGetText != null">
+                `is_get_text` = #{isGetText} and
+            </if>
+            <if test="regex != null and regex!=''">
+                `regex` = #{regex} and
+            </if>
+            <if test="replacement != null and replacement!=''">
+                `replacement` = #{replacement} and
+            </if>
+            <if test="xpath != null and xpath!=''">
+                `xpath` = #{xpath} and
+            </if>
+        </trim>
+        limit 1
+    </select>
+
+    <sql id="allResult">
+        <trim suffixOverrides=",">
+            `id`,
+            `is_get_text`+0 as `is_get_text`,
+            `regex`,
+            `replacement`,
+            `xpath`,
+        </trim>
+    </sql>
+
+</mapper>

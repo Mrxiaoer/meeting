@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.spider.modules.business.dao.ElementInfoDao">
+	<resultMap
+		type="com.spider.modules.business.entity.ElementInfoEntity"
+		id="resultMap">
+		<id column="element_id" property="elementId"/>
+		<result column="name_cn" property="nameCn"/>
+		<result column="name_en" property="nameEn"/>
+		<result column="source" property="source"/>
+		<result column="information_name" property="informationName"/>
+		<result column="type" property="type"/>
+		<result column="len" property="len"/>
+		<result column="remark" property="remark"/>
+		<result column="routine" property="routine"/>
+		<result column="result_id" property="resultId"/>
+		<result column="state" property="state"/>
+	</resultMap>
+	<sql id="Base_Column_List">
+		element_id,name_cn,name_en,source,information_name,type,len,remark,routine,state
+	</sql>
+	<!-- 根据element_id查询数据 -->
+	<select id="queryById" parameterType="java.lang.Integer"
+		resultMap="resultMap">
+		select * from spider_element_info where state = "1" and
+		element_id = #{elementId}
+	</select>
+	<!-- 添加信息 -->
+	<insert id="insert"
+		parameterType="com.spider.modules.business.entity.ElementInfoEntity"
+		useGeneratedKeys="true" keyProperty="elementId">
+		insert into spider_link_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="elementId != null">
+				element_id,
+			</if>
+			<if test="nameCn != null">
+				name_cn,
+			</if>
+			<if test="nameEn != null">
+				name_en,
+			</if>
+			<if test="source != null">
+				source,
+			</if>
+			<if test="informationName != null">
+				information_name,
+			</if>
+			<if test="type != null">
+				type,
+			</if>
+			<if test="len != null">
+				len,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+			<if test="routine != null">
+				routine,
+			</if>
+			<if test="state != null">
+				state,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="elementId != null">
+				#{elementId},
+			</if>
+			<if test="nameCn != null">
+				#{nameCn},
+			</if>
+			<if test="nameEn != null">
+				#{nameEn},
+			</if>
+			<if test="source != null">
+				#{source},
+			</if>
+			<if test="informationName != null">
+				#{informationName},
+			</if>
+			<if test="type != null">
+				#{type},
+			</if>
+			<if test="len != null">
+				#{len},
+			</if>
+			<if test="remark != null">
+				#{remark},
+			</if>
+			<if test="routine != null">
+				#{routine},
+			</if>
+			<if test="state != null">
+				#{state},
+			</if>
+		</trim>
+	</insert>
+	
+	<!-- 更新数据 -->
+	<update id="update"
+		parameterType="com.spider.modules.business.entity.ElementInfoEntity">
+		update spider_element_info
+		<set>
+			<if test="nameCn != null and nameCn.trim() != ''">
+				name_cn = #{nameCn},
+			</if>
+			<if test="nameEn != null and nameEn.trim() != ''">
+				name_en = #{nameEn},
+			</if>
+			<if test="source != null and source.trim() != ''">
+				source = #{source},
+			</if>
+			<if test="informationName != null and informationName.trim() != ''">
+				information_name = #{informationName},
+			</if>
+			<if test="type != null and type.trim() != ''">
+				type = #{type},
+			</if>
+			<if test="len != null and len.trim() != ''">
+				len = #{len},
+			</if>
+			<if test="remark != null and remark.trim() != ''">
+				remark = #{remark},
+			</if>
+			<if test="routine != null and routine.trim() != ''">
+				routine = #{routine},
+			</if>
+		</set>
+		where state = "1" and element_id = #{elementId}
+	</update>
+	<!-- 数据逻辑删除，根据element_id -->
+	<update id="delete">
+		UPDATE spider_element_info
+		<set>
+			state = 0
+		</set>
+		where element_id in
+		<foreach item="elementId" collection="elementIds" open="("
+			separator="," close=")">
+			#{elementId}
+		</foreach>
+	</update>
+</mapper>

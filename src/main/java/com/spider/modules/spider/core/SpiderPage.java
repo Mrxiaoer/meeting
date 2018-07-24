@@ -1,0 +1,70 @@
+package com.spider.modules.spider.core;
+
+import cn.hutool.core.lang.Assert;
+import com.spider.modules.spider.downloader.HttpClientDownloader;
+import com.spider.modules.spider.downloader.SeleniumDownloader;
+import com.spider.modules.spider.entity.SpiderRule;
+import com.spider.modules.spider.pipeline.SpiderContentPipeline;
+import com.spider.modules.spider.processor.SpiderPageProcessor;
+import org.openqa.selenium.Cookie;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import us.codecraft.webmagic.Spider;
+import us.codecraft.webmagic.pipeline.Pipeline;
+
+import java.util.Set;
+
+/**
+ * 爬取页面
+ * ------------------------------
+ *
+ * @Author : lolilijve
+ * @Email : 1042703214@qq.com
+ * @Date : 2018-06-21
+ */
+@Service
+public class SpiderPage extends AbstractSpider {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(SpiderPage.class);
+
+	private final SpiderContentPipeline spiderContentPipeline;
+
+	private final SeleniumDownloader seleniumDownloader;
+
+	@Autowired
+	public SpiderPage(SpiderContentPipeline spiderContentPipeline, SeleniumDownloader seleniumDownloader) {
+		this.spiderContentPipeline = spiderContentPipeline;
+		this.seleniumDownloader = seleniumDownloader;
+	}
+
+	@Override
+	public void startSpider(int linkId, String url, boolean allDomain, boolean isStaticPage, SpiderRule spiderRule, Set<Cookie> cookieSet,
+	                        Pipeline pipeline) {
+
+		Assert.notEmpty(url, "爬取页面URL不能为空");
+
+		if (pipeline == null) {
+			pipeline = spiderContentPipeline;
+		}
+
+		SpiderPageProcessor processor = new SpiderPageProcessor(allDomain, spiderRule);
+		processor.setLinkId(linkId);
+		processor.setCookies(cookieSet);
+		Spider spider = Spider.create(processor).addUrl(url).addPipeline(pipeline);
+		if (!isStaticPage) {
+			spider.setDownloader(seleniumDownloader);
+		} else {
+			spider.setDownloader(new HttpClientDownloader());
+		}
+		//开启n个线程抓取
+		this.setThreadCount(5);
+		spider.thread(this.getThreadCount())
+				//启动爬虫
+				.run();
+		LOGGER.info("爬取页面内容完成：url = " + url);
+
+	}
+
+}

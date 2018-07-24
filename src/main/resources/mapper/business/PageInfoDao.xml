@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spider.modules.business.dao.PageInfoDao">
+	<resultMap
+		type="com.spider.modules.business.entity.PageInfoEntity" id="resultMap">
+		<id column="page_id" property="pageId"/>
+		<result column="name_cn" property="nameCn"/>
+		<result column="name_en" property="nameEn"/>
+		<result column="information_name" property="informationName"/>
+		<result column="create_time" property="createTime"/>
+		<result column="update_time" property="updateTime"/>
+		<result column="is_change" property="isChange"/>
+		<result column="result_id" property="resultId"/>
+		<result column="state" property="state"/>
+		<association property="link" javaType="com.spider.modules.business.entity.LinkInfoEntity">
+			<result column="system" property="system"/>
+			<result column="module" property="module"/>
+			<result column="url" property="url"/>
+		</association>
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		page_id,name_cn,name_en,information_name,create_time,update_time,is_change,result_id,state
+	</sql>
+	<!-- 根据page_id查询数据 -->
+	<select id="queryById" parameterType="java.lang.Integer"
+		resultMap="resultMap">
+		select * from spider_page_info where is_change = 0 and state = 1 and
+		page_id = #{pageId}
+	</select>
+	<!-- 根据结果表中的id查询数据 -->
+	<select id="queryByResultId" parameterType="java.lang.Integer" resultMap="resultMap">
+		SELECT
+			*
+		FROM
+			spider_page_info
+		WHERE
+			is_change = 0
+		AND state = 1
+		AND result_id = #{resultId}
+	</select>
+	
+	<!-- 采集结果=>查看=>详情 -->
+	<select id="queryByPageId" parameterType="java.lang.Integer" resultMap="resultMap">
+		SELECT
+			name_cn,name_en,creat_time,l.system,l.url
+		FROM
+			spider_page_info p
+		LEFT JOIN spider_result_info r ON p.result_id = r.id
+		LEFT JOIN spider_link_info l ON l.link_id = r.link_id
+		WHERE
+			p.page_id = 70
+	</select>
+	
+	<!-- 更新数据 -->
+	<update id="update"
+		parameterType="com.spider.modules.business.entity.PageInfoEntity">
+		update spider_page_info
+		<set>
+			<if test="nameCn != null and nameCn.trim() != ''">
+				name_cn = #{nameCn},
+			</if>
+			<if test="nameEn != null and nameEn.trim() != ''">
+				name_en = #{nameEn},
+			</if>
+			<if test="informationName != null and informationName.trim() != ''">
+				information_name = #{informationName},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime},
+			</if>
+			<if test="isChange != null">
+				is_change = #{isChange},
+			</if>
+			<if test="state != null">
+				state = #{state},
+			</if>
+		</set>
+		where page_id = #{pageId}
+	</update>
+	
+	<!-- 插入数据 -->
+	<insert id="insert" parameterType="com.spider.modules.business.entity.PageInfoEntity" useGeneratedKeys="true" keyProperty="pageId">
+		insert into spider_page_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="pageId != null">
+				page_id,
+			</if>
+			<if test="nameCn != null">
+				name_cn,
+			</if>
+			<if test="nameEn != null">
+				name_en,
+			</if>
+			<if test="informationName != null">
+				information_name,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="isChange != null">
+				is_change,
+			</if>
+			<if test="resultId != null">
+				result_id,
+			</if>
+			<if test="state != null">
+				state,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="pageId != null">
+				#{pageId},
+			</if>
+			<if test="nameCn != null">
+				#{nameCn},
+			</if>
+			<if test="nameEn != null">
+				#{nameEn},
+			</if>
+			<if test="informationName != null">
+				#{informationName},
+			</if>
+			<if test="createTime != null">
+				#{createTime},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime},
+			</if>
+			<if test="isChange != null">
+				#{isChange},
+			</if>
+			<if test="resultId != null">
+				#{resultId},
+			</if>
+			<if test="state != null">
+				#{state},
+			</if>
+		</trim>
+	</insert>
+	<!-- 数据逻辑删除，根据element_id -->
+	<update id="delete">
+		UPDATE spider_page_info
+		<set>
+			state = 0
+		</set>
+		where page_id in
+		<foreach item="pageId" collection="pageIds" open="("
+			separator="," close=")">
+			#{pageId}
+		</foreach>
+	</update>
+</mapper>
