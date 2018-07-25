@@ -28,10 +28,9 @@ public class HtmlProcess {
 	@Autowired
 	private TemporaryRecordDao temporaryRecordDao;
 
-	public List<String> process(String url, SpiderRule spiderRule) {
-		TemporaryRecordEntity temporaryRecord = new TemporaryRecordEntity();
-		temporaryRecord.setUrl(url);
-		Html html = Html.create(temporaryRecordDao.selectOne(temporaryRecord).getHtml());
+	public List<String> process(TemporaryRecordEntity temporaryRecord, SpiderRule spiderRule) {
+	    temporaryRecord = temporaryRecordDao.selectOne(temporaryRecord);
+		Html html = Html.create(temporaryRecord!=null?temporaryRecord.getHtml():null);
 
 		if (StrUtil.isEmpty(spiderRule.getXpath())) {
 			spiderRule.setXpath("/html");

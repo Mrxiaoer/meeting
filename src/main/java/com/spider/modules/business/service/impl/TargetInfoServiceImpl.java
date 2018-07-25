@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.persistence.Transient;
 import javax.transaction.Transactional;
 
-import org.apache.xalan.xsltc.compiler.sym;
 import org.openqa.selenium.Cookie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -108,7 +108,6 @@ public class TargetInfoServiceImpl implements TargetInfoService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
         if(cookies != null) {
             LinkInfoEntity linkInfo = new LinkInfoEntity();
             linkInfo.setHasTarget(Constant.SUPER_ADMIN);
@@ -117,74 +116,50 @@ public class TargetInfoServiceImpl implements TargetInfoService {
         }
         LinkInfoEntity link = linkInfoService.queryById(targetInfo.getLinkId());
         //模拟登录后采集目标页
-        SpiderRule spiderRule = new SpiderRule();
+       /* SpiderRule spiderRule = new SpiderRule();
         spiderRule.setIsGetText(false);
-        spiderPage.startSpider(targetInfo.getLinkId(), targetInfo.getUrl(), false, false, spiderRule, cookies, spiderTemporaryRecordPipeline);
+        spiderPage.startSpider(targetInfo.getLinkId(), targetInfo.getUrl(), false, false, spiderRule, cookies, spiderTemporaryRecordPipeline);*/
         
         return link;
     }
     
-    /*
-     * cookie的问题需要解决
-     */
     @Override
     public TemporaryRecordEntity tothirdspider(Integer linkId) {
-        
         LinkInfoEntity linkInfo = linkInfoService.queryById(linkId);
         AnalogLoginEntity analogLogin = analogLoginService.getOneById(linkInfo.getAnalogId());
-        //解决cookie String转map
+        //解决cookie String转Set<cookie>
         String cookie = analogLogin.getCookie();
         System.err.println(cookie.length());
-        Integer j = 1;
-        for(int i=1;i<cookie.length()-1;i++) {
-            if(cookie.substring(i, i+1) != ";") {
-              System.err.println(cookie.substring(i,i+1));;
-            }else {
-                String key = cookie.substring(j, i+1);
-                j=i+1;
-                System.err.println(key);
-            }
-            
-        }
-        System.err.println(analogLogin.getCookie());
-        
+        Set<Cookie> cookies = MyStringUtil.json2cookie(cookie);
         SpiderRule spiderRule = new SpiderRule();
         spiderRule.setIsGetText(false);
-        
-     /*   Set<Cookie> cookies = analogLogin.getCookie();
-        spiderPage.startSpider(analogLogin.getTargetUrl(), false, false, spiderRule, analogLogin.getCookie(), 
-                spiderTemporaryRecordPipeline);*/
-        
-        TemporaryRecordEntity rc = new TemporaryRecordEntity();
-        rc.setLinkId(linkId);
-        rc.setUrl(linkInfo.getUrl());
-        
-        return  temporaryRecordDao.selectOne(rc);
+        spiderPage.startSpider(linkId, analogLogin.getTargetUrl(), false, false, spiderRule, cookies, spiderTemporaryRecordPipeline);
+        return  temporaryRecordService.queryBylinkId(linkId);
         
     }
-    /**
-     * 页面爬取获得list<String>
-     * 同时插入resultinfo与pageinfo表中
-     * 并返回给前端处理类
-     */
+
     @Override
+    @Transactional
     public Map<String,Object> getXpath(Map<String, Object> params) {
         String xpath = (String) params.get("xpath");
         Integer linkId = (Integer) params.get("linkId");
         LinkInfoEntity linkInfo = linkInfoService.queryById(linkId);
-        String url = linkInfo.getUrl();
+        
+        //组装解析表头信息
         SpiderRule spiderRule = new SpiderRule();
         spiderRule.setXpath(xpath);
-        List<String> spiderHead = htmlprocess.process(url, spiderRule);
+        TemporaryRecordEntity te = new TemporaryRecordEntity();
+        te.setLinkId(linkId);
+        te.setUrl(linkInfo.getUrl());
+        List<String> spiderHead = htmlprocess.process(te, spiderRule);
         ResultInfoEntity resultInfo = new ResultInfoEntity();
         resultInfo.setSystem(linkInfo.getSystem());
         resultInfo.setModule(linkInfo.getModule());
         resultInfo.setCreatTime(new Date());
         resultInfo.setLinkId(linkInfo.getLinkId());
         resultInfoService.save(resultInfo);
-        /**
-         * 采集到的表头插入数据库中
-         */
+        
+         //采集到的表头插入数据库中
         for(String vaule:spiderHead) {
            PageInfoEntity pageInfo = new PageInfoEntity();
            pageInfo.setNameCn(vaule);
@@ -193,15 +168,13 @@ public class TargetInfoServiceImpl implements TargetInfoService {
            pageInfo.setNameEn(myStringUtil.getPinYinHeadChar(vaule));
            pageInfoService.save(pageInfo);
         }
-        /**
-         * 采集的结果返回给前端
-         */
+         //采集的结果返回给前端
         List<PageInfoEntity> pageInfos = pageInfoService.queryByResultId(resultInfo.getId());
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("pageInfos", pageInfos);
         return map;
-        
     }
+    
     @Override
     public void updateHead(Map<String, Object> params) {
         String AllinformationName = (String) params.get("informationName");

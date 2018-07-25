@@ -76,8 +76,6 @@ public class TargetInfoController {
     @GetMapping("/spdier_point")
     public R getOneById(@RequestParam Integer linkId) {
        TemporaryRecordEntity temporary = targetInfoService.tothirdspider(linkId);
-        
-//        TemporaryRecordEntity temporaryRecord = temporaryRecordService.getOneByUrl(linkInfo.getUrl());
         return R.ok().put("temporary", temporary);
         
     }

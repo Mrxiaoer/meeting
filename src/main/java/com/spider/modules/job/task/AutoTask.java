@@ -5,6 +5,7 @@ import com.spider.modules.spider.core.LoginAnalog;
 import com.spider.modules.spider.core.SpiderPage;
 import com.spider.modules.spider.entity.AnalogLoginEntity;
 import com.spider.modules.spider.entity.SpiderRule;
+import com.spider.modules.spider.entity.TemporaryRecordEntity;
 import com.spider.modules.spider.pipeline.SpiderTemporaryRecordPipeline;
 import com.spider.modules.spider.service.AnalogLoginService;
 import org.openqa.selenium.Cookie;
@@ -55,7 +56,11 @@ public class AutoTask {
 
 		//@todo
 		SpiderRule spiderRule2 = new SpiderRule();
-		htmlProcess.process(LoginInfo.getTargetUrl(), spiderRule2);
+		//修改了htmlProcess.process(LoginInfo.getTargetUrl(), spiderRule2);  yaonuan0725
+		TemporaryRecordEntity temporaryRecord = new TemporaryRecordEntity();
+		temporaryRecord.setUrl(LoginInfo.getTargetUrl());
+		temporaryRecord.setLinkId(Integer.parseInt(params));
+		htmlProcess.process(temporaryRecord, spiderRule2);
 
 	}
 }

@@ -47,7 +47,9 @@ public class LinkInfoController {
     @GetMapping("/list")
     public R queryTerm(@RequestParam Map<String,Object> params){
         PageUtils page = linkInfoService.queryTerm(params);
-        return R.ok().put("page", page);
+        return R.ok().put("totalCount",page.getTotalCount()).put("pageSize", page.getPageSize())
+                .put("totalPage", page.getTotalPage()).put("currPage", page.getCurrPage())
+                .put("list", page.getList());
     }
     
     /**
