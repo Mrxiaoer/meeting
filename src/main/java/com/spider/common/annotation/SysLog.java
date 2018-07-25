@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 /**
  * 系统日志注解
  * 
- * @author maoxinmin
+ * @author maoxinmin 1.0
  */
 @Target(ElementType.METHOD) // 方法声明
 @Retention(RetentionPolicy.RUNTIME) // 注释将由编译器记录在类文件中，并由VM在运行时保留，因此可以反射读取

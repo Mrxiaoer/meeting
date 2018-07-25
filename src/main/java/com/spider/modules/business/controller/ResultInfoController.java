@@ -39,7 +39,9 @@ public class ResultInfoController {
     @GetMapping("/list")
     public R queryTerm(@RequestParam Map<String,Object> params) {
         PageUtils page = resultInfoService.queryTerm(params);
-        return R.ok().put("page",page);
+        return R.ok().put("totalCount",page.getTotalCount()).put("pageSize", page.getPageSize())
+                .put("totalPage", page.getTotalPage()).put("currPage", page.getCurrPage())
+                .put("list", page.getList());
     }
     
     /**
@@ -93,7 +95,9 @@ public class ResultInfoController {
     @GetMapping("/is_model")
     public R seeModel(@RequestParam Map<String,Object> params) {
         PageUtils page = resultInfoService.queryModel(params);
-        return R.ok().put("page", page);
+        return R.ok().put("totalCount",page.getTotalCount()).put("pageSize", page.getPageSize())
+                .put("totalPage", page.getTotalPage()).put("currPage", page.getCurrPage())
+                .put("list", page.getList());
     }
     
     /**

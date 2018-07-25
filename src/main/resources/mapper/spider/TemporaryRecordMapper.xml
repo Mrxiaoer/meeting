@@ -117,7 +117,7 @@
                 `create_time` = #{createTime} and
             </if>
         </trim>
-        limit 1
+        order by update_time limit 1
     </select>
 
     <sql id="allResult">

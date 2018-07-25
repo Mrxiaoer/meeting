@@ -2,6 +2,11 @@ package com.spider.modules.business.model;
 
 import java.io.Serializable;
 
+/**
+ * 信息转化前端接收的model
+ * @author yaonuan
+ * version 1.0
+ */
 public class ProvisionalEntity implements Serializable{
 
     private static final long serialVersionUID = 1L;
