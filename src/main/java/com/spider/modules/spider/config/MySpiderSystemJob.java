@@ -28,7 +28,6 @@ public class MySpiderSystemJob {
 	 */
 	@Scheduled(cron = "0 0 0/3 * * *")
 	public void cleanEveryDay() {
-		//todo
 		PhantomJSDriver theDriver;
 		try {
 			logger.info(phantomJSDriverPool.listAllObjects().toString());
