@@ -32,7 +32,6 @@ public class WebMagicConfig {
 		                   Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("")).getPath() + this.selenuimConfig);
 	}
 
-	//todo 池
 	@Bean(name = "phantomJSDriverPool")
 	@Autowired
 	public PhantomJSDriverPool newPool(PhantomJSDriverFactory phantomJSDriverFactory) {

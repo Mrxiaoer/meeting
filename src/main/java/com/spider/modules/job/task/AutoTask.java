@@ -25,17 +25,22 @@ import java.util.Set;
  */
 @Component("autoTask")
 public class AutoTask {
+	private final AnalogLoginService analogLoginService;
+	private final LoginAnalog loginAnalog;
+	private final SpiderTemporaryRecordPipeline spiderTemporaryRecordPipeline;
+	private final SpiderPage spiderPage;
+	private final HtmlProcess htmlProcess;
 	private Logger logger = LoggerFactory.getLogger(getClass());
+
 	@Autowired
-	private AnalogLoginService analogLoginService;
-	@Autowired
-	private LoginAnalog loginAnalog;
-	@Autowired
-	private SpiderTemporaryRecordPipeline spiderTemporaryRecordPipeline;
-	@Autowired
-	private SpiderPage spiderPage;
-	@Autowired
-	private HtmlProcess htmlProcess;
+	public AutoTask(AnalogLoginService analogLoginService, LoginAnalog loginAnalog, SpiderTemporaryRecordPipeline spiderTemporaryRecordPipeline,
+	                SpiderPage spiderPage, HtmlProcess htmlProcess) {
+		this.analogLoginService = analogLoginService;
+		this.loginAnalog = loginAnalog;
+		this.spiderTemporaryRecordPipeline = spiderTemporaryRecordPipeline;
+		this.spiderPage = spiderPage;
+		this.htmlProcess = htmlProcess;
+	}
 
 	public void autoCrawl(String params) throws Exception {
 		logger.info("自动爬取方法autoCrawl正在被执行，站点参数为：" + params);
