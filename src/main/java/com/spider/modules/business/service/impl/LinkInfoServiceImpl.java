@@ -60,25 +60,19 @@ public class LinkInfoServiceImpl extends ServiceImpl<LinkInfoDao, LinkInfoEntity
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void save(Map<String,Object> params) {
+    public void save(LinkInfoEntity linkInfo) {
         AnalogLoginEntity analogLogin = new AnalogLoginEntity();
         
         //在AnalogLoginEntity表中存用户爬取的url
-        analogLogin.setTargetUrl((String) params.get("url"));
+        analogLogin.setTargetUrl(linkInfo.getUrl());
         if(analogLogin.getId() !=null) {
             analogLogin.setId(null);
         }
         analogLoginService.saveAnalogLogin(analogLogin);
         
         
-        LinkInfoEntity linkInfo = new LinkInfoEntity();
+        
         linkInfo.setAnalogId(analogLogin.getId());
-        System.err.println(analogLogin.getId());
-        linkInfo.setSystem((String) params.get("system"));
-        linkInfo.setModule((String) params.get("mpdule"));
-        linkInfo.setUrl((String) params.get("url"));
-        linkInfo.setIsLogin((Integer) params.get("isLogin"));
-        linkInfo.setRemarks((String) params.get("remarks"));
         linkInfo.setCreateTime(new Date());
         linkInfo.setUpdateTime(new Date());
         if(linkInfo.getLinkId() != null) {

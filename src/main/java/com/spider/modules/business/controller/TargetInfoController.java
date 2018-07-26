@@ -20,6 +20,8 @@ import com.spider.modules.business.service.TargetInfoService;
 import com.spider.modules.spider.entity.TemporaryRecordEntity;
 import com.spider.modules.spider.service.AnalogLoginService;
 import com.spider.modules.spider.service.TemporaryRecordService;
+
+import us.codecraft.webmagic.selector.Html;
 /**
  * 采集页
  * @author yaonuan
@@ -49,9 +51,13 @@ public class TargetInfoController {
      * @return
      */
     @GetMapping("/analog_login_one")
-    public R tospider(@RequestParam Integer linkId) {
-        String html = targetInfoService.tospider(linkId);
-        return  R.ok().put("Html", html);
+    public R tospider(@RequestParam Map<String,Object> params) {
+        System.err.println(params);
+        System.err.println(params.get("id"));
+       /* String html = targetInfoService.tospider(linkId);
+        Html content =  Html.create(html);
+        return  R.ok().put("Html", content);*/
+        return R.ok();
     }
     
     /**

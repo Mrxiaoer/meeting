@@ -60,7 +60,7 @@ public class LinkInfoController {
     @GetMapping("/info/{linkId}")
     public R selectByPrimaryKey(@PathVariable("linkId") Integer linkId){
         LinkInfoEntity linkInfo = linkInfoService.queryById(linkId);
-        return R.ok().put("linkInfo", linkInfo);
+        return R.ok().put("list", linkInfo);
     }
     
     /**
@@ -68,9 +68,9 @@ public class LinkInfoController {
      * @return
      */
     @PostMapping("/save")
-    public R insert(@RequestBody Map<String,Object> params){
+    public R insert(@RequestBody LinkInfoEntity linkInfo){
         
-        linkInfoService.save(params);
+        linkInfoService.save(linkInfo);
         return R.ok();
     }
     
@@ -79,7 +79,7 @@ public class LinkInfoController {
      * @param record
      * @return
      */
-    @PutMapping("/update")
+    @PostMapping("/update")
     public R update(@RequestBody LinkInfoEntity linkInfo){
         linkInfoService.update(linkInfo);
         return R.ok();
@@ -90,7 +90,7 @@ public class LinkInfoController {
      * @param ids
      * @return
      */
-    @DeleteMapping("/delete")
+    @PostMapping("/delete")
     public R delete(@RequestBody Integer[] linkIds){
         linkInfoService.deletebyLinkId(linkIds);
         return R.ok();
