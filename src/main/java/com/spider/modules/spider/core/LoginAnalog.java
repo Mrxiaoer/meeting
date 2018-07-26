@@ -79,9 +79,11 @@ public class LoginAnalog {
 			//执行时间超出预算的话中断并抛出异常
 			Class[] paramClzs = {String.class};
 			Object[] paramObjs = {targetUrl};
-			int timeOut = 5000;
+			int timeOut = 8000;
 			try {
+				long startTime = System.currentTimeMillis();
 				RunTimeout.timeoutMethod(driver, "get", paramClzs, paramObjs, timeOut);
+				logger.info("点击事件耗时{}毫秒！", System.currentTimeMillis() - startTime);
 			} catch (RuntimeException re) {
 				//让程序继续往下执行
 				logger.info("获取页面超过{}毫秒！停止等待，向下执行！", timeOut);
@@ -114,8 +116,8 @@ public class LoginAnalog {
 					ChaoJiYingResult cjyResult = null;
 					if (verifycodeUrl != null) {
 						//截取验证码
-						Map<String, Object> jtResult = jieTu
-								.savePage2Pic(verifycodeUrl, cookieSet, "vc-" + System.currentTimeMillis() + "-" + new Random().nextInt(100));
+						Map<String, Object> jtResult =
+								jieTu.savePage2Pic(verifycodeUrl, cookieSet, "vc-" + System.currentTimeMillis() + "-" + new Random().nextInt(100));
 						cookieSet = (Set<Cookie>) jtResult.get(SpiderConstant.COOKIES);
 						//超级鹰解析验证码
 						int cjyTry = 0;
@@ -165,9 +167,11 @@ public class LoginAnalog {
 						//执行时间超出预算的话中断并抛出异常
 						Class[] paramClzs1 = {};
 						Object[] paramObjs1 = {};
-						int outTime = 5000;
+						int outTime = 8000;
 						try {
+							long startTime = System.currentTimeMillis();
 							RunTimeout.timeoutMethod(loginButtonElement, "click", paramClzs1, paramObjs1, outTime);
+							logger.info("点击事件耗时{}毫秒！", System.currentTimeMillis() - startTime);
 						} catch (RuntimeException re) {
 							logger.info("点击事件耗时超过{}毫秒！停止等待，向下执行！", outTime);
 						} catch (Exception e) {
@@ -181,8 +185,7 @@ public class LoginAnalog {
 							Thread.sleep(1000);
 							sleepNum++;
 						}
-						System.out.println(sleepNum);
-						System.out.println(driver.getCurrentUrl());
+						logger.info("当前页URL：{}", driver.getCurrentUrl());
 					} catch (Exception e) {
 						throw e;
 					} finally {

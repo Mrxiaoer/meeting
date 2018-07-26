@@ -66,7 +66,6 @@ public class JieTu {
 					}
 				}
 				phantomjsDriver.get(url);
-				System.out.println(phantomjsDriver.manage().getCookies().toString());
 
 				//放大图片
 				phantomjsDriver.executeScript("document.body.getElementsByTagName(\"img\")[0].setAttribute('style', 'width: 100% !important')");

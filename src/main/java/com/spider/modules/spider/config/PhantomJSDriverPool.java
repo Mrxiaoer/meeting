@@ -5,6 +5,8 @@ import org.apache.commons.pool2.impl.AbandonedConfig;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * ------------------------------
@@ -14,6 +16,8 @@ import org.openqa.selenium.phantomjs.PhantomJSDriver;
  * @Date : 2018-07-19
  */
 public class PhantomJSDriverPool extends GenericObjectPool<PhantomJSDriver> {
+
+	Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	public PhantomJSDriverPool(PooledObjectFactory<PhantomJSDriver> factory) {
 		super(factory);
@@ -31,7 +35,7 @@ public class PhantomJSDriverPool extends GenericObjectPool<PhantomJSDriver> {
 	public PhantomJSDriver borrowPhantomJSDriver() throws Exception {
 		long start = System.currentTimeMillis();
 		PhantomJSDriver phantomJSDriver = this.borrowObject();
-		System.out.println("获取PhantomJSDriver实际耗时：" + (System.currentTimeMillis() - start) + "毫秒");
+		logger.info("获取PhantomJSDriver实际耗时：{}毫秒", (System.currentTimeMillis() - start));
 
 		return phantomJSDriver;
 	}

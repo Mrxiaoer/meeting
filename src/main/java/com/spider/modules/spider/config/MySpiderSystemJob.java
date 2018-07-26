@@ -46,21 +46,6 @@ public class MySpiderSystemJob {
 	//测试用
 //	@Scheduled(cron = "0/2 * * * * *")
 	public void testclean() {
-		//		try {
-		//			long start = System.currentTimeMillis();
-		//			PhantomJSDriver xxx = phantomJSDriverPool.borrowObject(500);
-		//			System.out.println("获取driver实际耗时：" + (System.currentTimeMillis() - start) + "毫秒");
-		//
-		//			for(int i=0;i<10;i++){
-		//				xxx.get("http://115.233.227.46:18080/zqdata/login");
-		//			}
-		//
-		//			System.out.println(xxx.getWindowHandles());
-		//			System.out.println(xxx.getCurrentUrl());
-		//			phantomJSDriverPool.returnObject(xxx);
-		//		} catch (Exception e) {
-		//			e.printStackTrace();
-		//		}
 		PhantomJSDriver xxx;
 		for (int i = 0; i < 1; i++) {
 			try {
@@ -72,14 +57,6 @@ public class MySpiderSystemJob {
 			}
 		}
 		System.out.println(phantomJSDriverPool.listAllObjects());
-		//		try {
-		//			xxx = phantomJSDriverPool.borrowObject();
-		//			xxx.quit();
-		//			phantomJSDriverPool.invalidateObject(xxx);
-		//
-		//		} catch (Exception e) {
-		//			e.printStackTrace();
-		//		}
 	}
 
 }
