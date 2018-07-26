@@ -36,7 +36,7 @@ public interface LinkInfoService {
      * 添加链接信息
      * @param params
      */
-    void save(Map<String,Object> params);
+    void save(LinkInfoEntity linkInfo);
     
     /**
      * 更新链接信息
