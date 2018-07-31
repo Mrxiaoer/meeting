@@ -19,7 +19,8 @@ public class RunTimeout {
 	 * @param timeout
 	 * @return
 	 */
-	public static String timeoutMethod(Object obj, String methodName, Class<?>[] parameterTypes, Object[] params, int timeout) {
+	public static String timeoutMethod(Object obj, String methodName, Class<?>[] parameterTypes, Object[] params, int timeout)
+			throws ExecutionException, InterruptedException {
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		String result = null;
 		//		ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -39,12 +40,9 @@ public class RunTimeout {
 		executorService.execute(futureTask);
 		try {
 			result = futureTask.get(timeout, TimeUnit.MILLISECONDS);
-		} catch (InterruptedException e) {
+		} catch (InterruptedException | ExecutionException e) {
 			futureTask.cancel(true);
-			System.out.println("方法执行中断！");
-		} catch (ExecutionException e) {
-			futureTask.cancel(true);
-			System.out.println("Excution异常！");
+			throw e;
 		} catch (TimeoutException e) {
 			futureTask.cancel(true);
 			throw new RuntimeException("执行超时！", e);

@@ -24,6 +24,8 @@ public class SpiderConstant {
 
 	public static final String IMAGE_PATH = "imageLocalPath";
 
+	public static final String IMAGE_BUFFER = "imageBuffer";
+
 	//自定义分隔符
 	public static final String SEPARATOR = "<&fgf$>";
 

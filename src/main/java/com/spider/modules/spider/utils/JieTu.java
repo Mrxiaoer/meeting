@@ -14,13 +14,13 @@ import org.springframework.stereotype.Component;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 /**
- * 截图
- * ------------------------------
+ * 截图 ------------------------------
  *
  * @Author : lolilijve
  * @Email : 1042703214@qq.com
@@ -37,6 +37,10 @@ public class JieTu {
 
 	public Map<String, Object> savePage2Pic(String url, Set<Cookie> cookies, String fileName) {
 		PhantomJSDriver phantomjsDriver = null;
+		Calendar cal = Calendar.getInstance();
+		int year = cal.get(Calendar.YEAR);
+		int month = cal.get(Calendar.MONTH) + 1;
+		int day = cal.get(Calendar.DATE);
 		Map<String, Object> resultMap = new HashMap<>(4);
 		try {
 			phantomjsDriver = phantomJSDriverPool.borrowPhantomJSDriver();
@@ -45,7 +49,7 @@ public class JieTu {
 		}
 		try {
 			assert (phantomjsDriver != null);
-			String imageLocalPath = imagePath + fileName + ".jpg";
+			String imageLocalPath = imagePath + year + "-" + month + "-" + day + "/" + fileName + ".jpg";
 			try {
 				phantomjsDriver.get(url);
 				phantomjsDriver.manage().deleteAllCookies();
@@ -66,14 +70,18 @@ public class JieTu {
 					}
 				}
 				phantomjsDriver.get(url);
-				System.out.println(phantomjsDriver.manage().getCookies().toString());
 
 				//放大图片
-				phantomjsDriver.executeScript("document.body.getElementsByTagName(\"img\")[0].setAttribute('style', 'width: 100% !important')");
+				phantomjsDriver.executeScript(
+						"document.body.getElementsByTagName(\"img\")[0].setAttribute('style', 'width: 100% !important;height: 100% !important')");
 				File scrFile = phantomjsDriver.getScreenshotAs(OutputType.FILE);
 				BufferedImage bufferedImage = ImageIO.read(scrFile);
 				//压缩存储
-				ImageUtil.scale(bufferedImage, new File(imageLocalPath), 0.5F);
+				File destFile = new File(imageLocalPath);
+				if (!destFile.exists()) {
+					destFile.mkdirs();
+				}
+				ImageUtil.scale(bufferedImage, destFile, 0.5F);
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
