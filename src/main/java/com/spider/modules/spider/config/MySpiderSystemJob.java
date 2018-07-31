@@ -26,7 +26,7 @@ public class MySpiderSystemJob {
 	/**
 	 * 定时清除driver
 	 */
-	@Scheduled(cron = "0 0 0/3 * * *")
+	@Scheduled(cron = "0 0 0/12 * * *")
 	public void cleanEveryDay() {
 		PhantomJSDriver theDriver;
 		try {

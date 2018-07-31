@@ -9,10 +9,7 @@ import com.spider.modules.spider.config.SpiderConstant;
 import com.spider.modules.spider.dao.AnalogLoginDao;
 import com.spider.modules.spider.entity.AnalogLoginEntity;
 import com.spider.modules.spider.entity.ChaoJiYingResult;
-import com.spider.modules.spider.utils.ChaoJiYing;
-import com.spider.modules.spider.utils.JieTu;
-import com.spider.modules.spider.utils.MyStringUtil;
-import com.spider.modules.spider.utils.RunTimeout;
+import com.spider.modules.spider.utils.*;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
@@ -22,13 +19,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.util.Calendar;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
 /**
- * 模拟登录
- * ------------------------------
+ * 模拟登录 ------------------------------
  *
  * @Author : lolilijve
  * @Email : 1042703214@qq.com
@@ -47,6 +45,8 @@ public class LoginAnalog {
 	private String cjyPassword;
 	@Value("${chaojiying.softId}")
 	private String cjySoftId;
+	@Value("${image.p-path}")
+	private String destDir;
 
 	@Autowired
 	public LoginAnalog(AnalogLoginDao analogLoginDao, JieTu jieTu, PhantomJSDriverPool phantomJSDriverPool) {
@@ -98,10 +98,14 @@ public class LoginAnalog {
 			String beforeUrl = driver.getCurrentUrl();
 			//url相同说明可直接获取目标页
 			if (!beforeUrl.equals(targetUrl)) {
+				Calendar cal = Calendar.getInstance();
+				int year = cal.get(Calendar.YEAR);
+				int month = cal.get(Calendar.MONTH) + 1;
+				int day = cal.get(Calendar.DATE);
 				//尝试2次
 				boolean flag = true;
 				int tryNum = 0;
-				int maxTry = 2;
+				int maxTry = 3;
 				while (flag && tryNum < maxTry) {
 					loginInfo = analogLoginDao.queryAnalogLoginLimit1(sie);
 					String usernameXpath = loginInfo.getUsernameXpath();
@@ -119,26 +123,35 @@ public class LoginAnalog {
 						Map<String, Object> jtResult =
 								jieTu.savePage2Pic(verifycodeUrl, cookieSet, "vc-" + System.currentTimeMillis() + "-" + new Random().nextInt(100));
 						cookieSet = (Set<Cookie>) jtResult.get(SpiderConstant.COOKIES);
-						//超级鹰解析验证码
 						int cjyTry = 0;
 						boolean cjyFlag = true;
-						while (cjyTry < 3 && cjyFlag) {
-							String cjyBack = ChaoJiYing
-									.PostPic(cjyUsername, cjyPassword, "896782", "1902", "0", jtResult.get(SpiderConstant.IMAGE_PATH).toString());
-							cjyResult = JSONUtil.toBean(cjyBack, ChaoJiYingResult.class);
-							cjyTry++;
-							if ("-3001".equals(cjyResult.getErr_no()) || "-3002".equals(cjyResult.getErr_no())) {
-								logger.info("==>超级鹰--请求超时！重试");
-								continue;
-							}
-							if (StrUtil.isBlank(cjyResult.getPic_str())) {
-								continue;
-							}
-							verifyCodeValue = cjyResult.getPic_str();
+
+						if (tryNum < 1) {
+							//ocr解析验证码
+							File file = new File(jtResult.get(SpiderConstant.IMAGE_PATH).toString());
+							PicUril.cleanLinesInImage(file, destDir + year + "-" + month + "-" + day);
+							verifyCodeValue = OCRUtil.identifyCode(file);
 							cjyFlag = false;
+						} else {
+							while (cjyTry < 3 && cjyFlag) {
+								//超级鹰解析验证码
+								String cjyBack = ChaoJiYing.PostPic(cjyUsername, cjyPassword, cjySoftId, "1902", "0",
+								                                    jtResult.get(SpiderConstant.IMAGE_PATH).toString());
+								cjyResult = JSONUtil.toBean(cjyBack, ChaoJiYingResult.class);
+								cjyTry++;
+								if ("-3001".equals(cjyResult.getErr_no()) || "-3002".equals(cjyResult.getErr_no())) {
+									logger.info("==>超级鹰--请求超时！重试");
+									continue;
+								}
+								if (StrUtil.isBlank(cjyResult.getPic_str())) {
+									continue;
+								}
+								verifyCodeValue = cjyResult.getPic_str();
+								cjyFlag = false;
+							}
 						}
 						if (cjyFlag) {
-							logger.info("==>超级鹰--失败次数过多");
+							logger.info("==>解析验证码--失败次数过多");
 						}
 					}
 
@@ -154,7 +167,7 @@ public class LoginAnalog {
 						if (StrUtil.isNotBlank(verifyCodeXpath)) {
 							WebElement verifyCodeElement = driver.findElementByXPath(verifyCodeXpath);
 							verifyCodeElement.clear();
-							verifyCodeElement.sendKeys(cjyResult != null ? cjyResult.getPic_str() : null);
+							verifyCodeElement.sendKeys(verifyCodeValue);
 							logger.info("用户名：{} ；密码：{} ；验证码：{} ；", usernameElement.getAttribute("value"), passwordElement.getAttribute("value"),
 							            verifyCodeElement.getAttribute("value"));
 							logger.info("==>模拟登录--有验证码，进行尝试，URL=" + targetUrl);
