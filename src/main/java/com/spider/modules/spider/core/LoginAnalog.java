@@ -229,8 +229,6 @@ public class LoginAnalog {
 				loginInfo.setCookie(MyStringUtil.cookie2json(resultCookies));
 				resultCookies = driver.manage().getCookies();
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		} finally {
 			phantomJSDriverPool.returnObject(driver);
 		}

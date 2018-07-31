@@ -141,7 +141,11 @@ public class SpiderTestController {
 	@RequestMapping("/jietu")
 	public void jietu() {
 
-		jieTu.savePage2Pic("http://115.233.227.46:18080/zqdata/login/verifyCode?random=0.7304289337922849", null, "vc-" + System.currentTimeMillis());
+		try {
+			jieTu.savePage2Pic("http://115.233.227.46:18080/zqdata/login/verifyCode?random=0.7304289337922849", null, "vc-" + System.currentTimeMillis());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 	}
 
@@ -163,9 +167,14 @@ public class SpiderTestController {
 		element2.sendKeys("1223");
 		System.out.println(element2.getAttribute("value"));
 		WebElement element3 = driver.findElementByXPath("//*[@id=\"verifyCodeId\"]");
-		Map<String, Object> jtResult = jieTu
-				.savePage2Pic("http://114.55.11.227:8881/citysystemgz/verifyCode/slogin.do?random=0.8938614707267099", null,
-				              "vc-" + System.currentTimeMillis() + "-" + new Random().nextInt(100));
+		Map<String, Object> jtResult = null;
+		try {
+			jtResult = jieTu
+					.savePage2Pic("http://114.55.11.227:8881/citysystemgz/verifyCode/slogin.do?random=0.8938614707267099", null,
+					              "vc-" + System.currentTimeMillis() + "-" + new Random().nextInt(100));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		String cjyBack = ChaoJiYing.PostPic("chenxiaoqi", "123456", "896782", "1902", "0", jtResult.get(SpiderConstant.IMAGE_PATH).toString());
 		ChaoJiYingResult cjyResult = JSONUtil.toBean(cjyBack, ChaoJiYingResult.class);
 		element3.clear();
