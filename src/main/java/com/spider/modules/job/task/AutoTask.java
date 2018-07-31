@@ -1,6 +1,7 @@
 package com.spider.modules.job.task;
 
 import com.spider.modules.spider.core.HtmlProcess;
+import com.spider.modules.spider.core.LoginAnalog;
 import com.spider.modules.spider.core.SpiderPage;
 import com.spider.modules.spider.entity.AnalogLoginEntity;
 import com.spider.modules.spider.entity.SpiderRule;
