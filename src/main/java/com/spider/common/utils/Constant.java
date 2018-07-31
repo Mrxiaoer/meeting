@@ -11,6 +11,10 @@ public class Constant {
 	
 	public static final String TRUE_STATE = "1";
 
+	public static  final  int VALUE_ZERO = 0;
+
+	public static final  int VALUE_TWO = 2;
+
 	/**
 	 * 菜单类型
 	 */

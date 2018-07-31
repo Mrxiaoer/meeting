@@ -1,11 +1,9 @@
 package com.spider.modules.business.controller;
 
 
+import com.spider.modules.business.entity.PageInfoEntity;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.spider.common.utils.R;
 import com.spider.modules.business.model.ProvisionalEntity;
@@ -23,13 +21,19 @@ public class PageInfoController {
 
     @Autowired
     PageInfoService pageInfoService;
-    
+
+    @GetMapping("/query_id/{id}")
+    public R queryById(@PathVariable Integer id){
+        PageInfoEntity pageInfo = pageInfoService.queryById(id);
+        return R.ok().put("list",pageInfo);
+    }
+
     /**
      * 信息转化
      * @param provisional
      * @return
      */
-    @PutMapping("/chang_data")
+    @PostMapping("/chang_data")
     public R update(@RequestBody ProvisionalEntity provisional) 
     {
         pageInfoService.updatePageAndElement(provisional);

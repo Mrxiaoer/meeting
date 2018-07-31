@@ -39,72 +39,92 @@ public class ElementInfoEntity implements Serializable{
     //存在状态（1.存在;0.删除）
     @JsonIgnore
     private Integer state;
-    
+
     public Integer getElementId() {
         return elementId;
     }
+
     public void setElementId(Integer elementId) {
         this.elementId = elementId;
     }
+
     public String getNameCn() {
         return nameCn;
     }
+
     public void setNameCn(String nameCn) {
         this.nameCn = nameCn;
     }
+
     public String getNameEn() {
         return nameEn;
     }
+
     public void setNameEn(String nameEn) {
         this.nameEn = nameEn;
     }
+
     public String getSource() {
         return source;
     }
+
     public void setSource(String source) {
         this.source = source;
     }
+
     public String getInformationName() {
         return informationName;
     }
+
     public void setInformationName(String informationName) {
         this.informationName = informationName;
     }
+
     public String getType() {
         return type;
     }
+
     public void setType(String type) {
         this.type = type;
     }
+
     public Integer getLen() {
         return len;
     }
+
     public void setLen(Integer len) {
         this.len = len;
     }
+
     public String getRemark() {
         return remark;
     }
+
     public void setRemark(String remark) {
         this.remark = remark;
     }
-    public String getRoutine() {
-        return routine;
-    }
-    public void setRoutine(String routine) {
-        this.routine = routine;
-    }
+
     public Integer getResultId() {
         return resultId;
     }
+
     public void setResultId(Integer resultId) {
         this.resultId = resultId;
     }
+
+    public String getRoutine() {
+        return routine;
+    }
+
+    public void setRoutine(String routine) {
+        this.routine = routine;
+    }
+
     public Integer getState() {
         return state;
     }
+
     public void setState(Integer state) {
         this.state = state;
     }
-    
 }

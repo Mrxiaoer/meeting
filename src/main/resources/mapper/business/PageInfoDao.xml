@@ -29,7 +29,7 @@
 		select * from spider_page_info where is_change = 0 and state = 1 and
 		page_id = #{pageId}
 	</select>
-	<!-- 根据结果表中的id查询数据 -->
+	<!-- 根据结果表中的id查询未转化数据 -->
 	<select id="queryByResultId" parameterType="java.lang.Integer" resultMap="resultMap">
 		SELECT
 			*
@@ -39,6 +39,21 @@
 			is_change = 0
 		AND state = 1
 		AND result_id = #{resultId}
+	</select>
+
+	<!-- 根据结果表中的resultid查询 -->
+	<select id="listByResultId" parameterType="java.lang.Integer" resultMap="resultMap">
+		SELECT
+			*
+		FROM
+			spider_page_info
+		WHERE
+	  	state = 1
+		AND result_id = #{resultId}
+	</select>
+
+	<select id="querySum" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM spider_page_info WHERE state = 1 AND result_id = #{id}
 	</select>
 	
 	<!-- 采集结果=>查看=>详情 -->
@@ -50,7 +65,7 @@
 		LEFT JOIN spider_result_info r ON p.result_id = r.id
 		LEFT JOIN spider_link_info l ON l.link_id = r.link_id
 		WHERE
-			p.page_id = 70
+			p.page_id = #{pageId}
 	</select>
 	
 	<!-- 更新数据 -->

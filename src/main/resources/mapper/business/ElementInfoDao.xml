@@ -5,7 +5,7 @@
 	namespace="com.spider.modules.business.dao.ElementInfoDao">
 	<resultMap
 		type="com.spider.modules.business.entity.ElementInfoEntity"
-		id="resultMap">
+		id="Base_ResultMap">
 		<id column="element_id" property="elementId"/>
 		<result column="name_cn" property="nameCn"/>
 		<result column="name_en" property="nameEn"/>
@@ -19,11 +19,11 @@
 		<result column="state" property="state"/>
 	</resultMap>
 	<sql id="Base_Column_List">
-		element_id,name_cn,name_en,source,information_name,type,len,remark,routine,state
+		element_id,name_cn,name_en,source,information_name,type,len,remark,routine,result_id,state
 	</sql>
 	<!-- 根据element_id查询数据 -->
 	<select id="queryById" parameterType="java.lang.Integer"
-		resultMap="resultMap">
+		resultMap="Base_ResultMap">
 		select * from spider_element_info where state = "1" and
 		element_id = #{elementId}
 	</select>
@@ -31,7 +31,7 @@
 	<insert id="insert"
 		parameterType="com.spider.modules.business.entity.ElementInfoEntity"
 		useGeneratedKeys="true" keyProperty="elementId">
-		insert into spider_link_info
+		insert into spider_element_info
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="elementId != null">
 				element_id,
@@ -56,6 +56,9 @@
 			</if>
 			<if test="remark != null">
 				remark,
+			</if>
+			<if test="resultId != null">
+				result_id,
 			</if>
 			<if test="routine != null">
 				routine,
@@ -88,6 +91,9 @@
 			</if>
 			<if test="remark != null">
 				#{remark},
+			</if>
+			<if test="resultId != null">
+				#{resultId},
 			</if>
 			<if test="routine != null">
 				#{routine},

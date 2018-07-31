@@ -27,14 +27,16 @@ public class ResultInfoEntity  implements Serializable{
     
     //创建时间
     @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss",locale="zh",timezone="GMT+8")
-    private Date creatTime;
+    private Date createTime;
     
     //是否是模板
     private Integer isModel;
     
     //链接信息表的主键
     private Integer linkId;
-    
+
+    //是否转化<0、未转化 1、转化未完全 2、转化完全>
+    private Integer changeState;
     //存在状态（1.存在;0.删除）
     private Integer state;
     
@@ -44,7 +46,7 @@ public class ResultInfoEntity  implements Serializable{
     
     @Transient
     private List<ElementInfoEntity> elementInfo;
-    
+
 
     public Integer getId() {
         return id;
@@ -70,12 +72,12 @@ public class ResultInfoEntity  implements Serializable{
         this.module = module;
     }
 
-    public Date getCreatTime() {
-        return creatTime;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setCreatTime(Date creatTime) {
-        this.creatTime = creatTime;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     public Integer getIsModel() {
@@ -92,6 +94,14 @@ public class ResultInfoEntity  implements Serializable{
 
     public void setLinkId(Integer linkId) {
         this.linkId = linkId;
+    }
+
+    public Integer getChangeState() {
+        return changeState;
+    }
+
+    public void setChangeState(Integer changeState) {
+        this.changeState = changeState;
     }
 
     public Integer getState() {
@@ -117,7 +127,4 @@ public class ResultInfoEntity  implements Serializable{
     public void setElementInfo(List<ElementInfoEntity> elementInfo) {
         this.elementInfo = elementInfo;
     }
-
-   
-    
 }

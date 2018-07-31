@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.spider.common.utils.PageUtils;
+import com.spider.modules.business.entity.PageInfoEntity;
 import com.spider.modules.business.entity.ResultInfoEntity;
 
 public interface ResultInfoService {
@@ -44,5 +45,24 @@ public interface ResultInfoService {
     /**
      * 比对
      */
-    Map<String,Object> comparison(Integer currentId,Integer modelId);
+    List<PageInfoEntity> comparison(Integer id);
+
+    /**
+     * 数据转换
+     * @param id
+     * @return
+     */
+    List<ResultInfoEntity> resultByPageInfo(Integer id);
+
+    /**
+     * 采集结果=>查看=>详情
+     * param id
+     */
+    List<ResultInfoEntity> conversionByInformation(Integer linkId);
+
+    /**
+     * 设置模板或取消模板
+     * @param id
+     */
+    void setTemplate(Integer id);
 }

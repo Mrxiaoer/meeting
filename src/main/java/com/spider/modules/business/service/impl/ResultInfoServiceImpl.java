@@ -51,28 +51,49 @@ public class ResultInfoServiceImpl extends ServiceImpl<ResultInfoDao, ResultInfo
     public List<ResultInfoEntity> queryByResultId(Integer resultId) {
         return resultInfoDao.queryByResultId(resultId);
     }
-    
+
+    @Override
+    public  List<ResultInfoEntity> conversionByInformation(Integer linkId){
+        List<ResultInfoEntity> resultIns = resultInfoDao.conversionByInformation(linkId);
+        return  resultIns;
+    }
+
     @Override
     public List<Map<String, Object>> querySum() {
         return resultInfoDao.querySum();
     }
-    
+
+    @Override
     public void save(ResultInfoEntity resultInfo) {
         resultInfoDao.insert(resultInfo);
     }
 
+    @Override
+    public  void setTemplate(Integer id){
+        ResultInfoEntity rs = resultInfoDao.queryById(id);
+        ResultInfoEntity qs = new ResultInfoEntity();
+        qs.setId(id);
+        System.out.println(rs.getIsModel());
+        if(rs.getIsModel() == Constant.VALUE_ZERO){
+            qs.setIsModel(Constant.SUPER_ADMIN);
+        }else{
+            qs.setIsModel(Constant.VALUE_ZERO);
+        }
+        resultInfoDao.update(qs);
+    }
     
     @Override
-    public Map<String,Object> comparison(Integer currentId,Integer modelId) {
-        
-        List<PageInfoEntity> currentDataList = pageInfoService.queryByResultId(currentId);
-        List<PageInfoEntity> lastDataList = pageInfoService.queryByResultId(modelId);
-        Map<String,Object> map = new HashMap<>();
-        map.put("currentDataList", currentDataList);
-        map.put("lastDataList", lastDataList);
-        return map;
+    public List<PageInfoEntity> comparison(Integer id) {
+        List<PageInfoEntity> pageInfos = pageInfoService.listByResultId(id);
+        return pageInfos;
     }
 
-
+    @Override
+    public  List<ResultInfoEntity> resultByPageInfo(Integer id){
+        ResultInfoEntity rs = new ResultInfoEntity();
+        rs.setId(id);
+        List<ResultInfoEntity> resultInfos = resultInfoDao.listByResultId(rs);
+        return  resultInfos;
+    }
 
 }

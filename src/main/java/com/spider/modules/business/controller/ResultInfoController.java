@@ -3,11 +3,9 @@ package com.spider.modules.business.controller;
 import java.util.List;
 import java.util.Map;
 
+import com.spider.modules.business.dao.PageInfoDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.spider.common.utils.PageUtils;
 import com.spider.common.utils.R;
@@ -27,10 +25,13 @@ public class ResultInfoController {
     
     @Autowired
     ResultInfoService resultInfoService;
+
+    @Autowired
+    PageInfoDao pageInfoDao;
     
     @Autowired
     PageInfoService pageInfoService;
-    
+
     /**
      * 采集结果数据、分页
      * @param 可根据系统名查看
@@ -39,13 +40,12 @@ public class ResultInfoController {
     @GetMapping("/list")
     public R queryTerm(@RequestParam Map<String,Object> params) {
         PageUtils page = resultInfoService.queryTerm(params);
-        return R.ok().put("totalCount",page.getTotalCount()).put("pageSize", page.getPageSize())
-                .put("totalPage", page.getTotalPage()).put("currPage", page.getCurrPage())
-                .put("list", page.getList());
+        return R.ok().put("list",page.getList()).put("page", page);
     }
     
     /**
      * 采集结果的详细信息
+     * 多表查采集结果中element信息
      * 采集结果=>查看
      * @param resultId
      * @return
@@ -53,9 +53,21 @@ public class ResultInfoController {
     @GetMapping("/query_result_id")
     public R queryByResultId(@RequestParam Integer resultId) {
         List<PageInfoEntity> pageInfos = pageInfoService.queryByResultId(resultId);
-        return R.ok().put("pageInfos", pageInfos);
+        return R.ok().put("pageInfo", pageInfos);
     }
-    
+
+    /**
+     * 采集结果转换=>数据转换
+     * @param id => resultId
+     * @return
+     */
+    @GetMapping("/datachallege")
+    public R resultByPageInfo(@RequestParam("resultId") Integer id){
+        System.out.println(id);
+        List<ResultInfoEntity> resultInfos = resultInfoService.resultByPageInfo(id);
+        Integer  totalCount = pageInfoDao.querySum(id);
+        return R.ok().put("resultInfos",resultInfos).put("totalCount",totalCount);
+    }
     /**
      * 资源目录
      * @return
@@ -88,27 +100,38 @@ public class ResultInfoController {
         return R.ok().put("pageInfo", pageInfo);
     }
 
+
     /**
-           * 查看模板
+     * 查看模板
      * @return
      */
     @GetMapping("/is_model")
     public R seeModel(@RequestParam Map<String,Object> params) {
         PageUtils page = resultInfoService.queryModel(params);
-        return R.ok().put("totalCount",page.getTotalCount()).put("pageSize", page.getPageSize())
-                .put("totalPage", page.getTotalPage()).put("currPage", page.getCurrPage())
-                .put("list", page.getList());
+        return R.ok().put("page", page).put("list", page.getList());
     }
-    
+
+    @GetMapping("set_template")
+    public R setTemplate(@RequestParam Integer id){
+        resultInfoService.setTemplate(id);
+        return R.ok();
+    }
+
     /**
-         * 比对
-     * @param resultId
+     * 采集结果比对
+     * @param id
      * @return
      */
-    @GetMapping("/comparison")
-    public R comparison(@RequestParam("currentId") Integer currentId,
-                        @RequestParam("modelId") Integer modelId) {
-        Map<String, Object> map = resultInfoService.comparison(currentId, modelId);
-        return R.ok().put("lastDataList", map.get("lastDataList")).put("currentDataList", map.get("currentDataList"));
+        @PostMapping("/comparison")
+    public R comparison(@RequestBody Integer id) {
+        List<PageInfoEntity> pageInfos = resultInfoService.comparison(id);
+        return R.ok().put("list",pageInfos);
+    }
+
+    @GetMapping("/conversion/{id}")
+    public R conversionByInformation(@RequestParam("id") Integer linkId){
+            System.out.println(linkId);
+        List<ResultInfoEntity> results = resultInfoService.conversionByInformation(linkId);
+        return R.ok().put("results",results);
     }
 }

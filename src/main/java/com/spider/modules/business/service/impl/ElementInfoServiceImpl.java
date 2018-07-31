@@ -25,11 +25,15 @@ public class ElementInfoServiceImpl extends ServiceImpl<ElementInfoDao, ElementI
     @Override
     public PageUtils queryTerm(Map<String, Object> params) {
         String state = Constant.TRUE_STATE;
-        String informationName = (String) params.get("informationName");
+        /*String informationName = (String) params.get("informationName");*/
         String nameCn = (String) params.get("nameCn");
-        Page<ElementInfoEntity> page = this.selectPage(new Query<ElementInfoEntity>(params).getPage(),
+        Integer resultId = Integer.parseInt(String.valueOf(params.get("resultId")));
+        /*Page<ElementInfoEntity> page = this.selectPage(new Query<ElementInfoEntity>(params).getPage(),
                         new EntityWrapper<ElementInfoEntity>().like(StringUtils.isNotBlank(nameCn), "name_cn",nameCn)
-                        .and().like(StringUtils.isNotBlank(informationName), "information_name",informationName).eq("state", state));
+                        .and().like(StringUtils.isNotBlank(informationName), "information_name",informationName).eq("state", state));*/
+        Page<ElementInfoEntity> page = this.selectPage(new Query<ElementInfoEntity>(params).getPage(),
+                new EntityWrapper<ElementInfoEntity>().like(StringUtils.isNotBlank(nameCn), "name_cn",nameCn)
+                        .eq("state", state).and().eq("result_id",resultId));
         return new PageUtils(page);
     }
 

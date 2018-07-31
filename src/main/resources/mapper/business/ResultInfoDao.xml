@@ -6,8 +6,9 @@
 		<id column="id" property="id"/>
 		<result column="system" property="system"/>
 		<result column="module" property="module"/>
-		<result column="creat_time" property="creatTime"/>
+		<result column="create_time" property="createTime"/>
 		<result column="is_model" property="isModel"/>
+        <result column="change_state" property="changeState" />
 		<result column="link_id" property="linkId"/>
 		<result column="state" property="state"/>
 	</resultMap>
@@ -17,9 +18,10 @@
 		<id column="id" property="id"/>
 		<result column="system" property="system"/>
 		<result column="module" property="module"/>
-		<result column="creat_time" property="creatTime"/>
+		<result column="create_time" property="createTime"/>
 		<result column="is_model" property="isModel"/>
 		<result column="link_id" property="linkId"/>
+        <result column="change_state" property="changeState" />
 		<result column="state" property="state"/>
 		<collection property="pageInfo" ofType="com.spider.modules.business.entity.PageInfoEntity">
 			<id column="page_id" property="pageId"/>
@@ -38,9 +40,10 @@
 		<id column="id" property="id"/>
 		<result column="system" property="system"/>
 		<result column="module" property="module"/>
-		<result column="creat_time" property="creatTime"/>
+		<result column="create_time" property="createTime"/>
 		<result column="is_model" property="isModel"/>
 		<result column="link_id" property="linkId"/>
+        <result column="change_state" property="changeState" />
 		<result column="state" property="state"/>
 		<collection property="elementInfo" ofType="com.spider.modules.business.entity.ElementInfoEntity">
 			<id column="element_id" property="elementId"/>
@@ -59,7 +62,7 @@
 
 	
 	<sql id="Base_Column_List">
-		id,system,module,creat_time,is_model,link_id,state
+		id,system,module,create_time,is_model,link_id,change_state,state
 	</sql>
 	<sql id="Base_Column_Page">
 		page_id,name_cn,name_en,information_name,create_time,update_time,is_change,result_id,state as p.state
@@ -70,6 +73,19 @@
 		resultMap="Base_ResultMap">
 		select * from spider_result_info where state = 1 and
 		id = #{id}
+	</select>
+
+	<!--资源目录=>信息资源=>详情-->
+	<select id="conversionByInformation" parameterType="java.lang.Integer" resultMap="Element_ResultMap">
+		SELECT
+			*
+		FROM
+			spider_result_info result
+		RIGHT JOIN spider_element_info element ON result.id = element.result_id
+		WHERE
+			result.state = 1
+		AND element.state = 1
+		AND link_id = #{linkId}
 	</select>
 	
 	<!-- 多表查采集结果中element信息 -->
@@ -103,9 +119,11 @@
 	<select id="querySum" resultType="java.util.Map">
 		SELECT
 			system,
-			COUNT(system) as countNum
+			COUNT(system) AS countNum
 		FROM
 			spider_link_info
+		WHERE
+			state = 1
 		GROUP BY
 			system
 	</select>
@@ -121,12 +139,15 @@
 			<if test="module != null and module.trim() != ''">
 				module = #{module},
 			</if>
-			<if test="isModel != null and isModel.trim() != ''">
+			<if test="isModel != null ">
 				is_model = #{isModel},
 			</if>
 			<if test="linkId != null">
 				link_id = #{linkId},
 			</if>
+            <if test="changeState != null ">
+                change_state = #{changeState},
+            </if>
 		</set>
 		where id = #{id}
 	</update>
@@ -144,8 +165,8 @@
 			<if test="module != null">
 				module,
 			</if>
-			<if test="creatTime != null">
-				creat_time,
+			<if test="createTime != null">
+				create_time,
 			</if>
 			<if test="isModel != null">
 				is_model,
@@ -167,8 +188,8 @@
 			<if test="module != null">
 				#{module},
 			</if>
-			<if test="creatTime != null">
-				#{creatTime},
+			<if test="createTime != null">
+				#{createTime},
 			</if>
 			<if test="isModel != null">
 				#{isModel},

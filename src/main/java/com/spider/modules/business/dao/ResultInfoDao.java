@@ -15,7 +15,7 @@ import com.spider.modules.business.model.ResultInfoModel;
 public interface ResultInfoDao extends BaseMapper<ResultInfoModel> {
 
     /**
-          * 根据id查询
+     * 根据id查询
      * @param id
      * @return
      */
@@ -34,6 +34,13 @@ public interface ResultInfoDao extends BaseMapper<ResultInfoModel> {
      * @return list
      */
     List<ResultInfoEntity> listByResultId(ResultInfoEntity resultInfo);
+
+    /**
+     * 采集结果=>查看=>详情
+     * @param linkId
+     * @return
+     */
+    List<ResultInfoEntity> conversionByInformation(@Param("linkId") Integer linkId);
     
     /**
      * 更新数据

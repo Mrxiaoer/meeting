@@ -39,17 +39,15 @@ public class LinkInfoController {
     AnalogLoginService analogLoginService;
 
     /**
-         * 根据(系统名称、模块名称)条件进行查询
-         * 默认空属性时，查询所有
+     * 根据(系统名称、模块名称)条件进行查询
+     * 默认空属性时，查询所有
      * @param linkInfoEntity
      * @return
      */
     @GetMapping("/list")
     public R queryTerm(@RequestParam Map<String,Object> params){
         PageUtils page = linkInfoService.queryTerm(params);
-        return R.ok().put("totalCount",page.getTotalCount()).put("pageSize", page.getPageSize())
-                .put("totalPage", page.getTotalPage()).put("currPage", page.getCurrPage())
-                .put("list", page.getList());
+        return R.ok().put("page", page).put("list", page.getList());
     }
     
     /**
@@ -76,7 +74,7 @@ public class LinkInfoController {
     
     /**
      * updata 更新数据
-     * @param record
+     * @param linkInfo
      * @return
      */
     @PostMapping("/update")
@@ -87,7 +85,7 @@ public class LinkInfoController {
     
     /**
      * 删除数据，逻辑删除
-     * @param ids
+     * @param linkIds
      * @return
      */
     @PostMapping("/delete")
@@ -95,4 +93,5 @@ public class LinkInfoController {
         linkInfoService.deletebyLinkId(linkIds);
         return R.ok();
     }
+
 }

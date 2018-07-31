@@ -23,12 +23,19 @@ public interface PageInfoDao extends BaseMapper<PageInfoEntity> {
     PageInfoEntity queryById(Integer pageId);
     
     /**
-     * 根据resultId查询
+     * 根据resultId查询未转化的信息
      * @param resultId
      * @return
      */
     List<PageInfoEntity> queryByResultId(Integer resultId);
-    
+
+    /**
+     * 根据resultId查询信息
+     * @param resultId
+     * @return
+     */
+        List<PageInfoEntity> listByResultId(Integer resultId);
+
     /**
      * 采集结果=>查看=>详情
      * @param pageId
@@ -54,5 +61,11 @@ public interface PageInfoDao extends BaseMapper<PageInfoEntity> {
      * @return
      */
     int delete(@Param("pageIds") Integer[] pageIds);
-    
+
+    /**
+     * 统计pageInfo中关于resultId的信息
+     * @param resultId
+     * @return
+     */
+    int querySum(@Param("id") Integer resultId);
 }

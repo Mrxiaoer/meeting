@@ -51,13 +51,10 @@ public class TargetInfoController {
      * @return
      */
     @GetMapping("/analog_login_one")
-    public R tospider(@RequestParam Map<String,Object> params) {
-        System.err.println(params);
-        System.err.println(params.get("id"));
-       /* String html = targetInfoService.tospider(linkId);
+    public R tospider(@RequestParam("id") Integer linkId) {
+        String html = targetInfoService.tospider(linkId);
         Html content =  Html.create(html);
-        return  R.ok().put("Html", content);*/
-        return R.ok();
+        return  R.ok().put("contents", html);
     }
     
     /**
@@ -82,7 +79,7 @@ public class TargetInfoController {
     @GetMapping("/spdier_point")
     public R getOneById(@RequestParam Integer linkId) {
        TemporaryRecordEntity temporary = targetInfoService.tothirdspider(linkId);
-        return R.ok().put("temporary", temporary);
+        return R.ok().put("url", temporary.getUrl()).put("contents",temporary.getHtml());
         
     }
     
@@ -104,7 +101,7 @@ public class TargetInfoController {
      * @param
      * @return
      */
-    @PutMapping("/spider_head_update")
+    @PostMapping("/spider_head_update")
     public R updateHead(@RequestBody Map<String,Object> params) {
         targetInfoService.updateHead(params);
         return R.ok();

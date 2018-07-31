@@ -34,12 +34,10 @@ public class ElementInfoController {
      * @param params
      * @return
      */
-    @PostMapping("list")
-    public R queryTerm(@RequestBody Map<String,Object> params){
+    @GetMapping("list")
+    public R queryTerm(@RequestParam Map<String,Object> params){
         PageUtils page = elementInfoService.queryTerm(params);
-        return R.ok().put("totalCount",page.getTotalCount()).put("pageSize", page.getPageSize())
-                .put("totalPage", page.getTotalPage()).put("currPage", page.getCurrPage())
-                .put("list", page.getList());
+        return R.ok().put("page", page).put("list", page.getList());
     }
     
     /**
@@ -50,7 +48,7 @@ public class ElementInfoController {
     @GetMapping("/info/{elementId}")
     public R selectById(@PathVariable("elementId") Integer elementId){
         ElementInfoEntity elementInfo = elementInfoService.queryById(elementId);
-        return R.ok().put("elementInfo", elementInfo);
+        return R.ok().put("list", elementInfo);
        
     }
     
