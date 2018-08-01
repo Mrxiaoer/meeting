@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Set;
 
 import com.spider.modules.spider.core.LoginAnalog;
+import com.spider.modules.spider.dao.SpiderRuleDao;
+import com.spider.modules.spider.service.SpiderRuleService;
 import org.openqa.selenium.Cookie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +37,8 @@ import com.spider.modules.spider.service.TemporaryRecordService;
 import com.spider.modules.spider.utils.MyStringUtil;
 
 import cn.hutool.core.bean.BeanUtil;
+
+import javax.transaction.Transactional;
 
 @Service
 public class TargetInfoServiceImpl implements TargetInfoService {
@@ -67,6 +71,9 @@ public class TargetInfoServiceImpl implements TargetInfoService {
     
     @Autowired
     private SpiderPage spiderPage;
+
+    @Autowired
+    SpiderRuleDao spiderRuleDao;
     
     @Autowired
     SpiderTemporaryRecordPipeline spiderTemporaryRecordPipeline;
@@ -111,11 +118,7 @@ public class TargetInfoServiceImpl implements TargetInfoService {
             linkInfoService.update(linkInfo);
         }
         LinkInfoEntity link = linkInfoService.queryById(targetInfo.getLinkId());
-        //模拟登录后采集目标页
-       /* SpiderRule spiderRule = new SpiderRule();
-        spiderRule.setIsGetText(false);
-        spiderPage.startSpider(targetInfo.getLinkId(), targetInfo.getUrl(), false, false, spiderRule, cookies, spiderTemporaryRecordPipeline);*/
-        
+
         return link;
     }
     
@@ -142,14 +145,24 @@ public class TargetInfoServiceImpl implements TargetInfoService {
     }
 
     @Override
-//    @Transactional
+    @Transactional
     public Map<String,Object> getXpath(Map<String, Object> params) {
         String xpath = (String) params.get("xpath");
-        //需要解决//*[@id="spiderContent"] 并非/html/body的问题转化
+        //需要解决//*[@id="spiderContent"] 并非/html/body的问题转化 前端解决
 
         Integer linkId = (Integer) params.get("linkId");
         LinkInfoEntity linkInfo = linkInfoService.queryById(linkId);
-        
+
+        //xpath插入规则表
+        /*SpiderRule rule = new SpiderRule();
+        rule.setXpath(xpath);
+        if( rule.getId() != null ){
+            rule.setId(null);
+        }
+        spiderRuleDao.insertOne(rule);
+
+        System.out.println(rule.getId());
+        int a = 1/0;*/
         //组装解析表头信息
         SpiderRule spiderRule = new SpiderRule();
         spiderRule.setXpath(xpath);

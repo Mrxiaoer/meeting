@@ -16,10 +16,9 @@ import com.spider.common.utils.R;
 import com.spider.modules.business.entity.ElementInfoEntity;
 import com.spider.modules.business.service.ElementInfoService;
 /**
- * 采集结果转化存储表
+ * 采集结果转化表
  * @author yaonuan
  * @data 2018年7月11日
- * version 1.0
  */
 @RestController
 @RequestMapping(value = "/api/element")
@@ -30,9 +29,8 @@ public class ElementInfoController {
     
     /**
      * 根据自定义条件(中文名)查询数据
-     * 默认传参数information_name
-     * @param params
-     * @return
+     * @param params(page、limit、中文名)
+     * @return 分页信息、数据
      */
     @GetMapping("list")
     public R queryTerm(@RequestParam Map<String,Object> params){
@@ -41,7 +39,7 @@ public class ElementInfoController {
     }
     
     /**
-     * 根据element_id查询数据
+     * 根据eid查询对应数据
      * @param elementId
      * @return
      */

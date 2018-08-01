@@ -20,7 +20,7 @@ public interface TargetInfoService {
      * 根据条件(用户名，密码）更新数据
      * 并模拟查询插入cookie
      * author yaonuan-7.17
-     * @param analogLogin
+     * @param targetInfo,analogId
      * @return
      */
     LinkInfoEntity update(TargetInfoEntity targetInfo,Integer analogId);
@@ -28,7 +28,7 @@ public interface TargetInfoService {
     /**
      * 单点采集，采集表头
      * 返回给前，选择要爬取得部分
-     * @param analogId
+     * @param linkId
      */
     TemporaryRecordEntity tothirdspider(Integer linkId);
     

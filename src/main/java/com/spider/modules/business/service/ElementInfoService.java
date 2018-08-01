@@ -5,11 +5,15 @@ import java.util.Map;
 import com.spider.common.utils.PageUtils;
 import com.spider.modules.business.entity.ElementInfoEntity;
 
+/**
+ * 采集转化表service
+ * @author yaonuan
+ */
 public interface ElementInfoService {
     
     
     /**
-     * 根据element_id查询数据
+     * 根据id查询对定数据
      * @param elementId
      * @return
      */
@@ -23,8 +27,8 @@ public interface ElementInfoService {
     int update(ElementInfoEntity elementInfo);
     
     /**
-     * 根据自定义(nameCn)条件查询
-     * @param params
+     * 根据自定义条件查询
+     * @param params（resultId、nameCn、null）
      * @return
      */
     PageUtils queryTerm(Map<String, Object> params);

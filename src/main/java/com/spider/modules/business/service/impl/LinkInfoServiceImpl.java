@@ -49,10 +49,22 @@ public class LinkInfoServiceImpl extends ServiceImpl<LinkInfoDao, LinkInfoEntity
         String module = (String) params.get("module");
         Page<LinkInfoEntity> page = this.selectPage(new Query<LinkInfoEntity>(params).getPage(), 
                 new EntityWrapper<LinkInfoEntity>().like(StringUtils.isNotBlank(system),"system" ,system)
-                .and().like(StringUtils.isNotBlank(module),"module" ,module).eq("state", Constant.TRUE_STATE));
+                .and().like(StringUtils.isNotBlank(module),"module" ,module).eq("state", Constant.TRUE_STATE)
+                        .orderBy("link_id",false));
         return new PageUtils(page);
     }
-    
+
+    @Override
+    public PageUtils queryAccurate(Map<String,Object> params){
+        String system = (String) params.get("system");
+        Page<LinkInfoEntity> page = this.selectPage(new Query<LinkInfoEntity>(params).getPage(),
+                new EntityWrapper<LinkInfoEntity>()
+                        .eq("state", Constant.TRUE_STATE)
+                        .eq("system",system)
+                        );
+        return  new PageUtils(page);
+    }
+
     @Override
     public LinkInfoEntity queryById(Integer linkId) {
         return linkInfoDao.queryById(linkId);

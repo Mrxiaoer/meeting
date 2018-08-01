@@ -21,12 +21,14 @@
 	<sql id="Base_Column_List">
 		element_id,name_cn,name_en,source,information_name,type,len,remark,routine,result_id,state
 	</sql>
+
 	<!-- 根据element_id查询数据 -->
 	<select id="queryById" parameterType="java.lang.Integer"
 		resultMap="Base_ResultMap">
 		select * from spider_element_info where state = "1" and
 		element_id = #{elementId}
 	</select>
+
 	<!-- 添加信息 -->
 	<insert id="insert"
 		parameterType="com.spider.modules.business.entity.ElementInfoEntity"
@@ -136,6 +138,7 @@
 		</set>
 		where state = "1" and element_id = #{elementId}
 	</update>
+	
 	<!-- 数据逻辑删除，根据element_id -->
 	<update id="delete">
 		UPDATE spider_element_info

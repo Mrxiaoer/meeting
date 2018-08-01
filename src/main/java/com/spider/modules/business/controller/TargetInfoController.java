@@ -59,7 +59,7 @@ public class TargetInfoController {
     
     /**
      * 模拟登录
-     * @param 用户名，密码，xpath
+     * @param （username，password，4个xpath+验证码url）
      * @return
      */
     @PostMapping("/analog_login_two")
@@ -72,7 +72,7 @@ public class TargetInfoController {
     }
     
     /**
-     * 单点采集
+     * 单点采集采集页面，返回
      * @param linkId
      * @return
      */

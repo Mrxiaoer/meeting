@@ -34,7 +34,7 @@ public class ResultInfoServiceImpl extends ServiceImpl<ResultInfoDao, ResultInfo
         String system = (String) params.get("system");
         Page<ResultInfoModel> page = this.selectPage(new Query<ResultInfoModel>(params).getPage(), 
                             new EntityWrapper<ResultInfoModel>().like(StringUtils.isNotBlank(system), "system",system)
-                            .eq("state", Constant.TRUE_STATE));
+                            .eq("state", Constant.TRUE_STATE).orderBy("id",false));
         return new PageUtils(page);
     }
     
@@ -42,7 +42,7 @@ public class ResultInfoServiceImpl extends ServiceImpl<ResultInfoDao, ResultInfo
     public PageUtils queryModel(Map<String, Object> params) {
         Page<ResultInfoModel> page = this.selectPage(new Query<ResultInfoModel>(params).getPage(), 
                         new EntityWrapper<ResultInfoModel>().eq("state", Constant.SUPER_ADMIN)
-                        .and().eq("is_model", Constant.SUPER_ADMIN));
+                        .and().eq("is_model", Constant.SUPER_ADMIN).orderBy("id",false));
         return new  PageUtils(page); 
     }
 

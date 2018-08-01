@@ -20,11 +20,13 @@
 	<sql id="Base_Column_List">
 		link_id,analog_id,system,module,url,is_login,create_time,update_time,remarks,has_target,state
 	</sql>
+
 	<!-- 查询所有数据 -->
 	<select id="selectAll"
 		resultType="com.spider.modules.business.entity.LinkInfoEntity">
 		select * from spider_link_info where state = 1 ORDER BY link_id DESC
 	</select>
+
 	<!-- 根据主键id查询数据 -->
 	<select id="queryById" parameterType="java.lang.Integer"
 		resultType="com.spider.modules.business.entity.LinkInfoEntity">
@@ -36,6 +38,7 @@
 		state = 1 and link_id =
 		#{linkId}
 	</select>
+
 	<!-- 根据自定义条件查询数据 -->
 	<select id="queryTerm"
 		parameterType="com.spider.modules.business.entity.LinkInfoEntity"
@@ -56,6 +59,7 @@
 		</where>
 		ORDER BY link_id DESC
 	</select>
+
 	<!-- 添加数据 -->
 	<insert id="insert"
 		parameterType="com.spider.modules.business.entity.LinkInfoEntity"
@@ -132,6 +136,7 @@
 			</if>
 		</trim>
 	</insert>
+
 	<!-- 更新数据 -->
 	<update id="update"
 		parameterType="com.spider.modules.business.entity.LinkInfoEntity">
@@ -158,6 +163,7 @@
 		</set>
 		where link_id = #{linkId}
 	</update>
+
 	<!-- 删除数据，逻辑删除 -->
 	<update id="deletebyLinkId">
 		UPDATE spider_link_info

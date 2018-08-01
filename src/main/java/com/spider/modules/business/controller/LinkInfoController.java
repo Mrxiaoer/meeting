@@ -41,7 +41,7 @@ public class LinkInfoController {
     /**
      * 根据(系统名称、模块名称)条件进行查询
      * 默认空属性时，查询所有
-     * @param linkInfoEntity
+     * @param params
      * @return
      */
     @GetMapping("/list")
@@ -49,7 +49,17 @@ public class LinkInfoController {
         PageUtils page = linkInfoService.queryTerm(params);
         return R.ok().put("page", page).put("list", page.getList());
     }
-    
+
+    /**
+     * 资源目录精准查询
+     * @param params
+     * @return
+     */
+    @GetMapping("/query_accurate")
+    public R queryAccurate(@RequestParam Map<String,Object> params){
+        PageUtils page = linkInfoService.queryAccurate(params);
+        return R.ok().put("page",page).put("list",page.getList());
+    }
     /**
      * 根据linkId查询信息
      * @param linkId

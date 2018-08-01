@@ -129,9 +129,9 @@ public class ResultInfoController {
     }
 
     @GetMapping("/conversion/{id}")
-    public R conversionByInformation(@RequestParam("id") Integer linkId){
-            System.out.println(linkId);
-        List<ResultInfoEntity> results = resultInfoService.conversionByInformation(linkId);
+    public R conversionByInformation(@PathVariable Integer id){
+            System.out.println(id);
+        List<ResultInfoEntity> results = resultInfoService.conversionByInformation(id);
         return R.ok().put("results",results);
     }
 }

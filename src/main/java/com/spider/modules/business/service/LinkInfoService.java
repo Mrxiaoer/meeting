@@ -27,14 +27,21 @@ public interface LinkInfoService {
     
     /**
      * 根据自定义条件分页查询
-     * @param linkInfo
+     * @param params
      * @return
      */
     PageUtils queryTerm(Map<String, Object> params);
+
+    /**
+     * 静准查询
+     * @param params
+     * @return
+     */
+    PageUtils queryAccurate(Map<String,Object> params);
     
     /**
      * 添加链接信息
-     * @param params
+     * @param linkInfo
      */
     void save(LinkInfoEntity linkInfo);
     
