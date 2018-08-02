@@ -146,7 +146,7 @@ public class TargetInfoServiceImpl implements TargetInfoService {
     }
 
     @Override
-//    @Transactional
+    @Transactional
     public Map<String,Object> getXpath(Map<String, Object> params) {
         String xpath = (String) params.get("xpath");
         //需要解决//*[@id="spiderContent"] 并非/html/body的问题转化 前端解决
