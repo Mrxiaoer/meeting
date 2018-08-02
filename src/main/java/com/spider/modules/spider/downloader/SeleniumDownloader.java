@@ -55,7 +55,7 @@ public class SeleniumDownloader implements Downloader, Closeable {
 
 		PhantomJSDriver driver = null;
 		try {
-			driver = phantomJSDriverPool.borrowObject();
+			driver = phantomJSDriverPool.borrowPhantomJSDriver();
 		} catch (InterruptedException var10) {
 			this.logger.warn("interrupted", var10);
 			return null;

@@ -106,5 +106,5 @@ public class TargetInfoController {
         targetInfoService.updateHead(params);
         return R.ok();
     }
-	
+
 }

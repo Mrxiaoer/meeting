@@ -15,10 +15,11 @@
 		<result column="update_time" property="updateTime"/>
 		<result column="remarks" property="remarks"/>
 		<result column="has_target" property="hasTarget"/>
+		<result column="rule_id" property="ruleId"/>
 		<result column="state" property="state"/>
 	</resultMap>
 	<sql id="Base_Column_List">
-		link_id,analog_id,system,module,url,is_login,create_time,update_time,remarks,has_target,state
+		link_id,analog_id,system,module,url,is_login,create_time,update_time,remarks,has_target,rule_id,state
 	</sql>
 
 	<!-- 查询所有数据 -->
@@ -96,6 +97,9 @@
 			<if test="hasTarget != null">
 				has_target,
 			</if>
+			<if test="ruleId != null">
+				rule_id,
+			</if>
 			<if test="state != null">
 				state,
 			</if>
@@ -131,6 +135,9 @@
 			<if test="hasTarget != null">
 				#{hasTarget},
 			</if>
+			<if test="ruleId != null">
+				#{ruleId},
+			</if>
 			<if test="state != null">
 				#{state},
 			</if>
@@ -156,6 +163,9 @@
 			</if>
 			<if test="remarks != null and remarks.trim() != ''">
 				remarks = #{remarks},
+			</if>
+			<if test="ruleId != null">
+				rule_id = #{ruleId},
 			</if>
 			<if test="hasTarget != null">
 				has_target = #{hasTarget},

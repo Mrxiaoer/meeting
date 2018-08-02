@@ -72,7 +72,8 @@ public class LinkInfoController {
     }
     
     /**
-     * 插入数据，先对analog_login进行操作
+     * 插入数据，对analog与linkInfo进行操作
+     * @param linkInfo
      * @return
      */
     @PostMapping("/save")

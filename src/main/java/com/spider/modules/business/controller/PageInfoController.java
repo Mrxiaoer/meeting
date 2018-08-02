@@ -10,10 +10,9 @@ import com.spider.modules.business.model.ProvisionalEntity;
 import com.spider.modules.business.service.PageInfoService;
 
 /**
- * 采集结果表的controller
+ * 采集结果表
  * @author yaonuan
  * @data 2018年7月24日
- * version 1.0
  */
 @RestController
 @RequestMapping("/api/pageInfo")

@@ -100,18 +100,18 @@
 	</select>
 	
 	<!-- 多表查采集结果中pageInfo信息 -->
-	<select id="listByResultId" parameterType="com.spider.modules.business.entity.ResultInfoEntity" resultMap="Page_ResultMap">
+	<select id="listByResultId" parameterType="java.util.Map" resultMap="Page_ResultMap">
 		SELECT
 			*
 		FROM
 			spider_result_info r
 		LEFT JOIN spider_page_info p ON r.id = p.result_id
 		<where>
-			<if test="isModel != null">
-				AND is_model = #{isModel}
+			<if test="nameCn != null">
+				AND name_cn LIKE CONCAT('%',#{ nameCn },'%')
 			</if>
 				AND	p.state = 1
-				AND id = #{id}
+				AND id = #{resultId}
 		</where>
 	</select>
 	

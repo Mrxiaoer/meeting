@@ -10,19 +10,18 @@ import com.spider.modules.business.entity.ResultInfoEntity;
 public interface ResultInfoService {
 
     /**
-     * 插入数据
-     * @param resultInfo
-     */
-    void save(ResultInfoEntity resultInfo);
-    
-    /**
      * 结果页信息查询
      * @param resultId
      * @return
      */
     List<ResultInfoEntity> queryByResultId(Integer resultId);
-    
-    
+
+    /**
+     * 插入数据
+     * @param resultInfo
+     */
+    void save(ResultInfoEntity resultInfo);
+
     /**
      * 资源目录汇总
      * @return
@@ -37,13 +36,9 @@ public interface ResultInfoService {
     PageUtils queryTerm(Map<String,Object> params);
     
     /**
-     * 查模板信息
+     * 比对信息
+     * @param id
      * @return
-     */
-    PageUtils queryModel(Map<String, Object> params);
-    
-    /**
-     * 比对
      */
     List<PageInfoEntity> comparison(Integer id);
 
@@ -52,13 +47,19 @@ public interface ResultInfoService {
      * @param id
      * @return
      */
-    List<ResultInfoEntity> resultByPageInfo(Integer id);
+    List<ResultInfoEntity> resultByPageInfo(Map<String,Object> map);
 
     /**
      * 采集结果=>查看=>详情
      * param id
      */
     List<ResultInfoEntity> conversionByInformation(Integer linkId);
+
+    /**
+     * 查模板信息
+     * @return
+     */
+    PageUtils queryModel(Map<String, Object> params);
 
     /**
      * 设置模板或取消模板

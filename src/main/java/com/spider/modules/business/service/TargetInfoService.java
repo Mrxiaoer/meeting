@@ -10,7 +10,7 @@ public interface TargetInfoService {
 
     
     /**
-     * 模拟登录第一步
+     * 模拟登录采集登录页
      * @param linkId
      * @return
      */
@@ -18,8 +18,6 @@ public interface TargetInfoService {
     
     /**
      * 根据条件(用户名，密码）更新数据
-     * 并模拟查询插入cookie
-     * author yaonuan-7.17
      * @param targetInfo,analogId
      * @return
      */

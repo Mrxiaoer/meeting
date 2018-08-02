@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.spider.modules.business.dao.LinkInfoDao;
 import com.spider.modules.spider.core.LoginAnalog;
 import com.spider.modules.spider.dao.SpiderRuleDao;
 import com.spider.modules.spider.service.SpiderRuleService;
@@ -127,7 +128,7 @@ public class TargetInfoServiceImpl implements TargetInfoService {
         LinkInfoEntity linkInfo = linkInfoService.queryById(linkId);
         AnalogLoginEntity analogLogin = analogLoginService.getOneById(linkInfo.getAnalogId());
         String cookie = analogLogin.getCookie();
-        System.err.println(cookie.length());
+//        System.err.println(cookie.length());
         Set<Cookie> cookies = MyStringUtil.json2cookie(cookie);
         SpiderRule spiderRule = new SpiderRule();
         spiderRule.setIsGetText(false);
@@ -145,7 +146,7 @@ public class TargetInfoServiceImpl implements TargetInfoService {
     }
 
     @Override
-    @Transactional
+//    @Transactional
     public Map<String,Object> getXpath(Map<String, Object> params) {
         String xpath = (String) params.get("xpath");
         //需要解决//*[@id="spiderContent"] 并非/html/body的问题转化 前端解决
@@ -154,15 +155,19 @@ public class TargetInfoServiceImpl implements TargetInfoService {
         LinkInfoEntity linkInfo = linkInfoService.queryById(linkId);
 
         //xpath插入规则表
-        /*SpiderRule rule = new SpiderRule();
+        SpiderRule rule = new SpiderRule();
         rule.setXpath(xpath);
         if( rule.getId() != null ){
             rule.setId(null);
         }
         spiderRuleDao.insertOne(rule);
 
-        System.out.println(rule.getId());
-        int a = 1/0;*/
+        //更新linkInfo加入规则id
+        LinkInfoEntity linkrule = new LinkInfoEntity();
+        linkrule.setLinkId(linkId);
+        linkrule.setRuleId(rule.getId());
+        linkInfoService.update(linkrule);
+
         //组装解析表头信息
         SpiderRule spiderRule = new SpiderRule();
         spiderRule.setXpath(xpath);

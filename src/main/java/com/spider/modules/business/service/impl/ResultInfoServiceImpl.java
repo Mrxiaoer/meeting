@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.spider.modules.business.dao.PageInfoDao;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,12 +21,16 @@ import com.spider.modules.business.entity.ResultInfoEntity;
 import com.spider.modules.business.model.ResultInfoModel;
 import com.spider.modules.business.service.PageInfoService;
 import com.spider.modules.business.service.ResultInfoService;
+import sun.print.PageableDoc;
 
 @Service
 public class ResultInfoServiceImpl extends ServiceImpl<ResultInfoDao, ResultInfoModel> implements ResultInfoService {            
     @Autowired
     ResultInfoDao resultInfoDao;
-    
+
+    @Autowired
+    PageInfoDao pageInfoDao;
+
     @Autowired
     PageInfoService pageInfoService;
 
@@ -89,11 +94,8 @@ public class ResultInfoServiceImpl extends ServiceImpl<ResultInfoDao, ResultInfo
     }
 
     @Override
-    public  List<ResultInfoEntity> resultByPageInfo(Integer id){
-        ResultInfoEntity rs = new ResultInfoEntity();
-        rs.setId(id);
-        List<ResultInfoEntity> resultInfos = resultInfoDao.listByResultId(rs);
+    public  List<ResultInfoEntity> resultByPageInfo(Map<String,Object> map){
+        List<ResultInfoEntity> resultInfos = resultInfoDao.listByResultId(map);
         return  resultInfos;
     }
-
 }

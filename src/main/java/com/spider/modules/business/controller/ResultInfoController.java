@@ -34,7 +34,7 @@ public class ResultInfoController {
 
     /**
      * 采集结果数据、分页
-     * @param 可根据系统名查看
+     * @param (system、null)
      * @return
      */
     @GetMapping("/list")
@@ -45,7 +45,6 @@ public class ResultInfoController {
     
     /**
      * 采集结果的详细信息
-     * 多表查采集结果中element信息
      * 采集结果=>查看
      * @param resultId
      * @return
@@ -58,16 +57,16 @@ public class ResultInfoController {
 
     /**
      * 采集结果转换=>数据转换
-     * @param id => resultId
+     * @param params
      * @return
      */
     @GetMapping("/datachallege")
-    public R resultByPageInfo(@RequestParam("resultId") Integer id){
-        System.out.println(id);
-        List<ResultInfoEntity> resultInfos = resultInfoService.resultByPageInfo(id);
-        Integer  totalCount = pageInfoDao.querySum(id);
+    public R itemConversion(@RequestParam Map<String,Object> params){
+        List<ResultInfoEntity> resultInfos = resultInfoService.resultByPageInfo(params);
+        Integer totalCount = pageInfoDao.querySum(params);
         return R.ok().put("resultInfos",resultInfos).put("totalCount",totalCount);
     }
+
     /**
      * 资源目录
      * @return
@@ -90,7 +89,7 @@ public class ResultInfoController {
     }
     
     /**
-     * 采集结果=>查看=>详情（字段需考虑）
+     * 采集结果=>查看=>详情（字段需考虑<暂无>
      * @param pageId
      * @return
      */
@@ -111,6 +110,11 @@ public class ResultInfoController {
         return R.ok().put("page", page).put("list", page.getList());
     }
 
+    /**
+     * 设置模板或者取消模板
+     * @param id
+     * @return
+     */
     @GetMapping("set_template")
     public R setTemplate(@RequestParam Integer id){
         resultInfoService.setTemplate(id);
@@ -128,6 +132,11 @@ public class ResultInfoController {
         return R.ok().put("list",pageInfos);
     }
 
+    /**
+     * 获取信息资源详情
+     * @param id
+     * @return
+     */
     @GetMapping("/conversion/{id}")
     public R conversionByInformation(@PathVariable Integer id){
             System.out.println(id);

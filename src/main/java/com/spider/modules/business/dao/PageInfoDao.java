@@ -1,6 +1,7 @@
 package com.spider.modules.business.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -17,7 +18,7 @@ import com.spider.modules.business.entity.PageInfoEntity;
 public interface PageInfoDao extends BaseMapper<PageInfoEntity> {
     /**
      * 根据id查询数据
-     * @param elementId
+     * @param pageId
      * @return
      */
     PageInfoEntity queryById(Integer pageId);
@@ -57,15 +58,15 @@ public interface PageInfoDao extends BaseMapper<PageInfoEntity> {
     
     /**
      * 删除数据，逻辑删除
-     * @param elementIds
+     * @param pageIds
      * @return
      */
     int delete(@Param("pageIds") Integer[] pageIds);
 
     /**
      * 统计pageInfo中关于resultId的信息
-     * @param resultId
+     * @param map
      * @return
      */
-    int querySum(@Param("id") Integer resultId);
+    int querySum(Map<String,Object> map);
 }

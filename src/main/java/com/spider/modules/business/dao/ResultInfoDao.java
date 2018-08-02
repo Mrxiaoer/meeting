@@ -30,10 +30,10 @@ public interface ResultInfoDao extends BaseMapper<ResultInfoModel> {
     
     /**
      * 多表查采集结果中pageInfo信息
-     * @param resultInfo
+     * @param map
      * @return list
      */
-    List<ResultInfoEntity> listByResultId(ResultInfoEntity resultInfo);
+    List<ResultInfoEntity> listByResultId(Map<String,Object> map);
 
     /**
      * 采集结果=>查看=>详情
