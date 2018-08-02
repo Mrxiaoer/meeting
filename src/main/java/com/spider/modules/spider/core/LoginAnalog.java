@@ -79,7 +79,7 @@ public class LoginAnalog {
 			//执行时间超出预算的话中断并抛出异常
 			Class[] paramClzs = {String.class};
 			Object[] paramObjs = {targetUrl};
-			int timeOut = 8000;
+			int timeOut = 10000;
 			try {
 				long startTime = System.currentTimeMillis();
 				RunTimeout.timeoutMethod(driver, "get", paramClzs, paramObjs, timeOut);

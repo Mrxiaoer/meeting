@@ -35,6 +35,7 @@ public class PhantomJSDriverPool extends GenericObjectPool<PhantomJSDriver> {
 	public PhantomJSDriver borrowPhantomJSDriver() throws Exception {
 		long start = System.currentTimeMillis();
 		PhantomJSDriver phantomJSDriver = this.borrowObject();
+		phantomJSDriver.manage().deleteAllCookies();
 		logger.info("获取PhantomJSDriver实际耗时：{}毫秒", (System.currentTimeMillis() - start));
 
 		return phantomJSDriver;
