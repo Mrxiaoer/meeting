@@ -34,6 +34,13 @@ public interface ResultInfoService {
      * @return
      */
     PageUtils queryTerm(Map<String,Object> params);
+
+    /**
+     * 转换查询
+     * @param params
+     * @return
+     */
+    PageUtils queryChallenge(Map<String,Object> params);
     
     /**
      * 比对信息
@@ -44,7 +51,7 @@ public interface ResultInfoService {
 
     /**
      * 数据转换
-     * @param id
+     * @param map
      * @return
      */
     List<ResultInfoEntity> resultByPageInfo(Map<String,Object> map);

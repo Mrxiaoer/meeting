@@ -42,7 +42,12 @@ public class ResultInfoController {
         PageUtils page = resultInfoService.queryTerm(params);
         return R.ok().put("list",page.getList()).put("page", page);
     }
-    
+
+    @GetMapping("/challenge")
+    public R queryChallenge(@RequestParam Map<String,Object> params){
+        PageUtils page = resultInfoService.queryChallenge(params);
+        return R.ok().put("list",page.getList()).put("page",page);
+    }
     /**
      * 采集结果的详细信息
      * 采集结果=>查看
