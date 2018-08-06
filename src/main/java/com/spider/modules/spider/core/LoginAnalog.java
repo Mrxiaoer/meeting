@@ -207,7 +207,7 @@ public class LoginAnalog {
 						int sleepNum = 0;
                         Matcher mnew = p.matcher(driver.getCurrentUrl());
                         String nowUrl;
-                        if (m.find()) {
+                        if (mnew.find()) {
                             nowUrl = mnew.group(1);
                         }else {
                             nowUrl = driver.getCurrentUrl();
