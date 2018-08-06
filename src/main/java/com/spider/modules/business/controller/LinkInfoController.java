@@ -1,7 +1,9 @@
 package com.spider.modules.business.controller;
 
+import java.util.List;
 import java.util.Map;
 
+import com.spider.modules.business.model.TimeTaskModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -105,4 +107,13 @@ public class LinkInfoController {
         return R.ok();
     }
 
+    /**
+     * 树结构，查询系统名、模块名
+     * @return
+     */
+    @GetMapping("/tree-structured")
+    public R getModel(){
+        List<TimeTaskModel> list = linkInfoService.timedTask();
+        return R.ok().put("list",list);
+    }
 }

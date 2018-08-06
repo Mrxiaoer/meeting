@@ -2,9 +2,11 @@ package com.spider.modules.business.service.impl;
 
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 
-import java.util.Date;
-import java.util.Map;
+import java.util.*;
 
+import cn.hutool.core.bean.BeanUtil;
+import com.spider.modules.business.model.TimeTaskModel;
+import freemarker.ext.beans.HashAdapter;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -112,5 +114,29 @@ public class LinkInfoServiceImpl extends ServiceImpl<LinkInfoDao, LinkInfoEntity
         linkInfoDao.deletebyLinkId(linkIds);
     }
 
+    @Override
+    public List<TimeTaskModel> timedTask(){
+        List<LinkInfoEntity> infoEntities = linkInfoDao.selectAll();
 
+        List<TimeTaskModel> timeTaskModels = new ArrayList<TimeTaskModel>();
+        Map<String,Integer> flagMap = new HashMap<String,Integer>();
+
+        for(LinkInfoEntity entity : infoEntities){
+            if(!flagMap.containsKey(entity.getSystem())){
+                TimeTaskModel parent = new TimeTaskModel();
+                parent.setValue(entity.getSystem());
+                parent.setLabel(entity.getSystem());
+                List<TimeTaskModel> children = new ArrayList<TimeTaskModel>();
+                parent.setChildren(children);
+                flagMap.put(entity.getSystem(),timeTaskModels.size());
+                timeTaskModels.add(parent);
+            }
+
+            TimeTaskModel child = new TimeTaskModel();
+            child.setLabel(entity.getModule());
+            child.setValue(String.valueOf(entity.getLinkId()));
+            timeTaskModels.get(flagMap.get(entity.getSystem())).getChildren().add(child);
+        }
+        return timeTaskModels;
+    }
 }

@@ -24,6 +24,8 @@ import java.util.Calendar;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 模拟登录 ------------------------------
@@ -75,6 +77,9 @@ public class LoginAnalog {
 
 		//模拟浏览器创建连接，发起请求
 		PhantomJSDriver driver = phantomJSDriverPool.borrowPhantomJSDriver();
+
+        // 创建 Pattern 对象
+        Pattern p = Pattern.compile("(https?://[\\S]*?)[^A-Z|a-z|0-9|\\u4e00-\\u9fa5|.|/|:|_|-]");
 		try {
 			//执行时间超出预算的话中断并抛出异常
 			Class[] paramClzs = {String.class};
@@ -95,7 +100,13 @@ public class LoginAnalog {
 
 			//获取cookies
 			Set<Cookie> cookieSet = driver.manage().getCookies();
-			String beforeUrl = driver.getCurrentUrl();
+            Matcher m = p.matcher(driver.getCurrentUrl());
+            String beforeUrl;
+            if (m.find()) {
+                beforeUrl = m.group(1);
+            }else {
+                beforeUrl = driver.getCurrentUrl();
+            }
 			//url相同说明可直接获取目标页
 			if (!beforeUrl.equals(targetUrl)) {
 				Calendar cal = Calendar.getInstance();
@@ -194,11 +205,18 @@ public class LoginAnalog {
 
 						//sleep,等待
 						int sleepNum = 0;
-						while (sleepNum < 5 && URLUtil.getPath(driver.getCurrentUrl()).equals(URLUtil.getPath(beforeUrl))) {
+                        Matcher mnew = p.matcher(driver.getCurrentUrl());
+                        String nowUrl;
+                        if (m.find()) {
+                            nowUrl = mnew.group(1);
+                        }else {
+                            nowUrl = driver.getCurrentUrl();
+                        }
+						while (sleepNum < 5 && URLUtil.getPath(nowUrl).equals(URLUtil.getPath(beforeUrl))) {
 							Thread.sleep(1000);
 							sleepNum++;
 						}
-						logger.info("当前页URL：{}", driver.getCurrentUrl());
+						logger.info("当前页URL：{}，原页面：{}", nowUrl,beforeUrl);
 					} catch (Exception e) {
 						throw e;
 					} finally {

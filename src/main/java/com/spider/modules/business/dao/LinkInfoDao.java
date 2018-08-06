@@ -1,6 +1,7 @@
 package com.spider.modules.business.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -51,6 +52,19 @@ public interface LinkInfoDao extends BaseMapper<LinkInfoEntity>{
      * @return
      */
     int update(LinkInfoEntity linkInfo);
-    
-    
+
+    /**
+     * 定时任务联动一级
+     * @return
+     */
+    List<String> querySum();
+
+    /**
+     * 自定义精准查询
+     * @param linkInfo
+     * @return
+     */
+    List<LinkInfoEntity> queryTerm(LinkInfoEntity linkInfo);
+
+    List<LinkInfoEntity> selectAll();
 }

@@ -40,6 +40,18 @@
 		#{linkId}
 	</select>
 
+	<!--定时任务联动一级-->
+	<select id="querySum" resultType="java.lang.String">
+		SELECT
+			system
+		FROM
+			spider_link_info
+		WHERE
+			state = 1
+		GROUP BY
+			system
+	</select>
+
 	<!-- 根据自定义条件查询数据 -->
 	<select id="queryTerm"
 		parameterType="com.spider.modules.business.entity.LinkInfoEntity"
@@ -51,7 +63,7 @@
 		<where>
 			<!-- state = true -->
 			<if test="system != null and system.trim() != ''">
-				AND system LIKE CONCAT('%',#{ system },'%')
+				AND system = #{system}
 			</if>
 			<if test="module != null and module.trim() != ''">
 				AND module LIKE CONCAT('%',#{ module },'%')

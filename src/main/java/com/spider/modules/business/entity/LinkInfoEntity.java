@@ -8,13 +8,15 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.data.annotation.Transient;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 链接信息表
  * <p>
  * title: LinkInfo
  * </p>
- * 
+ *
  * @author yaonuan
  * @data 2018年7月9日 version 1.0
  */
@@ -26,10 +28,10 @@ public class LinkInfoEntity implements Serializable {
     // 编号
     @TableId
     private Integer linkId;
-    
+
     //模拟登录表主键
     private Integer analogId;
-    
+
     // 所属站点系统
     private String system;
 
@@ -38,7 +40,7 @@ public class LinkInfoEntity implements Serializable {
 
     // 此系统待采集模块url
     private String url;
-    
+
     private Integer isLogin;
 
     // 创建时间
@@ -51,10 +53,10 @@ public class LinkInfoEntity implements Serializable {
 
     // 描述
     private String remarks;
-    
+
     //目标页是否可达（1可达，0不可达）
     private Integer hasTarget;
-    
+
     //关联规则表Id
     @JsonIgnore
     private Integer ruleId;
@@ -62,6 +64,9 @@ public class LinkInfoEntity implements Serializable {
     // 存在状态（1.存在;0.删除）
     @JsonIgnore
     private Integer state;
+
+//    @Transient
+//    private LinkInfoEntity[] ls;
 
     public Integer getLinkId() {
         return linkId;

@@ -7,10 +7,13 @@ package com.spider.modules.business.service;
  * version 1.0
  */
 
+import java.util.List;
 import java.util.Map;
 
 import com.spider.common.utils.PageUtils;
 import com.spider.modules.business.entity.LinkInfoEntity;
+import com.spider.modules.business.model.TimeTaskModel;
+
 /**
  * 链接信息查詢
  */
@@ -53,8 +56,10 @@ public interface LinkInfoService {
     
     /**
      * 根据id查询删除信息
-     * @param LinkIds
+     * @param linkIds
      */
     void deletebyLinkId(Integer[] linkIds);
-    
+
+
+    List<TimeTaskModel> timedTask();
 }
