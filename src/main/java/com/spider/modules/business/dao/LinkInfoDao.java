@@ -30,7 +30,9 @@ public interface LinkInfoDao extends BaseMapper<LinkInfoEntity>{
      * @return
      */
     LinkInfoEntity queryById(Integer linkId);
-    
+
+    // TODO: 2018/8/6 0006  需解决scheduleJobServiceImpl
+    List<LinkInfoEntity> queryByIds(Integer linkId);
     
     /**
      * 根据ids删除链接表信息
