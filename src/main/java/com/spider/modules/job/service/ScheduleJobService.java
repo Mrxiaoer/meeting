@@ -3,6 +3,7 @@ package com.spider.modules.job.service;
 import com.baomidou.mybatisplus.service.IService;
 import com.spider.common.utils.PageUtils;
 import com.spider.modules.job.entity.ScheduleJobEntity;
+import com.spider.modules.job.model.ScheduleJobModel;
 
 import java.util.Map;
 
@@ -49,4 +50,6 @@ public interface ScheduleJobService extends IService<ScheduleJobEntity> {
 	 * 恢复运行
 	 */
 	void resume(Long[] jobIds);
+
+	ScheduleJobModel challenge(ScheduleJobEntity scheduleJob);
 }

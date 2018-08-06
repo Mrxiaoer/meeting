@@ -117,10 +117,13 @@ public class TargetInfoServiceImpl implements TargetInfoService {
             linkInfo.setHasTarget(Constant.SUPER_ADMIN);
             linkInfo.setLinkId(targetInfo.getLinkId());
             linkInfoService.update(linkInfo);
-        }
-        LinkInfoEntity link = linkInfoService.queryById(targetInfo.getLinkId());
+            LinkInfoEntity link = linkInfoService.queryById(targetInfo.getLinkId());
+            return link;
+        }else{
 
-        return link;
+            return null;
+        }
+
     }
     
     @Override
@@ -133,7 +136,7 @@ public class TargetInfoServiceImpl implements TargetInfoService {
         SpiderRule spiderRule = new SpiderRule();
         spiderRule.setIsGetText(false);
         spiderPage.startSpider(linkId, analogLogin.getTargetUrl(), false, false, spiderRule, cookies, spiderTemporaryRecordPipeline);
-        if(temporaryRecordService.queryBylinkId(linkId).getUrl() != analogLogin.getTargetUrl()){
+        if( !temporaryRecordService.queryBylinkId(linkId).getUrl().equals(analogLogin.getTargetUrl()) ){
             try {
                 cookies =  loginAnalog.login(analogLogin.getId());
             }catch (Exception e){
