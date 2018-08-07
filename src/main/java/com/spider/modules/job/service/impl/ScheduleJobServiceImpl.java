@@ -1,13 +1,19 @@
 package com.spider.modules.job.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.spider.common.utils.Constant;
 import com.spider.common.utils.PageUtils;
 import com.spider.common.utils.Query;
+import com.spider.modules.business.dao.LinkInfoDao;
+import com.spider.modules.business.entity.LinkInfoEntity;
+import com.spider.modules.business.model.TimeTaskModel;
+import com.spider.modules.business.service.LinkInfoService;
 import com.spider.modules.job.dao.ScheduleJobDao;
 import com.spider.modules.job.entity.ScheduleJobEntity;
+import com.spider.modules.job.model.ScheduleJobModel;
 import com.spider.modules.job.service.ScheduleJobService;
 import com.spider.modules.job.utils.ScheduleUtils;
 
@@ -26,6 +32,9 @@ public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobDao, Schedule
 		implements ScheduleJobService {
 	@Autowired
 	private Scheduler scheduler;
+
+	@Autowired
+	LinkInfoDao linkInfoDao;
 
 	/**
 	 * 项目启动时，初始化定时器
@@ -119,4 +128,41 @@ public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobDao, Schedule
 		updateBatch(jobIds, Constant.ScheduleStatus.NORMAL.getValue());
 	}
 
+	@Override
+	public ScheduleJobModel challenge(ScheduleJobEntity scheduleJob){
+		ScheduleJobModel model = new ScheduleJobModel();
+		model.setBeanName(scheduleJob.getBeanName());
+		model.setMethodName(scheduleJob.getMethodName());
+		model.setCronExpression(scheduleJob.getCronExpression());
+		model.setJobId(scheduleJob.getJobId());
+		model.setCreateTime(scheduleJob.getCreateTime());
+		model.setRemark(scheduleJob.getRemark());
+		model.setStatus(scheduleJob.getStatus());
+		String isNum = "^[0-9]*$";
+		if(scheduleJob.getParams().matches(isNum)){
+			List<LinkInfoEntity> linkInfo = linkInfoDao.queryByIds(Integer.parseInt(scheduleJob.getParams()));
+
+			List<TimeTaskModel> timeTaskModels = new ArrayList<TimeTaskModel>();
+			Map<String,Integer> flagMap = new HashMap<String,Integer>();
+
+			for(LinkInfoEntity entity : linkInfo){
+				if(!flagMap.containsKey(entity.getSystem())){
+					TimeTaskModel parent = new TimeTaskModel();
+					parent.setValue(entity.getSystem());
+					parent.setLabel(entity.getSystem());
+					List<TimeTaskModel> children = new ArrayList<TimeTaskModel>();
+					parent.setChildren(children);
+					flagMap.put(entity.getSystem(),timeTaskModels.size());
+					timeTaskModels.add(parent);
+				}
+
+				TimeTaskModel child = new TimeTaskModel();
+				child.setLabel(entity.getModule());
+				child.setValue(String.valueOf(entity.getLinkId()));
+				timeTaskModels.get(flagMap.get(entity.getSystem())).getChildren().add(child);
+			}
+			model.setParams(timeTaskModels.get(Constant.VALUE_ZERO));
+		}
+		return  model;
+	}
 }

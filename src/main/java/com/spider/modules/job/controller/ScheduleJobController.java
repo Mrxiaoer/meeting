@@ -1,5 +1,6 @@
 package com.spider.modules.job.controller;
 
+import com.spider.modules.job.model.ScheduleJobModel;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -42,8 +43,9 @@ public class ScheduleJobController {
 //	@RequiresPermissions("sys:schedule:info")
 	public R info(@PathVariable("jobId") Long jobId) {
 		ScheduleJobEntity schedule = scheduleJobService.selectById(jobId);
+        ScheduleJobModel model = scheduleJobService.challenge(schedule);
 
-		return R.ok().put("schedule", schedule);
+		return R.ok().put("schedule", model);
 	}
 
 	/**

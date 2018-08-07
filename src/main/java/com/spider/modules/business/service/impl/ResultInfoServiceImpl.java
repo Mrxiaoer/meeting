@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.spider.modules.business.dao.PageInfoDao;
+import com.sun.jna.platform.unix.solaris.LibKstat;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,12 +38,33 @@ public class ResultInfoServiceImpl extends ServiceImpl<ResultInfoDao, ResultInfo
     @Override
     public PageUtils queryTerm(Map<String,Object> params) {
         String system = (String) params.get("system");
-        Page<ResultInfoModel> page = this.selectPage(new Query<ResultInfoModel>(params).getPage(), 
+        Page<ResultInfoModel> page = this.selectPage(new Query<ResultInfoModel>(params).getPage(),
                             new EntityWrapper<ResultInfoModel>().like(StringUtils.isNotBlank(system), "system",system)
                             .eq("state", Constant.TRUE_STATE).orderBy("id",false));
         return new PageUtils(page);
     }
-    
+
+    @Override
+    public PageUtils queryChallenge(Map<String,Object> params){
+        String system = (String) params.get("system");
+        String module = (String) params.get("module");
+        String changeState = String.valueOf(params.get("changeState"));
+        if(changeState != null && !changeState.equals("") && !changeState.equals("null")){
+            Integer change = Integer.valueOf(changeState);
+            Page<ResultInfoModel> page = this.selectPage(new Query<ResultInfoModel>(params).getPage(),
+                    new EntityWrapper<ResultInfoModel>().like(StringUtils.isNotBlank(system), "system",system)
+                            .like(StringUtils.isNotBlank(module),"module",module).eq("change_state",change)
+                            .eq("state", Constant.TRUE_STATE).orderBy("id",false));
+            return new PageUtils(page);
+        }else{
+            Page<ResultInfoModel> page = this.selectPage(new Query<ResultInfoModel>(params).getPage(),
+                    new EntityWrapper<ResultInfoModel>().like(StringUtils.isNotBlank(system), "system",system)
+                            .like(StringUtils.isNotBlank(module),"module",module)
+                            .eq("state", Constant.TRUE_STATE).orderBy("id",false));
+            return new PageUtils(page);
+        }
+    }
+
     @Override
     public PageUtils queryModel(Map<String, Object> params) {
         Page<ResultInfoModel> page = this.selectPage(new Query<ResultInfoModel>(params).getPage(), 
