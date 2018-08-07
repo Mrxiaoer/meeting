@@ -314,10 +314,13 @@
             <plugin>
                 <groupId>com.spotify</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
-                <version>0.4.14</version>
+                <version>1.1.1</version>
                 <configuration>
-                    <imageName>spider-data</imageName>
+                    <!-- 路径为：私有仓库地址/你想要的镜像路径 -->
+                    <imageName>lolilijve/spider-docker</imageName>
+                    <!-- 指定 Dockerfile 路径-->
                     <dockerDirectory>${project.basedir}</dockerDirectory>
+                    <!-- 这里是复制 jar 包到 docker 容器指定目录配置，也可以写到 Docokerfile 中 -->
                     <resources>
                         <resource>
                             <targetPath>/</targetPath>
@@ -325,6 +328,9 @@
                             <include>${project.build.finalName}.jar</include>
                         </resource>
                     </resources>
+
+                    <!-- 与maven配置文件settings.xml一致 -->
+                    <serverId>docker-registry</serverId>
                 </configuration>
                 <!-- 运行命令 mvn clean package docker:build 打包并生成docker镜像 -->
             </plugin>

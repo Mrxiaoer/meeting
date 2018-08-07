@@ -1,28 +1,23 @@
 package com.spider.modules.business.service.impl;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.spider.modules.business.dao.PageInfoDao;
-import com.sun.jna.platform.unix.solaris.LibKstat;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.spider.common.utils.Constant;
 import com.spider.common.utils.PageUtils;
 import com.spider.common.utils.Query;
+import com.spider.modules.business.dao.PageInfoDao;
 import com.spider.modules.business.dao.ResultInfoDao;
 import com.spider.modules.business.entity.PageInfoEntity;
 import com.spider.modules.business.entity.ResultInfoEntity;
 import com.spider.modules.business.model.ResultInfoModel;
 import com.spider.modules.business.service.PageInfoService;
 import com.spider.modules.business.service.ResultInfoService;
-import sun.print.PageableDoc;
+import java.util.List;
+import java.util.Map;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class ResultInfoServiceImpl extends ServiceImpl<ResultInfoDao, ResultInfoModel> implements ResultInfoService {            
