@@ -1,18 +1,5 @@
 package com.spider.modules.business.service.impl;
 
-import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
-
-import java.util.*;
-
-import cn.hutool.core.bean.BeanUtil;
-import com.spider.modules.business.model.TimeTaskModel;
-import freemarker.ext.beans.HashAdapter;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -21,14 +8,25 @@ import com.spider.common.utils.PageUtils;
 import com.spider.common.utils.Query;
 import com.spider.modules.business.dao.LinkInfoDao;
 import com.spider.modules.business.entity.LinkInfoEntity;
+import com.spider.modules.business.model.TimeTaskModel;
 import com.spider.modules.business.service.LinkInfoService;
 import com.spider.modules.spider.dao.AnalogLoginDao;
 import com.spider.modules.spider.entity.AnalogLoginEntity;
 import com.spider.modules.spider.service.AnalogLoginService;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
- * 
- * <p> title: LinkInfoServiceImpl </p> 
+ *
+ * <p> title: LinkInfoServiceImpl </p>
  * @author yaonuan
  * @data 2018年7月9日
  * version 1.0
@@ -38,18 +36,18 @@ public class LinkInfoServiceImpl extends ServiceImpl<LinkInfoDao, LinkInfoEntity
 
     @Autowired
     LinkInfoDao linkInfoDao;
-    
+
     @Autowired
     AnalogLoginService analogLoginService;
-    
+
     @Autowired
     AnalogLoginDao analogLoginDao;
-    
+
     @Override
     public PageUtils queryTerm(Map<String, Object> params) {
         String system = (String) params.get("system");
         String module = (String) params.get("module");
-        Page<LinkInfoEntity> page = this.selectPage(new Query<LinkInfoEntity>(params).getPage(), 
+        Page<LinkInfoEntity> page = this.selectPage(new Query<LinkInfoEntity>(params).getPage(),
                 new EntityWrapper<LinkInfoEntity>().like(StringUtils.isNotBlank(system),"system" ,system)
                 .and().like(StringUtils.isNotBlank(module),"module" ,module).eq("state", Constant.TRUE_STATE)
                         .orderBy("link_id",false));
@@ -76,16 +74,16 @@ public class LinkInfoServiceImpl extends ServiceImpl<LinkInfoDao, LinkInfoEntity
     @Transactional(propagation = Propagation.REQUIRED)
     public void save(LinkInfoEntity linkInfo) {
         AnalogLoginEntity analogLogin = new AnalogLoginEntity();
-        
+
         //在AnalogLoginEntity表中存用户爬取的url
         analogLogin.setTargetUrl(linkInfo.getUrl());
         if(analogLogin.getId() !=null) {
             analogLogin.setId(null);
         }
         analogLoginService.saveAnalogLogin(analogLogin);
-        
-        
-        
+
+
+
         linkInfo.setAnalogId(analogLogin.getId());
         linkInfo.setCreateTime(new Date());
         linkInfo.setUpdateTime(new Date());
@@ -94,7 +92,7 @@ public class LinkInfoServiceImpl extends ServiceImpl<LinkInfoDao, LinkInfoEntity
         }
         linkInfoDao.insert(linkInfo);
     }
-    
+
 
     @Override
     public void update(LinkInfoEntity linkInfo) {

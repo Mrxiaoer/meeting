@@ -1,0 +1,79 @@
+Manifest-Version: 1.0
+Class-Path: antlr-2.7.7.jar lept4j-1.10.0.jar assertj-core-3.9.1.jar c
+ ommons-logging-1.1.1.jar springfox-swagger-ui-2.8.0.jar itext-2.1.7.j
+ ar jetty-util-9.4.10.v20180503.jar jsqlparser-1.1.jar selenium-chrome
+ -driver-3.0.1.jar websocket-common-9.4.10.v20180503.jar pdfbox-debugg
+ er-2.0.11.jar javax.annotation-api-1.3.2.jar slf4j-api-1.7.25.jar spr
+ ing-boot-devtools-2.0.2.RELEASE.jar asm-5.0.4.jar jedis-2.9.0.jar byt
+ e-buddy-1.7.11.jar tomcat-embed-core-8.5.31.jar spring-context-suppor
+ t-5.0.6.RELEASE.jar javax.transaction-api-1.2.jar hibernate-commons-a
+ nnotations-5.0.1.Final.jar shiro-web-1.3.2.jar mchange-commons-java-0
+ .2.11.jar spring-boot-starter-web-2.0.2.RELEASE.jar jboss-vfs-3.2.12.
+ Final.jar log4j-to-slf4j-2.10.0.jar jackson-core-2.9.5.jar HikariCP-2
+ .7.9.jar htmlcleaner-2.22.jar springfox-swagger-common-2.8.0.jar jett
+ y-io-9.4.10.v20180503.jar spring-webmvc-5.0.6.RELEASE.jar spring-boot
+ -starter-data-jpa-2.0.2.RELEASE.jar joda-time-2.9.9.jar selenium-supp
+ ort-3.0.1.jar postgresql-42.2.2.jar snakeyaml-1.19.jar selenium-java-
+ 3.0.1.jar commons-configuration-1.10.jar spring-web-5.0.6.RELEASE.jar
+  jdom-1.1.jar selenium-api-3.0.1.jar htmlunit-2.29.jar spring-beans-5
+ .0.6.RELEASE.jar websocket-client-9.4.10.v20180503.jar netty-resolver
+ -4.1.24.Final.jar guava-20.0.jar jetty-xml-9.4.10.v20180503.jar jboss
+ -logging-3.3.2.Final.jar mysql-connector-java-5.1.38.jar Saxon-HE-9.8
+ .0-12.jar ghost4j-1.0.1.jar spring-data-commons-2.0.7.RELEASE.jar com
+ mons-text-1.2.jar spring-boot-starter-aop-2.0.2.RELEASE.jar spring-da
+ ta-jpa-2.0.7.RELEASE.jar spring-boot-configuration-processor-2.0.2.RE
+ LEASE.jar webmagic-core-0.7.3.jar springfox-core-2.8.0.jar velocity-e
+ ngine-core-2.0.jar netty-transport-4.1.24.Final.jar tess4j-4.1.0.jar 
+ phantomjsdriver-1.3.0.jar netty-common-4.1.24.Final.jar mybatis-plus-
+ support-2.1.9.jar jcl-over-slf4j-1.7.25.jar jetty-http-9.4.10.v201805
+ 03.jar jna-4.5.1.jar spring-data-keyvalue-2.0.7.RELEASE.jar neko-html
+ unit-2.28.jar selenium-opera-driver-3.0.1.jar httpmime-4.5.5.jar clas
+ smate-1.3.4.jar commons-exec-1.3.jar spring-orm-5.0.6.RELEASE.jar sel
+ enium-safari-driver-3.0.1.jar spring-boot-starter-data-redis-2.0.2.RE
+ LEASE.jar netty-buffer-4.1.24.Final.jar mybatis-plus-2.1.9.jar xalan-
+ 2.7.2.jar spring-boot-starter-json-2.0.2.RELEASE.jar commons-codec-1.
+ 10.jar json-path-2.4.0.jar serializer-2.7.2.jar jbig2-imageio-3.0.1.j
+ ar spring-boot-starter-tomcat-2.0.2.RELEASE.jar shiro-spring-1.3.2.ja
+ r aliyun-sdk-oss-2.8.3.jar log4j-over-slf4j-1.7.25.jar spring-core-5.
+ 0.6.RELEASE.jar log4j-1.2.17.jar pdfbox-tools-2.0.11.jar spring-jdbc-
+ 5.0.6.RELEASE.jar tomcat-embed-websocket-8.5.31.jar gson-2.8.4.jar my
+ batis-plus-core-2.1.9.jar pinyin4j-2.5.0.jar mapstruct-1.2.0.Final.ja
+ r selenium-remote-driver-3.0.1.jar jul-to-slf4j-1.7.25.jar jackson-an
+ notations-2.9.0.jar jackson-datatype-jsr310-2.9.5.jar mybatis-plus-ge
+ nerate-2.1.9.jar spring-boot-starter-logging-2.0.2.RELEASE.jar hamcre
+ st-core-1.3.jar lettuce-core-5.0.4.RELEASE.jar aspectjweaver-1.8.13.j
+ ar reflections-0.9.11.jar websocket-api-9.4.10.v20180503.jar spring-b
+ oot-2.0.2.RELEASE.jar spring-oxm-5.0.6.RELEASE.jar xml-apis-1.4.01.ja
+ r commons-io-2.5.jar reactive-streams-1.0.2.jar spring-boot-starter-2
+ .0.2.RELEASE.jar httpcore-4.4.9.jar shiro-core-1.3.2.jar spring-tx-5.
+ 0.6.RELEASE.jar javassist-3.22.0-GA.jar spring-plugin-metadata-1.2.0.
+ RELEASE.jar spring-boot-starter-jdbc-2.0.2.RELEASE.jar hibernate-core
+ -5.2.17.Final.jar spring-boot-autoconfigure-2.0.2.RELEASE.jar druid-s
+ pring-boot-starter-1.1.9.jar filters-2.0.235.jar mybatis-3.4.5.jar we
+ bmagic-extension-0.7.3.jar jjwt-0.7.0.jar httpclient-4.5.5.jar tomcat
+ -embed-el-8.5.31.jar xsoup-0.3.1.jar junit-4.12.jar validation-api-2.
+ 0.1.Final.jar netty-handler-4.1.24.Final.jar jandex-2.0.3.Final.jar s
+ wagger-annotations-1.5.14.jar commons-lang-2.6.jar log4j-api-2.10.0.j
+ ar mybatisplus-spring-boot-starter-1.0.5.jar selenium-ie-driver-3.0.1
+ .jar freemarker-2.3.28.jar jetty-client-9.4.10.v20180503.jar xercesIm
+ pl-2.11.0.jar druid-1.1.9.jar commons-pool2-2.6.0.jar spring-expressi
+ on-5.0.6.RELEASE.jar jackson-module-parameter-names-2.9.5.jar spring-
+ plugin-core-1.2.0.RELEASE.jar json-smart-2.3.jar springfox-spi-2.8.0.
+ jar jsoup-1.8.3.jar netty-codec-4.1.24.Final.jar logback-classic-1.2.
+ 3.jar commons-collections-3.2.2.jar pdfbox-2.0.10.jar jdom2-2.0.6.jar
+  commons-lang3-3.7.jar hibernate-validator-6.0.9.Final.jar spring-aop
+ -5.0.6.RELEASE.jar spring-context-5.0.6.RELEASE.jar jna-platform-4.5.
+ 1.jar hibernate-jpa-2.1-api-1.0.0.Final.jar accessors-smart-1.2.jar q
+ uartz-2.3.0.jar hutool-all-4.1.2.jar logback-core-1.2.3.jar mybatis-s
+ pring-1.3.1.jar springfox-swagger2-2.8.0.jar commons-fileupload-1.2.2
+ .jar commons-beanutils-1.8.3.jar selenium-firefox-driver-3.0.1.jar se
+ lenium-edge-driver-3.0.1.jar fontbox-2.0.10.jar springfox-schema-2.8.
+ 0.jar commons-net-3.6.jar jackson-datatype-jdk8-2.9.5.jar fastjson-1.
+ 2.45.jar htmlunit-core-js-2.28.jar reactor-core-3.1.7.RELEASE.jar sac
+ -1.3.jar spring-jcl-5.0.6.RELEASE.jar xmlgraphics-commons-1.4.jar kap
+ tcha-0.0.9.jar swagger-models-1.5.14.jar springfox-spring-web-2.8.0.j
+ ar jai-imageio-core-1.4.0.jar dom4j-1.6.1.jar spring-aspects-5.0.6.RE
+ LEASE.jar spring-data-redis-2.0.7.RELEASE.jar cglib-nodep-3.2.4.jar j
+ ackson-databind-2.9.5.jar cssparser-0.9.24.jar netty-3.5.7.Final.jar
+Main-Class: com.spider.SpiderApplication
+

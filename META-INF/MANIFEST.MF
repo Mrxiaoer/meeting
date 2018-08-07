@@ -3,3 +3,12 @@ Bundle-ManifestVersion: 2
 Bundle-Name: spider-data
 Bundle-SymbolicName: spider-data
 Bundle-Version: 1.0.0.qualifier
+Import-Package: org.slf4j,
+ org.apache.commons.pool2,
+ javax.imageio,
+ com.sun.jna,
+ org.assertj.core.api,
+ org.apache.commons.lang,
+ org.apache.shiro.authz.annotation,
+ org.apache.shiro,
+ javax.annotation

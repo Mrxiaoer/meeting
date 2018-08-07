@@ -9,7 +9,19 @@ import com.spider.modules.spider.config.SpiderConstant;
 import com.spider.modules.spider.dao.AnalogLoginDao;
 import com.spider.modules.spider.entity.AnalogLoginEntity;
 import com.spider.modules.spider.entity.ChaoJiYingResult;
-import com.spider.modules.spider.utils.*;
+import com.spider.modules.spider.utils.ChaoJiYing;
+import com.spider.modules.spider.utils.JieTu;
+import com.spider.modules.spider.utils.MyStringUtil;
+import com.spider.modules.spider.utils.OCRUtil;
+import com.spider.modules.spider.utils.PicUril;
+import com.spider.modules.spider.utils.RunTimeout;
+import java.io.File;
+import java.util.Calendar;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
@@ -19,16 +31,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.util.Calendar;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 /**
- * 模拟登录 ------------------------------
+ * 模拟登录
  *
  * @Author : lolilijve
  * @Email : 1042703214@qq.com
@@ -217,8 +221,6 @@ public class LoginAnalog {
 							sleepNum++;
 						}
 						logger.info("当前页URL：{}，原页面：{}", nowUrl,beforeUrl);
-					} catch (Exception e) {
-						throw e;
 					} finally {
 						tryNum++;
 						//检测登录，判断是否已登录，已登录flag为false

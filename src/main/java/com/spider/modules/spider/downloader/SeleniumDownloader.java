@@ -2,6 +2,10 @@ package com.spider.modules.spider.downloader;
 
 import com.spider.modules.spider.config.PhantomJSDriverPool;
 import com.spider.modules.spider.entity.MyPage;
+import java.io.Closeable;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
@@ -18,14 +22,8 @@ import us.codecraft.webmagic.downloader.Downloader;
 import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.selector.PlainText;
 
-import java.io.Closeable;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-
 /**
  * 动态页面下载器
- * ------------------------------
  *
  * @Author : lolilijve
  * @Email : 1042703214@qq.com
@@ -33,101 +31,107 @@ import java.util.Set;
  */
 @Component
 public class SeleniumDownloader implements Downloader, Closeable {
-	private static final String DRIVER_PHANTOMJS = "phantomjs";
-	@Autowired
-	private PhantomJSDriverPool phantomJSDriverPool;
-	private Logger logger = LoggerFactory.getLogger(this.getClass());
-	private int sleepTime = 100;
+  private static final String DRIVER_PHANTOMJS = "phantomjs";
+  @Autowired private PhantomJSDriverPool phantomJSDriverPool;
+  private Logger logger = LoggerFactory.getLogger(this.getClass());
+  private int sleepTime = 100;
 
-	public SeleniumDownloader(String chromeDriverPath) {
-		System.getProperties().setProperty("webdriver.chrome.driver", chromeDriverPath);
-	}
+  public SeleniumDownloader(String chromeDriverPath) {
+    System.getProperties().setProperty("webdriver.chrome.driver", chromeDriverPath);
+  }
 
-	public SeleniumDownloader() {}
+  public SeleniumDownloader() {}
 
-	public SeleniumDownloader setSleepTime(int sleepTime) {
-		this.sleepTime = sleepTime;
-		return this;
-	}
+  public SeleniumDownloader setSleepTime(int sleepTime) {
+    this.sleepTime = sleepTime;
+    return this;
+  }
 
-	@Override
-	public MyPage download(Request request, Task task) {
+  @Override
+  public MyPage download(Request request, Task task) {
 
-		PhantomJSDriver driver = null;
-		try {
-			driver = phantomJSDriverPool.borrowPhantomJSDriver();
-		} catch (InterruptedException var10) {
-			this.logger.warn("interrupted", var10);
-			return null;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+    PhantomJSDriver driver = null;
+    MyPage page = new MyPage();
+    try {
+      driver = phantomJSDriverPool.borrowPhantomJSDriver();
+    } catch (InterruptedException var10) {
+      this.logger.warn("interrupted", var10);
+      return null;
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    try {
+      assert (driver != null);
 
-		assert (driver != null);
+      try {
+        Thread.sleep((long) this.sleepTime);
+      } catch (InterruptedException var9) {
+        var9.printStackTrace();
+      }
 
-		try {
-			Thread.sleep((long) this.sleepTime);
-		} catch (InterruptedException var9) {
-			var9.printStackTrace();
-		}
+      WebDriver.Options manage = driver.manage();
 
-		WebDriver.Options manage = driver.manage();
+      Site site = task.getSite();
+      if (site.getCookies() != null) {
 
-		Site site = task.getSite();
-		if (site.getCookies() != null) {
+        for (Object o : site.getCookies().entrySet()) {
+          Map.Entry<String, String> cookieEntry = (Map.Entry) o;
+          Cookie cookie = new Cookie(cookieEntry.getKey(), cookieEntry.getValue());
+          manage.addCookie(cookie);
+        }
+      }
+      if (site.getAllCookies() != null) {
+        Set<Map.Entry<String, Map<String, String>>> allCookieSet = site.getAllCookies().entrySet();
 
-			for (Object o : site.getCookies().entrySet()) {
-				Map.Entry<String, String> cookieEntry = (Map.Entry) o;
-				Cookie cookie = new Cookie(cookieEntry.getKey(), cookieEntry.getValue());
-				manage.addCookie(cookie);
-			}
-		}
-		if (site.getAllCookies() != null) {
-			Set<Map.Entry<String, Map<String, String>>> allCookieSet = site.getAllCookies().entrySet();
+        for (Map.Entry<String, Map<String, String>> cookiemap : allCookieSet) {
+          for (Map.Entry<String, String> cookieEntry : cookiemap.getValue().entrySet()) {
+            try {
+              manage.addCookie(
+                  new Cookie(
+                      cookieEntry.getKey(), cookieEntry.getValue(), cookiemap.getKey(), "/", null));
+            } catch (Exception e) {
+              manage.addCookie(
+                  new Cookie(
+                      cookieEntry.getKey(),
+                      cookieEntry.getValue(),
+                      "." + cookiemap.getKey(),
+                      "/",
+                      null));
+            }
+          }
+        }
+      }
 
-			for (Map.Entry<String, Map<String, String>> cookiemap : allCookieSet) {
-				for (Map.Entry<String, String> cookieEntry : cookiemap.getValue().entrySet()) {
-					try {
-						manage.addCookie(new Cookie(cookieEntry.getKey(), cookieEntry.getValue(), cookiemap.getKey(), "/", null));
-					} catch (Exception e) {
-						manage.addCookie(new Cookie(cookieEntry.getKey(), cookieEntry.getValue(), "." + cookiemap.getKey(), "/", null));
-					}
-				}
-			}
-		}
+      this.logger.info("downloading page " + request.getUrl());
+      driver.get(request.getUrl());
 
-		this.logger.info("downloading page " + request.getUrl());
-		driver.get(request.getUrl());
+      WebElement webElement = driver.findElement(By.xpath("/html"));
+      String content = webElement.getAttribute("outerHTML");
+      page.setRawText(content);
+      page.setHtml(new Html(content, request.getUrl()));
+      page.setUrl(new PlainText(driver.getCurrentUrl()));
+      // 设置path
+      String urlPath = null;
+      if (driver.manage().getCookies() != null) {
+        Iterator<Cookie> cookies = driver.manage().getCookies().iterator();
+        if (cookies.hasNext()) {
+          Cookie cookieEntry = cookies.next();
+          urlPath = cookieEntry.getPath();
+        }
+      }
+      page.setUrlPath(urlPath);
+      page.setRequest(request);
+    } finally {
+      this.phantomJSDriverPool.returnObject(driver);
+    }
+    return page;
+  }
 
-		WebElement webElement = driver.findElement(By.xpath("/html"));
-		String content = webElement.getAttribute("outerHTML");
-		MyPage page = new MyPage();
-		page.setRawText(content);
-		page.setHtml(new Html(content, request.getUrl()));
-		page.setUrl(new PlainText(driver.getCurrentUrl()));
-		//设置path
-		String urlPath = null;
-		if (driver.manage().getCookies() != null) {
-			Iterator<Cookie> cookies = driver.manage().getCookies().iterator();
-			if (cookies.hasNext()) {
-				Cookie cookieEntry = cookies.next();
-				urlPath = cookieEntry.getPath();
-			}
-		}
-		page.setUrlPath(urlPath);
-		page.setRequest(request);
-		this.phantomJSDriverPool.returnObject(driver);
-		return page;
-	}
+  @Override
+  public void setThread(int threadNum) {}
 
-	@Override
-	public void setThread(int threadNum) {
-
-	}
-
-	@Override
-	public void close() {
-		logger.info("close this downloader!");
-	}
+  @Override
+  public void close() {
+    logger.info("close this downloader!");
+  }
 }
-

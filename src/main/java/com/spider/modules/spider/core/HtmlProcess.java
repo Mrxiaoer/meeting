@@ -4,19 +4,16 @@ import cn.hutool.core.util.StrUtil;
 import com.spider.modules.spider.dao.TemporaryRecordDao;
 import com.spider.modules.spider.entity.SpiderRule;
 import com.spider.modules.spider.entity.TemporaryRecordEntity;
-import com.spider.modules.spider.utils.MyStringUtil;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.selector.Selectable;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
 /**
  * HTML页面处理
- * ------------------------------
  *
  * @Author : lolilijve
  * @Email : 1042703214@qq.com

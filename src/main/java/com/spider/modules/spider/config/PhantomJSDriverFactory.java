@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * ------------------------------
+ * phantomjs驱动工厂
  *
  * @Author : lolilijve
  * @Email : 1042703214@qq.com
@@ -47,7 +47,7 @@ public class PhantomJSDriverFactory extends BasePooledObjectFactory<PhantomJSDri
 		dcaps.setCapability("cssSelectorsEnabled", true);
 		//js支持
 		dcaps.setJavascriptEnabled(true);
-		ArrayList<String> cliArgsCap = new ArrayList();
+		ArrayList<String> cliArgsCap = new ArrayList<>(6);
 		cliArgsCap.add("--web-security=false");
 		cliArgsCap.add("--ssl-protocol=any");
 		cliArgsCap.add("--ignore-ssl-errors=true");
