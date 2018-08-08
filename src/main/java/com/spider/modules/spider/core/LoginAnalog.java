@@ -45,14 +45,16 @@ public class LoginAnalog {
 	private final JieTu jieTu;
 	private final PhantomJSDriverPool phantomJSDriverPool;
 	private Logger logger = LoggerFactory.getLogger(LoginAnalog.class);
-	@Value("${chaojiying.username}")
+	@Value("${VcCode.chaojiying.username}")
 	private String cjyUsername;
-	@Value("${chaojiying.password}")
+	@Value("${VcCode.chaojiying.password}")
 	private String cjyPassword;
-	@Value("${chaojiying.softId}")
+	@Value("${VcCode.chaojiying.softId}")
 	private String cjySoftId;
-	@Value("${image.p-path}")
+	@Value("${VcCode.image.p-path}")
 	private String destDir;
+	@Value("${VcCode.useOcr}")
+	private boolean useOcr;
 
 	@Autowired
 	public LoginAnalog(AnalogLoginDao analogLoginDao, JieTu jieTu, PhantomJSDriverPool phantomJSDriverPool) {
@@ -141,7 +143,7 @@ public class LoginAnalog {
 						int cjyTry = 0;
 						boolean cjyFlag = true;
 
-						if (tryNum < 1) {
+						if (useOcr&& tryNum < 1) {
 							//ocr解析验证码
 							File file = new File(jtResult.get(SpiderConstant.IMAGE_PATH).toString());
 							PicUril.cleanLinesInImage(file, destDir + year + "-" + month + "-" + day);

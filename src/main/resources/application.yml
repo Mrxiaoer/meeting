@@ -80,14 +80,15 @@ mybatis-plus:
 webmagic:
     selenuim_config: selenium/config.ini
 
-image:
-    #验证码存放位置
-    path: F:/JavaSource/image/before/
-    #处理过的验证码存放位置
-    p-path: F:/JavaSource/image/after/
-#    path: /Users/maoxinmin/Desktop/临时文件/image/
-
-chaojiying:
-    username: chenxiaoqi
-    password: 123456
-    softId: 896818
+VcCode:
+    image:
+        #验证码存放位置
+        path: F:/JavaSource/image/before/
+        #处理过的验证码存放位置
+        p-path: F:/JavaSource/image/after/
+    chaojiying:
+        username: chenxiaoqi
+        password: 123456
+        softId: 896818
+    #是否使用OCR识别验证码，准确率较低
+    useOcr: false

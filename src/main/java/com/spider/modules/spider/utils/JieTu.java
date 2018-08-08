@@ -29,7 +29,7 @@ import java.util.Set;
 @Component
 public class JieTu {
 
-	@Value("${image.path}")
+	@Value("${VcCode.image.path}")
 	private String imagePath;
 
 	@Autowired
