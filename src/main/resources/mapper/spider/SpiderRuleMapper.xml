@@ -78,7 +78,7 @@
         <result property="xpath" column="xpath"/>
     </resultMap>
 
-    <select id="queryOne" resultMap="SpiderRuleMap">
+    <select id="selectOne" resultMap="SpiderRuleMap">
         select
         <include refid="allResult"></include>
         from `spider_rule`

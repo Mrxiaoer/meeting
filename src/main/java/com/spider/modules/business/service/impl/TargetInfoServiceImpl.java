@@ -1,22 +1,8 @@
 package com.spider.modules.business.service.impl;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import com.spider.modules.business.dao.LinkInfoDao;
-import com.spider.modules.spider.core.LoginAnalog;
-import com.spider.modules.spider.dao.SpiderRuleDao;
-import com.spider.modules.spider.service.SpiderRuleService;
-import org.openqa.selenium.Cookie;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
+import cn.hutool.core.bean.BeanUtil;
 import com.spider.common.utils.Constant;
+import com.spider.modules.business.dao.ResultInfoDao;
 import com.spider.modules.business.entity.LinkInfoEntity;
 import com.spider.modules.business.entity.PageInfoEntity;
 import com.spider.modules.business.entity.ResultInfoEntity;
@@ -26,8 +12,10 @@ import com.spider.modules.business.service.PageInfoService;
 import com.spider.modules.business.service.ResultInfoService;
 import com.spider.modules.business.service.TargetInfoService;
 import com.spider.modules.spider.core.HtmlProcess;
+import com.spider.modules.spider.core.LoginAnalog;
 import com.spider.modules.spider.core.SpiderPage;
 import com.spider.modules.spider.dao.AnalogLoginDao;
+import com.spider.modules.spider.dao.SpiderRuleDao;
 import com.spider.modules.spider.dao.TemporaryRecordDao;
 import com.spider.modules.spider.entity.AnalogLoginEntity;
 import com.spider.modules.spider.entity.SpiderRule;
@@ -36,10 +24,14 @@ import com.spider.modules.spider.pipeline.SpiderTemporaryRecordPipeline;
 import com.spider.modules.spider.service.AnalogLoginService;
 import com.spider.modules.spider.service.TemporaryRecordService;
 import com.spider.modules.spider.utils.MyStringUtil;
-
-import cn.hutool.core.bean.BeanUtil;
+import org.openqa.selenium.Cookie;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.*;
 
 @Service
 public class TargetInfoServiceImpl implements TargetInfoService {
@@ -75,6 +67,9 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 
     @Autowired
     SpiderRuleDao spiderRuleDao;
+
+    @Autowired
+    ResultInfoDao resultInfoDao;
     
     @Autowired
     SpiderTemporaryRecordPipeline spiderTemporaryRecordPipeline;
@@ -205,6 +200,7 @@ public class TargetInfoServiceImpl implements TargetInfoService {
     public void updateHead(Map<String, Object> params) {
         String AllinformationName = (String) params.get("informationName");
         List<Map<String, Object>> map =  (List<Map<String, Object>>) params.get("pageInfos");
+        //定义获取pageId
         Integer id = 0;
         for(Map<String, Object> list : map) {
             PageInfoEntity pageInfo = new PageInfoEntity();
@@ -214,8 +210,8 @@ public class TargetInfoServiceImpl implements TargetInfoService {
             pageInfoService.update(pageInfo);
             id = pageInfo.getPageId();
         }
-        System.out.println(id);
-        List<PageInfoEntity> pageInfos = pageInfoService.listByResultId(pageInfoService.queryById(id).getResultId());
+        Integer resultId = pageInfoService.queryById(id).getResultId();
+        List<PageInfoEntity> pageInfos = pageInfoService.listByResultId(resultId);
         PageInfoEntity prs = new PageInfoEntity();
         for(PageInfoEntity list:pageInfos){
             if(list.getInformationName() == null){
@@ -224,6 +220,14 @@ public class TargetInfoServiceImpl implements TargetInfoService {
                 pageInfoService.update(prs);
             }
         }
+        //前端无进行操作resultinfo删除
+        /*List<PageInfoEntity> delect = pageInfoService.listByResultId(resultId);
+        if(delect.size() < 1){
+            ResultInfoEntity rs = new ResultInfoEntity();
+            rs.setId(resultId);
+            rs.setState(Constant.VALUE_ZERO);
+            resultInfoDao.update(rs);
+        }*/
     }
 
 }

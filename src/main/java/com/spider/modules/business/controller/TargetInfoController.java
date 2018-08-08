@@ -6,7 +6,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -68,7 +67,11 @@ public class TargetInfoController {
         Integer analogId = linkInfoone.getAnalogId();
         targetInfo.setUrl(linkInfoone.getUrl());
         LinkInfoEntity linkInfo = targetInfoService.update(targetInfo,analogId);
-        return R.ok().put("linkInfo", linkInfo);
+        if(linkInfo == null){
+            return R.error("模拟登录失败~");
+        }else {
+            return R.ok().put("linkInfo", linkInfo);
+        }
     }
     
     /**

@@ -23,6 +23,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -113,10 +115,14 @@ public class AutoTask {
 		resultInfoService.save(resultInfo);
 
 		//采集到的表头插入数据库中
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		String data = dateFormat.format(new Date());
+		String informationName = "自动采集信息" + data;
 		for(String vaule:spiderHead) {
 			PageInfoEntity pageInfo = new PageInfoEntity();
 			pageInfo.setNameCn(vaule);
 			pageInfo.setResultId(resultInfo.getId());
+			pageInfo.setInformationName(informationName);
 			MyStringUtil myStringUtil = new MyStringUtil();
 			pageInfo.setNameEn(myStringUtil.getPinYinHeadChar(vaule));
 			pageInfoService.save(pageInfo);

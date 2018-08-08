@@ -58,7 +58,7 @@
 			<if test="nameCn != null">
 				AND name_cn LIKE CONCAT('%',#{ nameCn },'%')
 			</if>
-			<if test="id != null">
+			<if test="resultId != null">
 				AND result_id = #{resultId}
 			</if>
 				AND state = 1
