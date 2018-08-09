@@ -138,6 +138,7 @@ public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobDao, Schedule
 		model.setCreateTime(scheduleJob.getCreateTime());
 		model.setRemark(scheduleJob.getRemark());
 		model.setStatus(scheduleJob.getStatus());
+		//params 转换模块名/系统名称的形式输出
 		String isNum = "^[0-9]*$";
 		if(scheduleJob.getParams().matches(isNum)){
 			List<LinkInfoEntity> linkInfo = linkInfoDao.queryByIds(Integer.parseInt(scheduleJob.getParams()));
@@ -155,7 +156,6 @@ public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobDao, Schedule
 					flagMap.put(entity.getSystem(),timeTaskModels.size());
 					timeTaskModels.add(parent);
 				}
-
 				TimeTaskModel child = new TimeTaskModel();
 				child.setLabel(entity.getModule());
 				child.setValue(String.valueOf(entity.getLinkId()));

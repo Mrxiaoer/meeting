@@ -67,7 +67,12 @@
 	<sql id="Base_Column_Page">
 		page_id,name_cn,name_en,information_name,create_time,update_time,is_change,result_id,state as p.state
 	</sql>
-	
+
+	<select id="queryAll" resultMap="Base_ResultMap">
+		select
+		<include refid="Base_Column_List"/>
+		from spider_result_info where state = 1
+	</select>
 	<!-- 根据id查询数据 -->
 	<select id="queryById" parameterType="java.lang.Integer"
 		resultMap="Base_ResultMap">
