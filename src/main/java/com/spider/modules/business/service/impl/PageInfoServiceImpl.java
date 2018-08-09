@@ -92,7 +92,11 @@ public class PageInfoServiceImpl extends ServiceImpl<PageInfoDao, PageInfoEntity
             rs.setChangeState(Constant.SUPER_ADMIN);
             resultInfoDao.update(rs);
         }
+    }
 
+    @Override
+    public void delete(Integer[] pageIds){
+        pageInfoDao.delete(pageIds);
     }
 
 }

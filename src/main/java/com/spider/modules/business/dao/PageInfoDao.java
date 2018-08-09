@@ -16,6 +16,12 @@ import com.spider.modules.business.entity.PageInfoEntity;
  */
 @Mapper
 public interface PageInfoDao extends BaseMapper<PageInfoEntity> {
+
+    /**
+     * 查询数据库中pageinfo表所有数据
+     * @return
+     */
+   List<PageInfoEntity> queryAll();
     /**
      * 根据id查询数据
      * @param pageId
@@ -35,7 +41,7 @@ public interface PageInfoDao extends BaseMapper<PageInfoEntity> {
      * @param resultId
      * @return
      */
-        List<PageInfoEntity> listByResultId(Integer resultId);
+    List<PageInfoEntity> listByResultId(Integer resultId);
 
     /**
      * 采集结果=>查看=>详情

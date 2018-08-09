@@ -38,4 +38,11 @@ public class PageInfoController {
         pageInfoService.updatePageAndElement(provisional);
         return R.ok();
     }
+
+    @PostMapping("/delete")
+    public R delete(@RequestBody Integer[] pageIds){
+        pageInfoService.delete(pageIds);
+        return  R.ok();
+    }
+
 }

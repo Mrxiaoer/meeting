@@ -2,6 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.spider.modules.business.dao.PageInfoDao">
+    <resultMap id="Base_ResultMap" type="com.spider.modules.business.entity.PageInfoEntity">
+        <id column="page_id" property="pageId"/>
+        <result column="name_cn" property="nameCn"/>
+        <result column="name_en" property="nameEn"/>
+        <result column="information_name" property="informationName"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_change" property="isChange"/>
+        <result column="result_id" property="resultId"/>
+        <result column="state" property="state"/>
+    </resultMap>
 	<resultMap
 		type="com.spider.modules.business.entity.PageInfoEntity" id="resultMap">
 		<id column="page_id" property="pageId"/>
@@ -23,10 +34,18 @@
 	<sql id="Base_Column_List">
 		page_id,name_cn,name_en,information_name,create_time,update_time,is_change,result_id,state
 	</sql>
+    <select id="queryAll" resultMap="Base_ResultMap">
+        SELECT
+         <include refid="Base_Column_List"/>
+         FROM spider_page_info WHERE state = 1
+    </select>
 	<!-- 根据page_id查询数据 -->
 	<select id="queryById" parameterType="java.lang.Integer"
 		resultMap="resultMap">
-		select * from spider_page_info where <!-- is_change = 0 and --> state = 1 and
+		select
+        <include refid="Base_Column_List"/>
+        from spider_page_info
+        where <!-- is_change = 0 and --> state = 1 and
 		page_id = #{pageId}
 	</select>
 	<!-- 根据结果表中的id查询未转化数据 -->

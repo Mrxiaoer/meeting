@@ -14,6 +14,13 @@ import com.spider.modules.business.model.ResultInfoModel;
 @Mapper
 public interface ResultInfoDao extends BaseMapper<ResultInfoModel> {
 
+
+    /**
+     * 查询所有resultInfo信息
+     * @return
+     */
+    List<ResultInfoEntity> queryAll();
+
     /**
      * 根据id查询
      * @param id

@@ -53,6 +53,7 @@ public interface PageInfoService {
      * @param params
      */
     void updatePageAndElement(ProvisionalEntity provisional);
-    
+
+    void delete(Integer[] pageIds);
     
 }
