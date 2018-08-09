@@ -195,6 +195,9 @@ public class SpiderPageProcessor implements PageProcessor {
 
 		//对所有链接进行补全
 		String fullPath = "";
+		if(!path.endsWith("/")){
+			path += "/";
+		}
 		while (matcher.find()) {
 			try {
 				fullPath = matcher.group().replace(matcher.group(3), URLUtil.complateUrl(URLUtil.complateUrl(host, path), matcher.group(3)));
