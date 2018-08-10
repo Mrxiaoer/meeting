@@ -3,9 +3,9 @@ spring:
         type: com.alibaba.druid.pool.DruidDataSource
         driverClassName: com.mysql.jdbc.Driver
         druid:
-            url: jdbc:mysql://115.233.227.46:3313/spider-data?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
+            url: jdbc:mysql://115.233.227.46:3336/spider-data?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
             username: root
-            password: root
+            password: 123456
             initial-size: 10
             max-active: 100
             min-idle: 10
@@ -31,3 +31,20 @@ spring:
                 wall:
                     config:
                         multi-statement-allow: true
+
+
+webmagic:
+    selenuim_config: /selenium/config-test.ini
+
+VcCode:
+    image:
+        #验证码存放位置
+        path: /usr/spider/image/before/
+        #处理过的验证码存放位置
+        p-path: /usr/spider/image/after/
+    chaojiying:
+        username: xiaomo
+        password: 123456
+        softId: 896818
+    #是否使用OCR识别验证码，准确率较低
+    useOcr: false

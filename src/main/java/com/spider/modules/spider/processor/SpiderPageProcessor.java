@@ -115,12 +115,13 @@ public class SpiderPageProcessor implements PageProcessor {
 		myPage.putField(SpiderConstant.LINKID, this.linkId);
 		String htmlStr = myPage.getHtml().get();
 		//清除js
-		Pattern p = Pattern.compile("<script[\\s|\\S]*?>[\\s|\\S]*?</script>");
-		Pattern p1 = Pattern.compile(
-						"<script[\\s]*?src[\\s]*?=[\\s]*?\"[\\S]*?(vue|element-ui/index)(.min)?.js\"[\\s|\\S]*?>[\\s|\\S]*?</script>");
+		Pattern p =
+				Pattern.compile("<script[^>]*?src[\\s]*?=[\\s]*?(\"[\\S]*?\"|\'[\\S]*?\')></script>");
+		Pattern p1 =
+				Pattern.compile(
+						"<script[^>]*?src[\\s]*?=[\\s]*?(\"[\\S]*?(vue|element-ui/index)(.min)?.js\"|\'[\\S]*?(vue|element-ui/index)(.min)?.js\')[^>]*?></script>");
 		Matcher m = p.matcher(htmlStr);
 		Matcher m1 = p1.matcher(htmlStr);
-		System.out.println("====>");
 		List<String> list = new ArrayList<>();
 		while (m1.find()) {
 			list.add(m1.group(0));
@@ -136,6 +137,7 @@ public class SpiderPageProcessor implements PageProcessor {
 				htmlStr = htmlStr.replaceAll(m.group(0), "");
 			}
 		}
+        htmlStr = htmlStr.replaceAll("(<script[\\s|\\S]*?>[\\s\\S]*?[^>\\s]+?[\\s\\S]*?</script>)", "");
 //		htmlStr = htmlStr.replaceAll("(<script[\\s|\\S]*?>[\\s|\\S]*?</script>)", "");
         htmlStr = htmlStr.replaceAll("type[\\s]*?=[\\s]*?(\"submit\"|'submit')", "");
 		//url补全

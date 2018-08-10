@@ -31,3 +31,21 @@ spring:
                 wall:
                     config:
                         multi-statement-allow: true
+
+webmagic:
+    selenuim_config: selenium/config.ini
+
+VcCode:
+    image:
+        #验证码存放位置
+        #        path: F:/JavaSource/image/before/
+        path: /usr/spider/image/before/
+        #处理过的验证码存放位置
+        #        p-path: F:/JavaSource/image/after/
+        p-path: /usr/spider/image/after/
+    chaojiying:
+        username: xiaomo
+        password: 123456
+        softId: 896818
+    #是否使用OCR识别验证码，准确率较低
+    useOcr: false

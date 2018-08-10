@@ -109,10 +109,11 @@ public class SpiderTest {
             + "<script src=\"http://114.55.11.227:8888/citysystem2/static/plugins/vue-2.5.2/vue.min.js\"></script>\n"
             + "<script src=\"http://114.55.11.227:8888/citysystem2/static/plugins/vue-2.5.13/axios.js\"></script>\n"
             + "<script src=\"http://114.55.11.227:8888/citysystem2/static/plugins/element-ui/index.js\"></script>";
-    Pattern p = Pattern.compile("<script[\\s|\\S]*?>[\\s|\\S]*?</script>");
+    Pattern p =
+        Pattern.compile("<script[\\s|\\S]*?src[\\s]*?=[\\s]*?(\"[\\S]*?\"|\'[\\S]*?\')></script>");
     Pattern p1 =
         Pattern.compile(
-            "<script[\\s]*?src[\\s]*?=[\\s]*?\"[\\S]*?(vue|element-ui/index)(.min)?.js\"[\\s|\\S]*?>[\\s|\\S]*?</script>");
+            "<script[^>]*?src[\\s]*?=[\\s]*?(\"[\\S]*?(vue|element-ui/index)(.min)?.js\"|\'[\\S]*?(vue|element-ui/index)(.min)?.js\')[^>]*?></script>");
     Matcher m = p.matcher(str);
     Matcher m1 = p1.matcher(str);
     System.out.println("====>");

@@ -30,14 +30,15 @@ public class PhantomJSDriverFactory extends BasePooledObjectFactory<PhantomJSDri
 
 	@Override
 	public PhantomJSDriver create() throws Exception {
-		Map<String, String> prop = readProp.readp();
-		Properties sConfig = new Properties();
-		String configFile = "selenium/config.ini";
-		if (System.getProperty("selenuim_config") != null) {
-			configFile = System.getProperty("selenuim_config");
-		}
+//		Map<String, String> prop = readProp.readp();
+		Properties prop = readProp.readp();
+//		Properties sConfig = new Properties();
+//		String configFile = "selenium/config.ini";
+//		if (System.getProperty("selenuim_config") != null) {
+//			configFile = System.getProperty("selenuim_config");
+//		}
 
-		sConfig.load(new FileReader(configFile));
+//		sConfig.load(new FileReader(configFile));
 		DesiredCapabilities dcaps = new DesiredCapabilities();
 		//ssl证书支持
 		dcaps.setCapability("acceptSslCerts", true);
@@ -56,10 +57,9 @@ public class PhantomJSDriverFactory extends BasePooledObjectFactory<PhantomJSDri
 		cliArgsCap.add("--disk-cache=true");
 		dcaps.setCapability("phantomjs.cli.args", cliArgsCap);
 		dcaps.setCapability("phantomjs.ghostdriver.cli.args",
-		                    new String[]{"--logLevel=" + (sConfig.getProperty("phantomjs_driver_loglevel") != null ? sConfig
-				                    .getProperty("phantomjs_driver_loglevel") : "INFO")});
+		                    new String[]{"--logLevel=" + (prop.getProperty("phantomjs_driver_loglevel") != null ? prop.getProperty("phantomjs_driver_loglevel") : "INFO")});
 		//驱动支持
-		dcaps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, prop.get("phantomjs_exec_path"));
+		dcaps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, prop.getProperty("phantomjs_exec_path"));
 		PhantomJSDriver driver = new PhantomJSDriver(dcaps);
 		driver.manage().window().maximize();
 		return driver;
