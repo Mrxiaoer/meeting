@@ -4,7 +4,7 @@ server:
         uri-encoding: UTF-8
         max-threads: 1000
         min-spare-threads: 30
-    port: 8080
+    port: 8899
     connection-timeout: 5000ms
     servlet:
         context-path: /
@@ -87,7 +87,7 @@ VcCode:
         #处理过的验证码存放位置
         p-path: F:/JavaSource/image/after/
     chaojiying:
-        username: chenxiaoqi
+        username: xiaomo
         password: 123456
         softId: 896818
     #是否使用OCR识别验证码，准确率较低

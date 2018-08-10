@@ -7,6 +7,7 @@ import com.spider.modules.spider.config.SpiderConstant;
 import com.spider.modules.spider.entity.MyPage;
 import com.spider.modules.spider.entity.SpiderRule;
 import com.spider.modules.spider.utils.MyStringUtil;
+import java.util.ArrayList;
 import org.openqa.selenium.Cookie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -114,7 +115,29 @@ public class SpiderPageProcessor implements PageProcessor {
 		myPage.putField(SpiderConstant.LINKID, this.linkId);
 		String htmlStr = myPage.getHtml().get();
 		//清除js
-		htmlStr = htmlStr.replaceAll("(<script[\\s|\\S]*?>[\\s|\\S]*?</script>)", "");
+		Pattern p = Pattern.compile("<script[\\s|\\S]*?>[\\s|\\S]*?</script>");
+		Pattern p1 = Pattern.compile(
+						"<script[\\s]*?src[\\s]*?=[\\s]*?\"[\\S]*?(vue|element-ui/index)(.min)?.js\"[\\s|\\S]*?>[\\s|\\S]*?</script>");
+		Matcher m = p.matcher(htmlStr);
+		Matcher m1 = p1.matcher(htmlStr);
+		System.out.println("====>");
+		List<String> list = new ArrayList<>();
+		while (m1.find()) {
+			list.add(m1.group(0));
+		}
+		while (m.find()) {
+			boolean flag = true;
+			for (int i = 0; i < list.size(); i++) {
+				if (list.get(i).equals(m.group(0))) {
+					flag = false;
+				}
+			}
+			if (flag == true) {
+				htmlStr = htmlStr.replaceAll(m.group(0), "");
+			}
+		}
+//		htmlStr = htmlStr.replaceAll("(<script[\\s|\\S]*?>[\\s|\\S]*?</script>)", "");
+        htmlStr = htmlStr.replaceAll("type[\\s]*?=[\\s]*?(\"submit\"|'submit')", "");
 		//url补全
 		htmlStr = this.urlComplate(UrlUtils.getHost(myPage.getUrl().toString()), myPage.getUrlPath(), htmlStr);
 		Html html = Html.create(htmlStr);

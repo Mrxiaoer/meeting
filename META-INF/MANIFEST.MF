@@ -11,4 +11,6 @@ Import-Package: org.slf4j,
  org.apache.commons.lang,
  org.apache.shiro.authz.annotation,
  org.apache.shiro,
- javax.annotation
+ javax.annotation,
+ com.fasterxml.jackson.databind,
+ com.fasterxml.jackson.core

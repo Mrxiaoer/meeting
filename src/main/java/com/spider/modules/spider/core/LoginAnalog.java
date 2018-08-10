@@ -106,7 +106,7 @@ public class LoginAnalog {
 
 			//获取cookies
 			Set<Cookie> cookieSet = driver.manage().getCookies();
-            String beforeUrl = urlCutParam(driver.getCurrentUrl());
+            String beforeUrl = MyStringUtil.urlCutParam(driver.getCurrentUrl());
 			//url相同说明可直接获取目标页
 			if (!beforeUrl.equals(targetUrl)) {
 				Calendar cal = Calendar.getInstance();
@@ -205,7 +205,7 @@ public class LoginAnalog {
 
 						//sleep,等待
 						int sleepNum = 0;
-                        String nowUrl = urlCutParam(driver.getCurrentUrl());
+                        String nowUrl = MyStringUtil.urlCutParam(driver.getCurrentUrl());
 						while (sleepNum < 5 && URLUtil.getPath(nowUrl).equals(URLUtil.getPath(beforeUrl))) {
 							Thread.sleep(1000);
 							sleepNum++;
@@ -214,9 +214,9 @@ public class LoginAnalog {
 					} finally {
 						tryNum++;
 						//检测登录，判断是否已登录，已登录flag为false
-						String tarUrl = urlCutParam(targetUrl);
+						String tarUrl = MyStringUtil.urlCutParam(targetUrl);
 						driver.get(targetUrl);
-						String nowUrl = urlCutParam(driver.getCurrentUrl());
+						String nowUrl = MyStringUtil.urlCutParam(driver.getCurrentUrl());
 						if (nowUrl.equals(tarUrl)) {
 							flag = false;
 						} else if (cjyResult != null) {
@@ -246,18 +246,6 @@ public class LoginAnalog {
 			phantomJSDriverPool.returnObject(driver);
 		}
 		return resultCookies;
-	}
-
-	private String urlCutParam(String url){
-		Pattern p = Pattern.compile("(https?://[\\S]*?)[^A-Z|a-z|0-9|\\u4e00-\\u9fa5|.|/|:|_|-]");
-		Matcher m = p.matcher(url);
-		String newUrl;
-		if (m.find()) {
-			newUrl = m.group(1);
-		}else {
-			newUrl = url;
-		}
-		return newUrl;
 	}
 
 }

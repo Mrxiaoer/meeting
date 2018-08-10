@@ -5,6 +5,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spider.modules.spider.entity.MyCookie;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import net.sourceforge.pinyin4j.PinyinHelper;
 import org.openqa.selenium.Cookie;
 
@@ -95,6 +97,18 @@ public class MyStringUtil {
 					            .expiresOn(myCookie.getExpiry()).isHttpOnly(myCookie.isHttpOnly()).isSecure(myCookie.isSecure()).build());
 		}
 		return cookies;
+	}
+
+	public static String urlCutParam(String url){
+		Pattern p = Pattern.compile("(https?://[\\S]*?)[^A-Z|a-z|0-9|\\u4e00-\\u9fa5|.|/|:|_|-]");
+		Matcher m = p.matcher(url);
+		String newUrl;
+		if (m.find()) {
+			newUrl = m.group(1);
+		}else {
+			newUrl = url;
+		}
+		return newUrl;
 	}
 
 }

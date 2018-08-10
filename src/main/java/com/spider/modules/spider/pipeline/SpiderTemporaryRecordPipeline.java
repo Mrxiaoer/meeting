@@ -3,6 +3,7 @@ package com.spider.modules.spider.pipeline;
 import com.spider.modules.spider.config.SpiderConstant;
 import com.spider.modules.spider.entity.TemporaryRecordEntity;
 import com.spider.modules.spider.service.TemporaryRecordService;
+import com.spider.modules.spider.utils.MyStringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.ResultItems;
@@ -27,7 +28,7 @@ public class SpiderTemporaryRecordPipeline implements Pipeline {
 	@Override
 	public void process(ResultItems resultItems, Task task) {
 		TemporaryRecordEntity temporaryRecord = new TemporaryRecordEntity();
-		temporaryRecord.setUrl(resultItems.get(SpiderConstant.URL));
+		temporaryRecord.setUrl(resultItems.get(MyStringUtil.urlCutParam(SpiderConstant.URL)));
 		if (resultItems.get(SpiderConstant.SELECTOBJS) != null && ((List<String>) resultItems.get(SpiderConstant.SELECTOBJS)).size() >= 1) {
 			String html = ((List<String>) resultItems.get(SpiderConstant.SELECTOBJS)).get(0);
 			int linkId = resultItems.get(SpiderConstant.LINKID);
