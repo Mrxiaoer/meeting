@@ -6,6 +6,7 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -41,7 +42,7 @@ public class ScheduleJobModel implements Serializable {
     /**
      * 参数
      */
-    private TimeTaskModel params;
+    private List<String> params;
 
     /**
      * cron表达式
@@ -99,11 +100,11 @@ public class ScheduleJobModel implements Serializable {
         this.methodName = methodName;
     }
 
-    public TimeTaskModel getParams() {
+    public List<String> getParams() {
         return params;
     }
 
-    public void setParams(TimeTaskModel params) {
+    public void setParams(List<String> params) {
         this.params = params;
     }
 

@@ -40,18 +40,6 @@
 		#{linkId}
 	</select>
 
-	 <!--TODO: 2018/8/6 0006  需解决scheduleJobServiceImpl-->
-	<select id="queryByIds" parameterType="java.lang.Integer"
-			resultType="com.spider.modules.business.entity.LinkInfoEntity">
-		SELECT
-		*
-		FROM
-		spider_link_info
-		WHERE
-		state = 1 and link_id =
-		#{linkId}
-	</select>
-
 	<!--定时任务联动一级-->
 	<select id="querySum" resultType="java.lang.String">
 		SELECT

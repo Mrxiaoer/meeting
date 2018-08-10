@@ -32,7 +32,7 @@ public class ElementInfoController {
      * @param params(page、limit、中文名)
      * @return 分页信息、数据
      */
-    @GetMapping("list")
+    @GetMapping("/list")
     public R queryTerm(@RequestParam Map<String,Object> params){
         PageUtils page = elementInfoService.queryTerm(params);
         return R.ok().put("page", page).put("list", page.getList());
