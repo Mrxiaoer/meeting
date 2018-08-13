@@ -110,17 +110,19 @@ public class LinkInfoServiceImpl extends ServiceImpl<LinkInfoDao, LinkInfoEntity
            rc.setTargetUrl(linkInfo.getUrl());
            analogLoginDao.updateAnalogLogin(rc);
         }
-        LinkInfoEntity oldlink = linkInfoDao.queryById(linkInfo.getLinkId());
-        if(oldlink.getSystem() != linkInfo.getSystem() || oldlink.getModule() != linkInfo.getModule()){
-            ResultInfoEntity rs = new ResultInfoEntity();
-            rs.setLinkId(linkInfo.getLinkId());
-            ResultInfoEntity rsg = new ResultInfoEntity();
-            rsg.setSystem(linkInfo.getSystem());
-            rsg.setModule(linkInfo.getModule());
-            List<ResultInfoEntity> results = resultInfoDao.selectByCustom(rs);
-            for (ResultInfoEntity resultInfo:results){
-                rsg.setId(resultInfo.getId());
-                resultInfoDao.update(rsg);
+        if(!(linkInfo.getSystem() == null || linkInfo.getModule() == null)){
+            LinkInfoEntity oldlink = linkInfoDao.queryById(linkInfo.getLinkId());
+            if(oldlink.getSystem() != linkInfo.getSystem() || oldlink.getModule() != linkInfo.getModule()){
+                ResultInfoEntity rs = new ResultInfoEntity();
+                rs.setLinkId(linkInfo.getLinkId());
+                ResultInfoEntity rsg = new ResultInfoEntity();
+                rsg.setSystem(linkInfo.getSystem());
+                rsg.setModule(linkInfo.getModule());
+                List<ResultInfoEntity> results = resultInfoDao.selectByCustom(rs);
+                for (ResultInfoEntity resultInfo:results){
+                    rsg.setId(resultInfo.getId());
+                    resultInfoDao.update(rsg);
+                }
             }
         }
     }
