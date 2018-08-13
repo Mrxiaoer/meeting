@@ -7,7 +7,9 @@ import com.spider.common.utils.Constant;
 import com.spider.common.utils.PageUtils;
 import com.spider.common.utils.Query;
 import com.spider.modules.business.dao.LinkInfoDao;
+import com.spider.modules.business.dao.ResultInfoDao;
 import com.spider.modules.business.entity.LinkInfoEntity;
+import com.spider.modules.business.entity.ResultInfoEntity;
 import com.spider.modules.business.model.TimeTaskModel;
 import com.spider.modules.business.service.LinkInfoService;
 import com.spider.modules.spider.dao.AnalogLoginDao;
@@ -42,6 +44,9 @@ public class LinkInfoServiceImpl extends ServiceImpl<LinkInfoDao, LinkInfoEntity
 
     @Autowired
     AnalogLoginDao analogLoginDao;
+
+    @Autowired
+    ResultInfoDao resultInfoDao;
 
     @Override
     public PageUtils queryTerm(Map<String, Object> params) {
@@ -104,6 +109,19 @@ public class LinkInfoServiceImpl extends ServiceImpl<LinkInfoDao, LinkInfoEntity
            rc.setId(id);
            rc.setTargetUrl(linkInfo.getUrl());
            analogLoginDao.updateAnalogLogin(rc);
+        }
+        LinkInfoEntity oldlink = linkInfoDao.queryById(linkInfo.getLinkId());
+        if(oldlink.getSystem() != linkInfo.getSystem() || oldlink.getModule() != linkInfo.getModule()){
+            ResultInfoEntity rs = new ResultInfoEntity();
+            rs.setLinkId(linkInfo.getLinkId());
+            ResultInfoEntity rsg = new ResultInfoEntity();
+            rsg.setSystem(linkInfo.getSystem());
+            rsg.setModule(linkInfo.getModule());
+            List<ResultInfoEntity> results = resultInfoDao.selectByCustom(rs);
+            for (ResultInfoEntity resultInfo:results){
+                rsg.setId(resultInfo.getId());
+                resultInfoDao.update(rsg);
+            }
         }
     }
 

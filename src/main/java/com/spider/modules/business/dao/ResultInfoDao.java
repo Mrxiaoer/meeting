@@ -27,7 +27,14 @@ public interface ResultInfoDao extends BaseMapper<ResultInfoModel> {
      * @return
      */
     ResultInfoEntity queryById(Integer id);
-    
+
+    /**
+     * 根据用户自定义查询resultInfo表
+     * @param resultInfo
+     * @return
+     */
+    List<ResultInfoEntity> selectByCustom(ResultInfoEntity resultInfo);
+
     /**
      * 多表查采集结果中element信息
      * @param resultId
