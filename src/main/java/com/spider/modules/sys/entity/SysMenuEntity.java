@@ -64,6 +64,12 @@ public class SysMenuEntity implements Serializable {
 	private Integer orderNum;
 
 	/**
+	 * 是否显示
+	 */
+
+	public Boolean hide;
+
+	/**
 	 * ztree属性
 	 */
 	@TableField(exist = false)
