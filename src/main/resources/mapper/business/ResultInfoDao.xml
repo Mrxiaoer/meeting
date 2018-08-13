@@ -80,6 +80,22 @@
 		id = #{id}
 	</select>
 
+	<!--根据条件查看resultInfo表-->
+	<select id="selectByCustom" parameterType="com.spider.modules.business.entity.ResultInfoEntity" resultMap="Base_ResultMap">
+		select
+		<include refid="Base_Column_List"/>
+		from spider_result_info
+		<where>
+			<if test="system != null" >
+			 and system = #{system}
+			</if>
+			<if test="linkId != null" >
+			 and link_id = #{linkId}
+			</if>
+			and state = 1
+		</where>
+	</select>
+
 	<!--资源目录=>信息资源=>详情-->
 	<select id="conversionByInformation" parameterType="java.lang.Integer" resultMap="Element_ResultMap">
 		SELECT
