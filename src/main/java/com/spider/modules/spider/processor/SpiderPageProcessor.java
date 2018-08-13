@@ -137,7 +137,7 @@ public class SpiderPageProcessor implements PageProcessor {
 				htmlStr = htmlStr.replaceAll(m.group(0), "");
 			}
 		}
-        htmlStr = htmlStr.replaceAll("(<script[\\s|\\S]*?>[\\s\\S]*?[^>\\s]+?[\\s\\S]*?</script>)", "");
+        htmlStr = htmlStr.replaceAll("(<script[^>]*?>[^>]*?[^>\\s]+?[^>]*?</script>)", "");
 //		htmlStr = htmlStr.replaceAll("(<script[\\s|\\S]*?>[\\s|\\S]*?</script>)", "");
         htmlStr = htmlStr.replaceAll("type[\\s]*?=[\\s]*?(\"submit\"|'submit')", "");
 		//url补全

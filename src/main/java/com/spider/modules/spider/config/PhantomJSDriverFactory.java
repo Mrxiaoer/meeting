@@ -55,8 +55,8 @@ public class PhantomJSDriverFactory extends BasePooledObjectFactory<PhantomJSDri
 		cliArgsCap.add("--load-images=false");
 		// 本地缓存
 		cliArgsCap.add("--disk-cache=true");
-		dcaps.setCapability("phantomjs.cli.args", cliArgsCap);
-		dcaps.setCapability("phantomjs.ghostdriver.cli.args",
+		dcaps.setCapability(PhantomJSDriverService.PHANTOMJS_CLI_ARGS, cliArgsCap);
+		dcaps.setCapability(PhantomJSDriverService.PHANTOMJS_GHOSTDRIVER_CLI_ARGS,
 		                    new String[]{"--logLevel=" + (prop.getProperty("phantomjs_driver_loglevel") != null ? prop.getProperty("phantomjs_driver_loglevel") : "INFO")});
 		//驱动支持
 		dcaps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, prop.getProperty("phantomjs_exec_path"));
