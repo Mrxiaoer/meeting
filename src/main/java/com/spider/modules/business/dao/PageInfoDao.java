@@ -75,4 +75,10 @@ public interface PageInfoDao extends BaseMapper<PageInfoEntity> {
      * @return
      */
     int querySum(Map<String,Object> map);
+
+   /**
+    * 定时统计采集信息项
+    * @return
+    */
+   List<Map<String,Object>> spiderByMonth();
 }

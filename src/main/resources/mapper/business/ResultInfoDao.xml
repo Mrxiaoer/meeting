@@ -148,6 +148,29 @@
 		GROUP BY
 			system
 	</select>
+
+    <!--首页统计采集数量-->
+    <select id="pageCount" resultType="java.lang.Integer">
+        SELECT
+            COUNT(id) as count
+        FROM
+            spider_result_info
+        WHERE
+            state = 1
+    </select>
+
+	<select id="spiderByMonth" resultType="java.util.Map">
+		SELECT
+			MONTH (create_time) AS month,
+			COUNT(*) AS result
+		FROM
+			spider_result_info
+		WHERE
+			YEAR (create_time) = 2018
+		AND state = 1
+		GROUP BY
+			MONTH (create_time)
+	</select>
 	
 	<!-- 更新数据 -->
 	<update id="update"

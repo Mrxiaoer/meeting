@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spider.modules.business.dao.HomePageChartDao">
+
+    <resultMap id="Base_ResultMap" type="com.spider.modules.business.model.HomePageChart">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="type" property="type"/>
+        <result column="sqldata" property="sqldata" />
+        <result column="month" property="month" />
+    </resultMap>
+
+    <sql id="Base_Columnm_List">
+        id,name,type,sqldata,month
+    </sql>
+
+    <select id="selectOne" parameterType="com.spider.modules.business.model.HomePageChart" resultMap="Base_ResultMap">
+        select
+        <include refid="Base_Columnm_List"></include>
+        from `spider_home_page_chart`
+        <trim prefix="where" suffixOverrides="and | or">
+            <if test="id != null">
+                `id` = #{id} and
+            </if>
+            <if test="name != null">
+                `name` = #{name} and
+            </if>
+            <if test="type != null and type!=''">
+                `regex` = #{type} and
+            </if>
+            <if test="sqldata != null">
+                `sqldata` = #{sqldata} and
+            </if>
+            <if test="month != null ">
+                `month` = #{month} and
+            </if>
+        </trim>
+        LIMIT 1
+    </select>
+
+    <select id="selectAllByName" parameterType="com.spider.modules.business.model.HomePageChart" resultType="java.lang.Integer">
+        SELECT
+        sqldata
+        FROM
+        `spider_home_page_chart`
+        <where>
+            <if test="name != null">
+                name = #{name}
+            </if>
+        </where>
+        ORDER BY
+        `month` ASC
+    </select>
+
+    <!--统计月份-->
+    <select id="queryMonth" resultType="java.lang.Integer">
+        SELECT
+            month
+        FROM
+            spider_home_page_chart
+        GROUP BY
+            `month` ASC
+    </select>
+
+    <!--自定义更新数据-->
+    <update id="updateOne" parameterType="com.spider.modules.business.model.HomePageChart">
+        UPDATE `spider_home_page_chart`
+        SET
+        <trim suffixOverrides=",">
+            <if test="name != null and name!=''">
+                `name` = #{name},
+            </if>
+            <if test="type != null and type!=''">
+                `type` = #{type},
+            </if>
+            <if test="sqldata != null">
+                `sqldata` = #{sqldata},
+            </if>
+            <if test="month != null">
+                `month` = #{month},
+            </if>
+        </trim>
+        WHERE
+        <trim suffixOverrides="and">
+            `id` = #{id}
+        </trim>
+    </update>
+
+    <insert id="insertOne" parameterType="com.spider.modules.business.model.HomePageChart" useGeneratedKeys="true" keyProperty="id">
+        insert into spider_home_page_chart
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="sqldata != null">
+                sqldata,
+            </if>
+            <if test="month != null">
+                month,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="name != null">
+                #{name},
+            </if>
+            <if test="type != null">
+                #{type},
+            </if>
+            <if test="sqldata != null">
+                #{sqldata},
+            </if>
+            <if test="month != null">
+                #{month},
+            </if>
+        </trim>
+    </insert>
+
+</mapper>
