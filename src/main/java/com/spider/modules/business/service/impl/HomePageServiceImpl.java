@@ -1,6 +1,5 @@
 package com.spider.modules.business.service.impl;
 
-import com.spider.modules.business.dao.HomePageChartDao;
 import com.spider.modules.business.dao.LinkInfoDao;
 import com.spider.modules.business.dao.PageInfoDao;
 import com.spider.modules.business.dao.ResultInfoDao;
@@ -38,8 +37,6 @@ public class HomePageServiceImpl implements HomePageService {
     @Autowired
     PageInfoDao pageInfoDao;
 
-    @Autowired
-    HomePageChartDao homePageChartDao;
 
     @Override
     public List<PageCountModel> getInfoCount(){
@@ -83,41 +80,64 @@ public class HomePageServiceImpl implements HomePageService {
 
         List<HomePageChart> seriesData = new  ArrayList<HomePageChart>();
 
-        //统计系统与模块总数
-//        List<Map<String,Object>> sandm = linkInfoDao.spiderByMonth();
-//        HomePageChart oldHome = new HomePageChart();
-//        HomePageChart home = new HomePageChart();
-//        for (Map<String,Object> m:sandm){
-//
-//            oldHome.setName("采集模块总数");
-//            oldHome.setMonth(Integer.valueOf(String.valueOf(m.get("month"))));
-//            HomePageChart old = homePageChartDao.selectOne(oldHome);
-//            oldHome.setSqldata(Integer.parseInt(String.valueOf(m.get("module"))));
-//            this.insertOrUpdate(oldHome, old);
-//
-//            home.setName("采集系统总数");
-//            home.setMonth(Integer.valueOf(String.valueOf(m.get("month"))));
-//            HomePageChart other = homePageChartDao.selectOne(home);
-//            home.setSqldata(Integer.parseInt(String.valueOf(m.get("system"))));
-//            this.insertOrUpdate(home, other);
-//        }
+        List<Integer> systemcount = new ArrayList<Integer>();
+        List<Integer> modulecount = new ArrayList<Integer>();
+        List<Integer> resultcount = new ArrayList<Integer>();
+        List<Integer> pagecount = new ArrayList<Integer>();
+        //初始list数据
+        for(Integer i=0;i<12;i++){
+            systemcount.add(0);
+            modulecount.add(0);
+            resultcount.add(0);
+            pagecount.add(0);
+        }
 
-        seriesData.add(this.conversion("采集系统总数"));
-        seriesData.add(this.conversion("采集模块总数"));
-        seriesData.add(this.conversion("采集信息资源总数"));
-        seriesData.add(this.conversion("采集信息项总数"));
+        //统计系统与模块总数
+        List<Map<String,Object>> sandm = linkInfoDao.spiderByMonth();
+        for (Map<String,Object> m:sandm){
+            Integer s = Integer.parseInt(String.valueOf(m.get("month"))) - 1;
+            systemcount.set(s, Integer.parseInt(String.valueOf(m.get("system"))));
+            modulecount.set(s, Integer.parseInt(String.valueOf(m.get("module"))));
+        }
+        //定时统计信息项总数
+        List<Map<String,Object>> re = resultInfoDao.spiderByMonth();
+        for (Map<String,Object> q:re){
+            Integer m = Integer.parseInt(String.valueOf(q.get("month"))) - 1;
+            resultcount.set(m, Integer.parseInt(String.valueOf(q.get("result"))));
+        }
+        //定时统计采集信息项总数
+        List<Map<String,Object>> pa = pageInfoDao.spiderByMonth();
+        for (Map<String,Object> p :pa){
+            Integer y = Integer.parseInt(String.valueOf(p.get("month"))) - 1;
+            pagecount.set(y, Integer.parseInt(String.valueOf(p.get("page"))));
+        }
+        //组装entity
+        HomePageChart system = new HomePageChart();
+        system.setName("采集系统总数");
+        system.setType("bar");
+        system.setData(systemcount);
+        seriesData.add(system);
+
+        HomePageChart module = new HomePageChart();
+        module.setName("采集模块总数");
+        module.setType("bar");
+        module.setData(modulecount);
+        seriesData.add(module);
+
+        HomePageChart result = new HomePageChart();
+        result.setName("采集信息资源总数");
+        result.setType("bar");
+        result.setData(resultcount);
+        seriesData.add(result);
+
+        HomePageChart page = new HomePageChart();
+        page.setName("采集信息项总数");
+        page.setType("bar");
+        page.setData(pagecount);
+        seriesData.add(page);
 
         map.put("seriesData", seriesData);
         return map;
     }
 
-    private  HomePageChart conversion(String name){
-
-        HomePageChart homePageChart = new HomePageChart();
-        homePageChart.setName(name);
-        List<Integer> sqldata = homePageChartDao.selectAllByName(homePageChart);
-        homePageChart.setType("bar");
-        homePageChart.setData(sqldata);
-        return homePageChart;
-    }
 }
