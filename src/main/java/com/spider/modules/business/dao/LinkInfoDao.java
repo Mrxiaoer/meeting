@@ -65,4 +65,16 @@ public interface LinkInfoDao extends BaseMapper<LinkInfoEntity>{
     List<LinkInfoEntity> queryTerm(LinkInfoEntity linkInfo);
 
     List<LinkInfoEntity> selectAll();
+
+    /**
+     * 首页统计系统名称与模块名称
+     * @return
+     */
+    Map<String,Object> countSystemAndModule();
+
+    /**
+     * 采集首页中系统与模块总数
+     * @return
+     */
+    List<Map<String,Object>> spiderByMonth();
 }

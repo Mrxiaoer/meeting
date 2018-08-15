@@ -68,6 +68,18 @@ public interface ResultInfoDao extends BaseMapper<ResultInfoModel> {
      * @return
      */
     List<Map<String, Object>> querySum();
+
+    /**
+     * 首页统计采集数量
+     * @return
+     */
+    Integer pageCount();
+
+    /**
+     * 首页统计信息资源总数
+     * @return
+     */
+    List<Map<String,Object>> spiderByMonth();
     
     /**
      * 添加数据
