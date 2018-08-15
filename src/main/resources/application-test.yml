@@ -34,7 +34,7 @@ spring:
 
 
 webmagic:
-    selenuim_config: /selenium/config-test.ini
+    selenuim_config: /selenium/config-lin.ini
 
 VcCode:
     image:

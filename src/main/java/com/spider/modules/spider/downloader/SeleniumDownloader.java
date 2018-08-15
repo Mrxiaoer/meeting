@@ -22,13 +22,7 @@ import us.codecraft.webmagic.downloader.Downloader;
 import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.selector.PlainText;
 
-/**
- * 动态页面下载器
- *
- * @Author : lolilijve
- * @Email : 1042703214@qq.com
- * @Date : 2018-06-26
- */
+/** 动态页面下载器 @Author : lolilijve @Email : 1042703214@qq.com @Date : 2018-06-26 */
 @Component
 public class SeleniumDownloader implements Downloader, Closeable {
   private static final String DRIVER_PHANTOMJS = "phantomjs";
@@ -122,7 +116,15 @@ public class SeleniumDownloader implements Downloader, Closeable {
       page.setUrlPath(urlPath);
       page.setRequest(request);
     } finally {
-      this.phantomJSDriverPool.returnObject(driver);
+      try {
+        this.phantomJSDriverPool.returnObject(driver);
+      } catch (Exception e) {
+        try {
+          this.phantomJSDriverPool.invalidateObject(driver);
+        } catch (Exception e1) {
+          e1.printStackTrace();
+        }
+      }
     }
     return page;
   }

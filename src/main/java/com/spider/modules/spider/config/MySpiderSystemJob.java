@@ -43,20 +43,4 @@ public class MySpiderSystemJob {
 		logger.info("定时清除driver完成！当前池中对象：{}", phantomJSDriverPool.listAllObjects());
 	}
 
-	//测试用
-//	@Scheduled(cron = "0/2 * * * * *")
-	public void testclean() {
-		PhantomJSDriver xxx;
-		for (int i = 0; i < 1; i++) {
-			try {
-				xxx = phantomJSDriverPool.borrowObject();
-				xxx.get("http://115.233.227.46:18080/zqdata/login");
-				phantomJSDriverPool.returnObject(xxx);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		System.out.println(phantomJSDriverPool.listAllObjects());
-	}
-
 }

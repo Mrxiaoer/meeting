@@ -34,17 +34,17 @@ spring:
                         multi-statement-allow: true
 
 webmagic:
-    selenuim_config: /selenium/config.ini
+    selenuim_config: /selenium/config-win.ini
 
 VcCode:
     image:
         #验证码存放位置
-        path: F:/JavaSource/image/before/
+        path: C:/spider/vc-image/before/
         #处理过的验证码存放位置
-        p-path: F:/JavaSource/image/after/
+        p-path: C:/spider/vc-image/after/
     chaojiying:
-        username: xiaomo
-        password: 123456
-        softId: 896818
+        username: gov123
+        password: gov123
+        softId: 897003
     #是否使用OCR识别验证码，准确率较低
     useOcr: false
