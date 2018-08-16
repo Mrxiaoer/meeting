@@ -5,19 +5,18 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spider.modules.spider.entity.MyCookie;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import net.sourceforge.pinyin4j.PinyinHelper;
-import org.openqa.selenium.Cookie;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import net.sourceforge.pinyin4j.PinyinHelper;
+import org.openqa.selenium.Cookie;
 
 /**
- * ------------------------------
+ * StringUtil
  *
  * @Author : lolilijve
  * @Email : 1042703214@qq.com
@@ -27,17 +26,17 @@ public class MyStringUtil {
 
 	//获取中文拼音首字母
 	public static String getPinYinHeadChar(String str) {
-		String convert = "";
+		StringBuilder convert = new StringBuilder();
 		for (int j = 0; j < str.length(); j++) {
 			char word = str.charAt(j);
 			String[] pinyinArray = PinyinHelper.toHanyuPinyinStringArray(word);
 			if (pinyinArray != null) {
-				convert += pinyinArray[0].charAt(0);
+				convert.append(pinyinArray[0].charAt(0));
 			} else {
-				convert += word;
+				convert.append(word);
 			}
 		}
-		return convert;
+		return convert.toString();
 	}
 
 	public static Map<String, String> json2map(String json) {
@@ -65,17 +64,17 @@ public class MyStringUtil {
 	}
 
 	public static String cookie2json(Set<Cookie> cookies) {
-		String str = "[";
+		StringBuilder str = new StringBuilder("[");
 		int i = 0;
 		for (Cookie cookie : cookies) {
 			if (i > 0) {
-				str += ",";
+				str.append(",");
 			}
-			str += JSONUtil.parse(cookie);
+			str.append(JSONUtil.parse(cookie));
 			i++;
 		}
-		str += "]";
-		return str;
+		str.append("]");
+		return str.toString();
 	}
 
 	public static Set<Cookie> json2cookie(String jsons) {
@@ -93,19 +92,21 @@ public class MyStringUtil {
 			}
 
 			MyCookie myCookie = JSONUtil.toBean(j, MyCookie.class);
-			cookies.add(new Cookie.Builder(myCookie.getName(), myCookie.getValue()).domain(myCookie.getDomain()).path(myCookie.getPath())
-					            .expiresOn(myCookie.getExpiry()).isHttpOnly(myCookie.isHttpOnly()).isSecure(myCookie.isSecure()).build());
+			cookies.add(new Cookie.Builder(myCookie.getName(), myCookie.getValue()).domain(myCookie.getDomain())
+					.path(myCookie.getPath())
+					.expiresOn(myCookie.getExpiry()).isHttpOnly(myCookie.isHttpOnly()).isSecure(myCookie.isSecure())
+					.build());
 		}
 		return cookies;
 	}
 
-	public static String urlCutParam(String url){
+	public static String urlCutParam(String url) {
 		Pattern p = Pattern.compile("(https?://[\\S]*?)[^A-Z|a-z|0-9|\\u4e00-\\u9fa5|.|/|:|_|-]");
 		Matcher m = p.matcher(url);
 		String newUrl;
 		if (m.find()) {
 			newUrl = m.group(1);
-		}else {
+		} else {
 			newUrl = url;
 		}
 		return newUrl;

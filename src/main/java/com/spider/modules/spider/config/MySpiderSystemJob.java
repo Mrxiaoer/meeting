@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 /**
  * 定时任务
- * ------------------------------
  *
  * @Author : lolilijve
  * @Email : 1042703214@qq.com
@@ -18,10 +17,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class MySpiderSystemJob {
 
-	Logger logger = LoggerFactory.getLogger(this.getClass());
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+	private final PhantomJSDriverPool phantomJSDriverPool;
 
 	@Autowired
-	private PhantomJSDriverPool phantomJSDriverPool;
+	public MySpiderSystemJob(PhantomJSDriverPool phantomJSDriverPool) {
+		this.phantomJSDriverPool = phantomJSDriverPool;
+	}
 
 	/**
 	 * 定时清除driver

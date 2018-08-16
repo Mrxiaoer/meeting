@@ -2,14 +2,17 @@ package com.spider.modules.spider.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.spider.modules.spider.utils.MyStringUtil;
-import org.apache.ibatis.type.Alias;
-
-import javax.persistence.*;
 import java.util.Map;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import org.apache.ibatis.type.Alias;
 
 /**
  * 爬取规则
- * ------------------------------
  *
  * @Author : lolilijve
  * @Email : 1042703214@qq.com
@@ -20,6 +23,7 @@ import java.util.Map;
 @Entity
 @Table(name = "spider_rule")
 public class SpiderRule {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;

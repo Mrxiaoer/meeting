@@ -2,18 +2,16 @@ package com.spider.modules.spider.pipeline;
 
 import com.spider.modules.spider.dao.AnalogLoginDao;
 import com.spider.modules.spider.entity.AnalogLoginEntity;
+import java.util.Date;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.pipeline.Pipeline;
 
-import java.util.Date;
-import java.util.List;
-
 /**
  * 检验登录(弃用)
- * ------------------------------
  *
  * @Author : lolilijve
  * @Email : 1042703214@qq.com

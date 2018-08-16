@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * ------------------------------
+ * 爬取规则实现类
  *
  * @Author : lolilijve
  * @Email : 1042703214@qq.com

@@ -3,38 +3,49 @@ package com.spider.modules.spider.config;
 import com.sun.jna.Pointer;
 import com.sun.jna.StringArray;
 import com.sun.jna.ptr.PointerByReference;
-import net.sourceforge.lept4j.Box;
-import net.sourceforge.lept4j.Boxa;
-import net.sourceforge.lept4j.Leptonica;
-import net.sourceforge.tess4j.ITessAPI.*;
-import net.sourceforge.tess4j.*;
-import net.sourceforge.tess4j.util.ImageIOHelper;
-import net.sourceforge.tess4j.util.LoggHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.imageio.IIOImage;
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
-import javax.imageio.stream.ImageInputStream;
-import java.awt.*;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
+import net.sourceforge.lept4j.Box;
+import net.sourceforge.lept4j.Boxa;
+import net.sourceforge.lept4j.Leptonica;
+import net.sourceforge.tess4j.ITessAPI.ETEXT_DESC;
+import net.sourceforge.tess4j.ITessAPI.TessBaseAPI;
+import net.sourceforge.tess4j.ITessAPI.TessPageIterator;
+import net.sourceforge.tess4j.ITessAPI.TessResultIterator;
+import net.sourceforge.tess4j.ITessAPI.TessResultRenderer;
+import net.sourceforge.tess4j.ITesseract;
+import net.sourceforge.tess4j.OCRResult;
+import net.sourceforge.tess4j.TessAPI;
+import net.sourceforge.tess4j.TesseractException;
+import net.sourceforge.tess4j.Word;
+import net.sourceforge.tess4j.util.ImageIOHelper;
+import net.sourceforge.tess4j.util.LoggHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * ------------------------------
+ * 图片字符光学识别
  *
  * @Author : lolilijve
  * @Email : 1042703214@qq.com
  * @Date : 2018-07-30
  */
 public class Tesseract implements ITesseract {
+
 	private static final Logger logger = LoggerFactory.getLogger((new LoggHelper()).toString());
 	private final Properties prop;
 	private final List<String> configList;
@@ -126,7 +137,8 @@ public class Tesseract implements ITesseract {
 			Iterator var5 = ImageIO.getImageReadersByFormatName(var4);
 			if (!var5.hasNext()) {
 				throw new RuntimeException(
-						"Unsupported image format. May need to install JAI Image I/O package.\nhttps://github.com/jai-imageio/jai-imageio-core");
+						"Unsupported image format. May need to install JAI Image I/O package.\nhttps://github"
+								+ ".com/jai-imageio/jai-imageio-core");
 			} else {
 				ImageReader var6 = (ImageReader) var5.next();
 				StringBuilder var7 = new StringBuilder();
@@ -148,7 +160,10 @@ public class Tesseract implements ITesseract {
 
 						if (this.renderedFormat == RenderedFormat.HOCR) {
 							var7.insert(0,
-							            "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n<html>\n<head>\n<title></title>\n<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\" />\n<meta name='ocr-system' content='tesseract'/>\n</head>\n<body>\n")
+									"<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3"
+											+ ".org/TR/html4/loose.dtd\">\n<html>\n<head>\n<title></title>\n<meta "
+											+ "http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\" />\n<meta "
+											+ "name='ocr-system' content='tesseract'/>\n</head>\n<body>\n")
 									.append("</body>\n</html>\n");
 						}
 					} catch (Throwable var29) {
@@ -224,7 +239,10 @@ public class Tesseract implements ITesseract {
 
 			if (this.renderedFormat == RenderedFormat.HOCR) {
 				var4.insert(0,
-				            "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n<html>\n<head>\n<title></title>\n<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\" />\n<meta name='ocr-system' content='tesseract'/>\n</head>\n<body>\n")
+						"<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3"
+								+ ".org/TR/html4/loose.dtd\">\n<html>\n<head>\n<title></title>\n<meta "
+								+ "http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\" />\n<meta "
+								+ "name='ocr-system' content='tesseract'/>\n</head>\n<body>\n")
 						.append("</body>\n</html>\n");
 			}
 
@@ -254,7 +272,8 @@ public class Tesseract implements ITesseract {
 	}
 
 	@Override
-	public String doOCR(int var1, int var2, ByteBuffer var3, String var4, Rectangle var5, int var6) throws TesseractException {
+	public String doOCR(int var1, int var2, ByteBuffer var3, String var4, Rectangle var5, int var6)
+			throws TesseractException {
 		this.init();
 		this.setTessVariables();
 
@@ -278,7 +297,8 @@ public class Tesseract implements ITesseract {
 		StringArray var1 = new StringArray((String[]) this.configList.toArray(new String[0]));
 		PointerByReference var2 = new PointerByReference();
 		var2.setPointer(var1);
-		this.api.TessBaseAPIInit1(this.handle, this.datapath, this.language, this.ocrEngineMode, var2, this.configList.size());
+		this.api.TessBaseAPIInit1(this.handle, this.datapath, this.language, this.ocrEngineMode, var2,
+				this.configList.size());
 		if (this.psm > -1) {
 			this.api.TessBaseAPISetPageSegMode(this.handle, this.psm);
 		}
@@ -296,7 +316,8 @@ public class Tesseract implements ITesseract {
 	}
 
 	protected void setImage(RenderedImage var1, Rectangle var2) throws IOException {
-		this.setImage(var1.getWidth(), var1.getHeight(), ImageIOHelper.getImageByteBuffer(var1), var2, var1.getColorModel().getPixelSize());
+		this.setImage(var1.getWidth(), var1.getHeight(), ImageIOHelper.getImageByteBuffer(var1), var2,
+				var1.getColorModel().getPixelSize());
 	}
 
 	protected void setImage(int var1, int var2, ByteBuffer var3, Rectangle var4, int var5) {
@@ -429,7 +450,8 @@ public class Tesseract implements ITesseract {
 		try {
 			ArrayList var3 = new ArrayList();
 			this.setImage(var1, (Rectangle) null);
-			Boxa var4 = this.api.TessBaseAPIGetComponentImages(this.handle, var2, 1, (PointerByReference) null, (PointerByReference) null);
+			Boxa var4 = this.api.TessBaseAPIGetComponentImages(this.handle, var2, 1, (PointerByReference) null,
+					(PointerByReference) null);
 			Leptonica var5 = Leptonica.INSTANCE;
 			int var6 = var5.boxaGetCount(var4);
 
@@ -497,7 +519,8 @@ public class Tesseract implements ITesseract {
 	}
 
 	@Override
-	public List<OCRResult> createDocumentsWithResults(String[] var1, String[] var2, List<RenderedFormat> var3, int var4) throws TesseractException {
+	public List<OCRResult> createDocumentsWithResults(String[] var1, String[] var2, List<RenderedFormat> var3, int var4)
+			throws TesseractException {
 		if (var1.length != var2.length) {
 			throw new RuntimeException("The two arrays must match in length.");
 		} else {

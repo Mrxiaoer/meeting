@@ -1,11 +1,15 @@
 package com.spider.modules.spider.utils;
 
 import java.lang.reflect.Method;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * 执行超时处理的方法
- * ------------------------------
  *
  * @Author : lolilijve
  * @Email : 1042703214@qq.com
@@ -15,11 +19,9 @@ public class RunTimeout {
 
 	/**
 	 * 超时处理
-	 *
-	 * @param timeout
-	 * @return
 	 */
-	public static String timeoutMethod(Object obj, String methodName, Class<?>[] parameterTypes, Object[] params, int timeout)
+	public static String timeoutMethod(Object obj, String methodName, Class<?>[] parameterTypes, Object[] params,
+			int timeout)
 			throws ExecutionException, InterruptedException {
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		String result = null;

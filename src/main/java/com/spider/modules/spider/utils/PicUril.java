@@ -1,12 +1,10 @@
 package com.spider.modules.spider.utils;
 
-import org.springframework.beans.factory.annotation.Value;
-
-import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import javax.imageio.ImageIO;
 
 /**
  * 图片工具
@@ -18,11 +16,10 @@ import java.io.IOException;
 public class PicUril {
 
 	/**
-	 * @param sfile 需要去噪的图像
+	 * @param sfile   需要去噪的图像
 	 * @param destDir 去噪后的图像保存地址
-	 * @throws IOException
 	 */
-	public static void cleanLinesInImage(File sfile,String destDir) throws IOException {
+	public static void cleanLinesInImage(File sfile, String destDir) throws IOException {
 		File destF = new File(destDir);
 		if (!destF.exists()) {
 			destF.mkdirs();
@@ -50,7 +47,8 @@ public class PicUril {
 				if (b >= 255) {
 					b = 255;
 				}
-				gray[x][y] = (int) Math.pow((Math.pow(r, 2.2) * 0.2973 + Math.pow(g, 2.2) * 0.6274 + Math.pow(b, 2.2) * 0.0753), 1 / 2.2);
+				gray[x][y] = (int) Math
+						.pow((Math.pow(r, 2.2) * 0.2973 + Math.pow(g, 2.2) * 0.6274 + Math.pow(b, 2.2) * 0.0753), 1 / 2.2);
 			}
 		}
 
@@ -124,7 +122,9 @@ public class PicUril {
 		int total = w * h;
 
 		float sum = 0;
-		for (int t = 0; t < 256; t++) { sum += t * histData[t]; }
+		for (int t = 0; t < 256; t++) {
+			sum += t * histData[t];
+		}
 
 		float sumB = 0;
 		int wB = 0;
@@ -136,11 +136,15 @@ public class PicUril {
 		for (int t = 0; t < 256; t++) {
 			// Weight Background
 			wB += histData[t];
-			if (wB == 0) { continue; }
+			if (wB == 0) {
+				continue;
+			}
 
 			// Weight Foreground
 			wF = total - wB;
-			if (wF == 0) { break; }
+			if (wF == 0) {
+				break;
+			}
 
 			sumB += (float) (t * histData[t]);
 

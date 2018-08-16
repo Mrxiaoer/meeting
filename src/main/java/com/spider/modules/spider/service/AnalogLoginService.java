@@ -4,7 +4,6 @@ import com.spider.modules.spider.entity.AnalogLoginEntity;
 
 /**
  * AnalogLoginService
- * ------------------------------
  *
  * @Author : lolilijve
  * @Email : 1042703214@qq.com
@@ -15,7 +14,6 @@ public interface AnalogLoginService {
 	/**
 	 * 保存site信息
 	 *
-	 * @param analogLogin
 	 * @return int
 	 */
 	int saveAnalogLogin(AnalogLoginEntity analogLogin);
@@ -23,7 +21,6 @@ public interface AnalogLoginService {
 	/**
 	 * 根据id查找一个
 	 *
-	 * @param id
 	 * @return AnalogLoginEntity
 	 */
 	AnalogLoginEntity getOneById(int id);
@@ -31,9 +28,8 @@ public interface AnalogLoginService {
 	/**
 	 * 根据id查找一个
 	 *
-	 * @param linkId
 	 * @return AnalogLoginEntity
 	 */
 	AnalogLoginEntity getOneByLinkId(int linkId);
-	
+
 }

@@ -4,7 +4,6 @@ import java.util.Date;
 
 /**
  * cookie，作中转用
- * ------------------------------
  *
  * @Author : lolilijve
  * @Email : 1042703214@qq.com

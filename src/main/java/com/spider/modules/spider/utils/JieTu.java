@@ -3,24 +3,25 @@ package com.spider.modules.spider.utils;
 import cn.hutool.core.util.ImageUtil;
 import com.spider.modules.spider.config.PhantomJSDriverPool;
 import com.spider.modules.spider.config.SpiderConstant;
-import org.openqa.selenium.Cookie;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.UnableToSetCookieException;
-import org.openqa.selenium.phantomjs.PhantomJSDriver;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import javax.imageio.ImageIO;
+import org.openqa.selenium.Cookie;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.UnableToSetCookieException;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 /**
- * 截图 ------------------------------
+ * 截图
  *
  * @Author : lolilijve
  * @Email : 1042703214@qq.com
@@ -28,6 +29,8 @@ import java.util.Set;
  */
 @Component
 public class JieTu {
+
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Value("${VcCode.image.path}")
 	private String imagePath;
@@ -59,11 +62,13 @@ public class JieTu {
 				} catch (UnableToSetCookieException utsce) {
 					Cookie cook;
 					if (cookie.getDomain().startsWith(".")) {
-						cook = new Cookie(cookie.getName(), cookie.getValue(), cookie.getDomain().substring(1), cookie.getPath(), cookie.getExpiry(),
-						                  cookie.isSecure(), cookie.isHttpOnly());
+						cook = new Cookie(cookie.getName(), cookie.getValue(), cookie.getDomain().substring(1),
+								cookie.getPath(), cookie.getExpiry(),
+								cookie.isSecure(), cookie.isHttpOnly());
 					} else {
-						cook = new Cookie(cookie.getName(), cookie.getValue(), "." + cookie.getDomain(), cookie.getPath(), cookie.getExpiry(),
-						                  cookie.isSecure(), cookie.isHttpOnly());
+						cook = new Cookie(cookie.getName(), cookie.getValue(), "." + cookie.getDomain(), cookie.getPath(),
+								cookie.getExpiry(),
+								cookie.isSecure(), cookie.isHttpOnly());
 					}
 					phantomjsDriver.manage().addCookie(cook);
 				}
@@ -73,7 +78,8 @@ public class JieTu {
 			//放大图片
 			try {
 				phantomjsDriver.executeScript(
-						"document.body.getElementsByTagName(\"img\")[0].setAttribute('style', 'width: 100% !important;height: 100% !important')");
+						"document.body.getElementsByTagName(\"img\")[0].setAttribute('style', 'width: 100% !important;"
+								+ "height: 100% !important')");
 			} catch (Exception ex) {
 				throw new Exception("无法获取验证码截图", ex);
 			}
@@ -82,7 +88,10 @@ public class JieTu {
 			//压缩存储
 			File destFile = new File(imageLocalPath);
 			if (!destFile.exists()) {
-				destFile.mkdirs();
+				boolean mk = destFile.mkdirs();
+				if (mk) {
+					logger.info("创建验证码图片文件目录完成！");
+				}
 			}
 			ImageUtil.scale(bufferedImage, destFile, 0.5F);
 

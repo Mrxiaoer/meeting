@@ -1,6 +1,11 @@
 package com.spider.modules.spider.downloader;
 
 import com.spider.modules.spider.entity.MyPage;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
@@ -27,15 +32,8 @@ import us.codecraft.webmagic.selector.PlainText;
 import us.codecraft.webmagic.utils.CharsetUtils;
 import us.codecraft.webmagic.utils.HttpClientUtils;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
 /**
  * HttpClientDownloader
- * ------------------------------
  *
  * @Author : lolilijve
  * @Email : 1042703214@qq.com
@@ -91,7 +89,9 @@ public class HttpClientDownloader extends AbstractDownloader {
 		MyPage page = MyPage.fail();
 		try {
 			httpResponse = httpClient.execute(requestContext.getHttpUriRequest(), requestContext.getHttpClientContext());
-			page = handleResponse(request, request.getCharset() != null ? request.getCharset() : task.getSite().getCharset(), httpResponse, task);
+			page = handleResponse(request, request.getCharset() != null ? request.getCharset() :
+							task.getSite().getCharset(),
+					httpResponse, task);
 			onSuccess(request);
 			logger.info("downloading page success {}", request.getUrl());
 			return page;
@@ -115,9 +115,11 @@ public class HttpClientDownloader extends AbstractDownloader {
 		httpClientGenerator.setPoolSize(thread);
 	}
 
-	protected MyPage handleResponse(Request request, String charset, HttpResponse httpResponse, Task task) throws IOException {
+	protected MyPage handleResponse(Request request, String charset, HttpResponse httpResponse, Task task)
+			throws IOException {
 		byte[] bytes = IOUtils.toByteArray(httpResponse.getEntity().getContent());
-		String contentType = httpResponse.getEntity().getContentType() == null ? "" : httpResponse.getEntity().getContentType().getValue();
+		String contentType = httpResponse.getEntity().getContentType() == null ? ""
+				: httpResponse.getEntity().getContentType().getValue();
 		MyPage page = new MyPage();
 		page.setBytes(bytes);
 		if (!request.isBinaryContent()) {
@@ -156,7 +158,8 @@ public class HttpClientDownloader extends AbstractDownloader {
 		String charset = CharsetUtils.detectCharset(contentType, contentBytes);
 		if (charset == null) {
 			charset = Charset.defaultCharset().name();
-			logger.warn("Charset autodetect failed, use {} as charset. Please specify charset in Site.setCharset()", Charset.defaultCharset());
+			logger.warn("Charset autodetect failed, use {} as charset. Please specify charset in Site.setCharset()",
+					Charset.defaultCharset());
 		}
 		return charset;
 	}

@@ -20,8 +20,6 @@ import java.util.Calendar;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
@@ -65,9 +63,6 @@ public class LoginAnalog {
 
 	/**
 	 * 模拟登录操作，在此之前请把用户名，密码存入数据库
-	 *
-	 * @param id
-	 * @throws Exception
 	 */
 	public Set<Cookie> login(int id) throws Exception {
 
@@ -84,8 +79,8 @@ public class LoginAnalog {
 		//模拟浏览器创建连接，发起请求
 		PhantomJSDriver driver = phantomJSDriverPool.borrowPhantomJSDriver();
 
-        // 创建 Pattern 对象
-//        Pattern p = Pattern.compile("(https?://[\\S]*?)[^A-Z|a-z|0-9|\\u4e00-\\u9fa5|.|/|:|_|-]");
+		// 创建 Pattern 对象
+		//        Pattern p = Pattern.compile("(https?://[\\S]*?)[^A-Z|a-z|0-9|\\u4e00-\\u9fa5|.|/|:|_|-]");
 		try {
 			//执行时间超出预算的话中断并抛出异常
 			Class[] paramClzs = {String.class};
@@ -106,7 +101,7 @@ public class LoginAnalog {
 
 			//获取cookies
 			Set<Cookie> cookieSet = driver.manage().getCookies();
-            String beforeUrl = MyStringUtil.urlCutParam(driver.getCurrentUrl());
+			String beforeUrl = MyStringUtil.urlCutParam(driver.getCurrentUrl());
 			//url相同说明可直接获取目标页
 			if (!beforeUrl.equals(targetUrl)) {
 				Calendar cal = Calendar.getInstance();
@@ -132,12 +127,13 @@ public class LoginAnalog {
 					if (verifycodeUrl != null) {
 						//截取验证码
 						Map<String, Object> jtResult =
-								jieTu.savePage2Pic(verifycodeUrl, cookieSet, "vc-" + System.currentTimeMillis() + "-" + new Random().nextInt(100));
+								jieTu.savePage2Pic(verifycodeUrl, cookieSet,
+										"vc-" + System.currentTimeMillis() + "-" + new Random().nextInt(100));
 						cookieSet = (Set<Cookie>) jtResult.get(SpiderConstant.COOKIES);
 						int cjyTry = 0;
 						boolean cjyFlag = true;
 
-						if (useOcr&& tryNum < 1) {
+						if (useOcr && tryNum < 1) {
 							//ocr解析验证码
 							File file = new File(jtResult.get(SpiderConstant.IMAGE_PATH).toString());
 							PicUril.cleanLinesInImage(file, destDir + year + "-" + month + "-" + day);
@@ -147,7 +143,7 @@ public class LoginAnalog {
 							while (cjyTry < 3 && cjyFlag) {
 								//超级鹰解析验证码
 								String cjyBack = ChaoJiYing.PostPic(cjyUsername, cjyPassword, cjySoftId, "1902", "0",
-								                                    jtResult.get(SpiderConstant.IMAGE_PATH).toString());
+										jtResult.get(SpiderConstant.IMAGE_PATH).toString());
 								cjyResult = JSONUtil.toBean(cjyBack, ChaoJiYingResult.class);
 								cjyTry++;
 								if ("-3001".equals(cjyResult.getErr_no()) || "-3002".equals(cjyResult.getErr_no())) {
@@ -179,11 +175,13 @@ public class LoginAnalog {
 							WebElement verifyCodeElement = driver.findElementByXPath(verifyCodeXpath);
 							verifyCodeElement.clear();
 							verifyCodeElement.sendKeys(verifyCodeValue);
-							logger.info("用户名：{} ；密码：{} ；验证码：{} ；", usernameElement.getAttribute("value"), passwordElement.getAttribute("value"),
-							            verifyCodeElement.getAttribute("value"));
+							logger.info("用户名：{} ；密码：{} ；验证码：{} ；", usernameElement.getAttribute("value"),
+									passwordElement.getAttribute("value"),
+									verifyCodeElement.getAttribute("value"));
 							logger.info("==>模拟登录--有验证码，进行尝试，URL=" + targetUrl);
 						} else {
-							logger.info("用户名：{} ；密码：{} ；", usernameElement.getAttribute("value"), passwordElement.getAttribute("value"));
+							logger.info("用户名：{} ；密码：{} ；", usernameElement.getAttribute("value"),
+									passwordElement.getAttribute("value"));
 							logger.info("==>模拟登录--无验证码，进行尝试，URL=" + targetUrl);
 						}
 						//模拟点击
@@ -205,12 +203,12 @@ public class LoginAnalog {
 
 						//sleep,等待
 						int sleepNum = 0;
-                        String nowUrl = MyStringUtil.urlCutParam(driver.getCurrentUrl());
+						String nowUrl = MyStringUtil.urlCutParam(driver.getCurrentUrl());
 						while (sleepNum < 5 && URLUtil.getPath(nowUrl).equals(URLUtil.getPath(beforeUrl))) {
 							Thread.sleep(1000);
 							sleepNum++;
 						}
-						logger.info("当前页URL：{}，原页面：{}", nowUrl,beforeUrl);
+						logger.info("当前页URL：{}，原页面：{}", nowUrl, beforeUrl);
 					} finally {
 						tryNum++;
 						//检测登录，判断是否已登录，已登录flag为false

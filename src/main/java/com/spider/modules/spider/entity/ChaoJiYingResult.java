@@ -2,7 +2,6 @@ package com.spider.modules.spider.entity;
 
 /**
  * 超级鹰返回结果
- * ------------------------------
  *
  * @Author : lolilijve
  * @Email : 1042703214@qq.com

@@ -1,5 +1,7 @@
 package com.spider.modules.spider.config;
 
+import java.util.Objects;
+import javax.annotation.PostConstruct;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,11 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.annotation.PostConstruct;
-import java.util.Objects;
-
 /**
- * 配置 ------------------------------
+ * 配置
  *
  * @Author : lolilijve
  * @Email : 1042703214@qq.com
@@ -29,7 +28,8 @@ public class WebMagicConfig {
 	@PostConstruct
 	public void initSelenuimConfig() {
 		System.setProperty("selenuim_config",
-		                   Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("")).getPath() + this.selenuimConfig);
+				Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("")).getPath()
+						+ this.selenuimConfig);
 	}
 
 	@Bean(name = "phantomJSDriverPool")

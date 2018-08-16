@@ -32,7 +32,6 @@ import java.util.Set;
 
 /**
  * 测试
- * ------------------------------
  *
  * @Author : lolilijve
  * @Email : 1042703214@qq.com
@@ -146,48 +145,6 @@ public class SpiderTestController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-	}
-
-	@RequestMapping("/test")
-	public void xxxxxx(String jsid) throws InterruptedException {
-		PhantomJSDriver driver = null;
-
-		driver.get("http://114.55.11.227:8881/citysystemgz/loginIndex");
-		driver.manage().deleteAllCookies();
-		System.out.println(driver.manage().getCookies());
-		Cookie cookie = new Cookie("JSESSIONID", jsid, "114.55.11.227", null, null);
-		driver.manage().addCookie(cookie);
-		WebElement element1 = driver.findElementByXPath("//*[@id=\"accountNameId\"]");
-		element1.clear();
-		element1.sendKeys("admin");
-		System.out.println(element1.getAttribute("value"));
-		WebElement element2 = driver.findElementByXPath("//*[@id=\"passwordId\"]");
-		element2.clear();
-		element2.sendKeys("1223");
-		System.out.println(element2.getAttribute("value"));
-		WebElement element3 = driver.findElementByXPath("//*[@id=\"verifyCodeId\"]");
-		Map<String, Object> jtResult = null;
-		try {
-			jtResult = jieTu
-					.savePage2Pic("http://114.55.11.227:8881/citysystemgz/verifyCode/slogin.do?random=0.8938614707267099", null,
-					              "vc-" + System.currentTimeMillis() + "-" + new Random().nextInt(100));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		String cjyBack = ChaoJiYing.PostPic("chenxiaoqi", "123456", "896782", "1902", "0", jtResult.get(SpiderConstant.IMAGE_PATH).toString());
-		ChaoJiYingResult cjyResult = JSONUtil.toBean(cjyBack, ChaoJiYingResult.class);
-		element3.clear();
-		element3.sendKeys(cjyResult.getPic_str());
-		System.out.println(element3.getAttribute("value"));
-		WebElement element4 = driver.findElementByXPath("//*[@id=\"loginBtn\"]");
-		System.out.println(element4.getText());
-		element4.click();
-
-		System.out.println(driver.getPageSource());
-		Thread.sleep(3000);
-		System.out.println(driver.getCurrentUrl());
-		System.out.println(driver.manage().toString());
 
 	}
 

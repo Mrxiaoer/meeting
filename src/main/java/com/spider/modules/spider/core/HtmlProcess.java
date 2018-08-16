@@ -26,8 +26,8 @@ public class HtmlProcess {
 	private TemporaryRecordDao temporaryRecordDao;
 
 	public List<String> process(TemporaryRecordEntity temporaryRecord, SpiderRule spiderRule) {
-	    temporaryRecord = temporaryRecordDao.selectOne(temporaryRecord);
-		Html html = Html.create(temporaryRecord!=null?temporaryRecord.getHtml():null);
+		temporaryRecord = temporaryRecordDao.selectOne(temporaryRecord);
+		Html html = Html.create(temporaryRecord != null ? temporaryRecord.getHtml() : null);
 
 		if (StrUtil.isEmpty(spiderRule.getXpath())) {
 			spiderRule.setXpath("/html");

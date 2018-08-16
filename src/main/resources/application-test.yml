@@ -4,6 +4,7 @@ spring:
         driverClassName: com.mysql.jdbc.Driver
         druid:
             url: jdbc:mysql://115.233.227.46:3336/spider-data?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
+            #            url: jdbc:mysql://localhost:3306/spider?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
             username: root
             password: 123456
             initial-size: 10
@@ -32,19 +33,18 @@ spring:
                     config:
                         multi-statement-allow: true
 
-
 webmagic:
-    selenuim_config: /selenium/config-lin.ini
+    selenuim_config: /selenium/config-win.ini
 
 VcCode:
     image:
         #验证码存放位置
-        path: /usr/spider/image/before/
+        path: C:/spider/vc-image/before/
         #处理过的验证码存放位置
-        p-path: /usr/spider/image/after/
+        p-path: C:/spider/vc-image/after/
     chaojiying:
-        username: xiaomo
-        password: 123456
-        softId: 896818
+        username: gov123
+        password: gov123
+        softId: 897003
     #是否使用OCR识别验证码，准确率较低
     useOcr: false

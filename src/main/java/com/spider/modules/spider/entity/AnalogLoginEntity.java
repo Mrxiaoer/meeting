@@ -1,14 +1,17 @@
 package com.spider.modules.spider.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import org.apache.ibatis.type.Alias;
-
-import javax.persistence.*;
 import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import org.apache.ibatis.type.Alias;
 
 /**
  * 网站信息对象
- * ------------------------------
  *
  * @Author : lolilijve
  * @Email : 1042703214@qq.com
@@ -19,6 +22,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "spider_analog_login")
 public class AnalogLoginEntity implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 	//编号
 	@Id

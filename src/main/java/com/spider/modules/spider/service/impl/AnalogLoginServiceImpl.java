@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 /**
  * 模拟登录信息操作实现类
- * ------------------------------
  *
  * @Author : lolilijve
  * @Email : 1042703214@qq.com

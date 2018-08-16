@@ -22,7 +22,7 @@ public class OCRUtil {
 		String ocrResult = instance.doOCR(imgFile);
 		//"/"换成7，因为总是出错，又不想去训练它
 		ocrResult = ocrResult.replaceAll("/", "7");
-		ocrResult = ocrResult.replaceAll("[^a-z^A-Z^0-9]", "");
+		ocrResult = ocrResult.replaceAll("[^a-zA-Z0-9]", "");
 		//输出识别结果
 		System.out.println("OCR Result: " + ocrResult);
 		return ocrResult;

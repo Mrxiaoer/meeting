@@ -1,13 +1,22 @@
 package com.spider.modules.spider.processor;
 
+import static java.util.regex.Pattern.compile;
+
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.http.HttpStatus;
 import com.spider.modules.spider.config.SpiderConstant;
 import com.spider.modules.spider.entity.MyPage;
 import com.spider.modules.spider.entity.SpiderRule;
-import com.spider.modules.spider.utils.MyStringUtil;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.openqa.selenium.Cookie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,20 +27,8 @@ import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.selector.Selectable;
 import us.codecraft.webmagic.utils.UrlUtils;
 
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static java.util.regex.Pattern.compile;
-
 /**
  * 页面处理器
- * ------------------------------
  *
  * @Author : lolilijve
  * @Email : 1042703214@qq.com
@@ -39,7 +36,7 @@ import static java.util.regex.Pattern.compile;
  */
 public class SpiderPageProcessor implements PageProcessor {
 
-	Logger logger = LoggerFactory.getLogger(SpiderPageProcessor.class);
+	private Logger logger = LoggerFactory.getLogger(SpiderPageProcessor.class);
 
 	/**
 	 * 抓取网站的相关配置，包括编码、抓取间隔、重试次数等
@@ -119,7 +116,8 @@ public class SpiderPageProcessor implements PageProcessor {
 				Pattern.compile("<script[^>]*?src[\\s]*?=[\\s]*?(\"[\\S]*?\"|\'[\\S]*?\')></script>");
 		Pattern p1 =
 				Pattern.compile(
-						"<script[^>]*?src[\\s]*?=[\\s]*?(\"[\\S]*?(vue|element-ui/index)(.min)?.js\"|\'[\\S]*?(vue|element-ui/index)(.min)?.js\')[^>]*?></script>");
+						"<script[^>]*?src[\\s]*?=[\\s]*?(\"[\\S]*?(vue|element-ui/index)(.min)?.js\"|\'[\\S]*?"
+								+ "(vue|element-ui/index)(.min)?.js\')[^>]*?></script>");
 		Matcher m = p.matcher(htmlStr);
 		Matcher m1 = p1.matcher(htmlStr);
 		List<String> list = new ArrayList<>();
@@ -128,18 +126,18 @@ public class SpiderPageProcessor implements PageProcessor {
 		}
 		while (m.find()) {
 			boolean flag = true;
-			for (int i = 0; i < list.size(); i++) {
-				if (list.get(i).equals(m.group(0))) {
+			for (String aList : list) {
+				if (aList.equals(m.group(0))) {
 					flag = false;
 				}
 			}
-			if (flag == true) {
+			if (flag) {
 				htmlStr = htmlStr.replaceAll(m.group(0), "");
 			}
 		}
-        htmlStr = htmlStr.replaceAll("(<script[^>]*?>[^>]*?[^>\\s]+?[^>]*?</script>)", "");
-//		htmlStr = htmlStr.replaceAll("(<script[\\s|\\S]*?>[\\s|\\S]*?</script>)", "");
-        htmlStr = htmlStr.replaceAll("type[\\s]*?=[\\s]*?(\"submit\"|'submit')", "");
+		htmlStr = htmlStr.replaceAll("(<script[^>]*?>[^>]*?[^>\\s]+?[^>]*?</script>)", "");
+		//		htmlStr = htmlStr.replaceAll("(<script[\\s|\\S]*?>[\\s|\\S]*?</script>)", "");
+		htmlStr = htmlStr.replaceAll("type[\\s]*?=[\\s]*?(\"submit\"|'submit')", "");
 		//url补全
 		htmlStr = this.urlComplate(UrlUtils.getHost(myPage.getUrl().toString()), myPage.getUrlPath(), htmlStr);
 		Html html = Html.create(htmlStr);
@@ -158,7 +156,7 @@ public class SpiderPageProcessor implements PageProcessor {
 				select = select.regex(this.spiderRule.getRegex());
 			}
 			//根据规则置换
-			Map<String, String> ruleMap =spiderRule.getReplacementMap();
+			Map<String, String> ruleMap = spiderRule.getReplacementMap();
 			if (ruleMap != null && ruleMap.size() > 0) {
 				for (Map.Entry<String, String> rep : ruleMap.entrySet()) {
 					select = select.replace(rep.getKey(), rep.getValue());
@@ -188,7 +186,8 @@ public class SpiderPageProcessor implements PageProcessor {
 		myPage.putField(SpiderConstant.HOST, UrlUtils.getHost(myPage.getUrl().toString()));
 		myPage.putField(SpiderConstant.URL, myPage.getUrl().toString());
 
-		if (myPage.getResultItems().get(SpiderConstant.SELECTOBJS) == null && myPage.getResultItems().get(SpiderConstant.SELECTSTRS) == null) {
+		if (myPage.getResultItems().get(SpiderConstant.SELECTOBJS) == null
+				&& myPage.getResultItems().get(SpiderConstant.SELECTSTRS) == null) {
 			//skip this myPage（略过pipeline的执行）
 			myPage.setSkip(true);
 		}
@@ -219,13 +218,14 @@ public class SpiderPageProcessor implements PageProcessor {
 		Matcher matcher = pattern.matcher(htmlStr);
 
 		//对所有链接进行补全
-		String fullPath = "";
-		if(!path.endsWith("/")){
+		String fullPath;
+		if (!path.endsWith("/")) {
 			path += "/";
 		}
 		while (matcher.find()) {
 			try {
-				fullPath = matcher.group().replace(matcher.group(3), URLUtil.complateUrl(URLUtil.complateUrl(host, path), matcher.group(3)));
+				fullPath = matcher.group()
+						.replace(matcher.group(3), URLUtil.complateUrl(URLUtil.complateUrl(host, path), matcher.group(3)));
 			} catch (Exception e) {
 				logger.info(e.getMessage());
 				continue;
@@ -237,12 +237,6 @@ public class SpiderPageProcessor implements PageProcessor {
 
 	/**
 	 * 我发现。。。这个方法没什么用。。。
-	 *
-	 * @param host
-	 * @param xmm
-	 * @param afterUrl
-	 * @param pathList
-	 * @return
 	 */
 	private String getUrlPath(String host, String xmm, String afterUrl, List<String> pathList) {
 		String oldXmm = xmm;

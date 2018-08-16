@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * ------------------------------
+ * 临时记录实现类
  *
  * @Author : lolilijve
  * @Email : 1042703214@qq.com
@@ -41,9 +41,9 @@ public class TemporaryRecordServiceImpl implements TemporaryRecordService {
 		return temporaryRecordDao.selectOne(tre);
 	}
 
-    @Override
-    public TemporaryRecordEntity queryBylinkId(Integer linkId) {
-        return temporaryRecordDao.queryBylinkId(linkId);
-    }
+	@Override
+	public TemporaryRecordEntity queryBylinkId(Integer linkId) {
+		return temporaryRecordDao.queryBylinkId(linkId);
+	}
 
 }

@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * ------------------------------
+ * phantomjs驱动池
  *
  * @Author : lolilijve
  * @Email : 1042703214@qq.com
@@ -23,12 +23,14 @@ public class PhantomJSDriverPool extends GenericObjectPool<PhantomJSDriver> {
 		super(factory);
 	}
 
-	public PhantomJSDriverPool(PooledObjectFactory<PhantomJSDriver> factory, GenericObjectPoolConfig<PhantomJSDriver> config) {
+	public PhantomJSDriverPool(PooledObjectFactory<PhantomJSDriver> factory,
+			GenericObjectPoolConfig<PhantomJSDriver> config) {
 		super(factory, config);
 	}
 
-	public PhantomJSDriverPool(PooledObjectFactory<PhantomJSDriver> factory, GenericObjectPoolConfig<PhantomJSDriver> config,
-	                           AbandonedConfig abandonedConfig) {
+	public PhantomJSDriverPool(PooledObjectFactory<PhantomJSDriver> factory,
+			GenericObjectPoolConfig<PhantomJSDriver> config,
+			AbandonedConfig abandonedConfig) {
 		super(factory, config, abandonedConfig);
 	}
 

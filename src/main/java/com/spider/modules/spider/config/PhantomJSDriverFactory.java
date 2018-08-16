@@ -1,19 +1,18 @@
 package com.spider.modules.spider.config;
 
 import com.spider.modules.spider.utils.ReadProp;
+import java.util.ArrayList;
+import java.util.Properties;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Resource;
 import org.apache.commons.pool2.BasePooledObjectFactory;
 import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.springframework.context.annotation.Configuration;
-
-import javax.annotation.Resource;
-import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Properties;
 
 /**
  * phantomjs驱动工厂
@@ -30,15 +29,7 @@ public class PhantomJSDriverFactory extends BasePooledObjectFactory<PhantomJSDri
 
 	@Override
 	public PhantomJSDriver create() throws Exception {
-//		Map<String, String> prop = readProp.readp();
 		Properties prop = readProp.readp();
-//		Properties sConfig = new Properties();
-//		String configFile = "selenium/config.ini";
-//		if (System.getProperty("selenuim_config") != null) {
-//			configFile = System.getProperty("selenuim_config");
-//		}
-
-//		sConfig.load(new FileReader(configFile));
 		DesiredCapabilities dcaps = new DesiredCapabilities();
 		//ssl证书支持
 		dcaps.setCapability("acceptSslCerts", true);
@@ -57,11 +48,17 @@ public class PhantomJSDriverFactory extends BasePooledObjectFactory<PhantomJSDri
 		cliArgsCap.add("--disk-cache=true");
 		dcaps.setCapability(PhantomJSDriverService.PHANTOMJS_CLI_ARGS, cliArgsCap);
 		dcaps.setCapability(PhantomJSDriverService.PHANTOMJS_GHOSTDRIVER_CLI_ARGS,
-		                    new String[]{"--logLevel=" + (prop.getProperty("phantomjs_driver_loglevel") != null ? prop.getProperty("phantomjs_driver_loglevel") : "INFO")});
+				new String[]{"--logLevel=" + (prop.getProperty("phantomjs_driver_loglevel") != null ? prop
+						.getProperty("phantomjs_driver_loglevel") : "INFO")});
 		//驱动支持
-		dcaps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, prop.getProperty("phantomjs_exec_path"));
+		dcaps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY,
+				prop.getProperty("phantomjs_exec_path"));
 		PhantomJSDriver driver = new PhantomJSDriver(dcaps);
-		driver.manage().window().maximize();
+		driver.manage().timeouts().pageLoadTimeout(120, TimeUnit.SECONDS);
+		driver.manage().timeouts().setScriptTimeout(120, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+		driver.manage().deleteAllCookies();
+		driver.manage().window().setSize(new Dimension(1920, 1080));
 		return driver;
 	}
 
