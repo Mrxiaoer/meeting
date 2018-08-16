@@ -3,10 +3,10 @@ spring:
         type: com.alibaba.druid.pool.DruidDataSource
         driverClassName: com.mysql.jdbc.Driver
         druid:
-            url: jdbc:mysql://115.233.227.46:3336/spider-data?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
-            #            url: jdbc:mysql://localhost:3306/spider?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
+            #            url: jdbc:mysql://115.233.227.46:3336/spider-data?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
+            url: jdbc:mysql://localhost:3306/spider-data?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
             username: root
-            password: 123456
+            password: root
             initial-size: 10
             max-active: 100
             min-idle: 10
@@ -17,7 +17,7 @@ spring:
             min-evictable-idle-time-millis: 300000
             validation-query: SELECT 1 FROM DUAL
             test-while-idle: true
-            test-on-borrow: false
+            test-on-borrow: true
             test-on-return: false
             stat-view-servlet:
                 enabled: true

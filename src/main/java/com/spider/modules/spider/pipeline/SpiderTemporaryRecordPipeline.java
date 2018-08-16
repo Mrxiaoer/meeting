@@ -4,7 +4,11 @@ import com.spider.modules.spider.config.SpiderConstant;
 import com.spider.modules.spider.entity.TemporaryRecordEntity;
 import com.spider.modules.spider.service.TemporaryRecordService;
 import com.spider.modules.spider.utils.MyStringUtil;
+import java.io.IOException;
 import java.util.List;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.ResultItems;
@@ -21,6 +25,8 @@ import us.codecraft.webmagic.pipeline.Pipeline;
 @Component
 public class SpiderTemporaryRecordPipeline implements Pipeline {
 
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
+
 	@Autowired
 	private TemporaryRecordService temporaryRecordService;
 
@@ -32,7 +38,17 @@ public class SpiderTemporaryRecordPipeline implements Pipeline {
 		if (resultItems.get(SpiderConstant.SELECTOBJS) != null && objs.size() >= 1) {
 			String html = objs.get(0);
 			int linkId = resultItems.get(SpiderConstant.LINKID);
-			temporaryRecord.setHtml(html);
+			//html写入文件
+			String fileName = linkId + temporaryRecord.getUrl();
+			String filePath = Thread.currentThread().getContextClassLoader().getResource("").getPath() + "/static/htmlFile"
+					+ DigestUtils.md5Hex(fileName);
+			try {
+				MyStringUtil.WriteStringToFile(filePath, html, false);
+			} catch (IOException e) {
+				e.printStackTrace();
+				logger.error("IOException:{}", e.getMessage());
+			}
+			temporaryRecord.setHtmlFilePath(filePath);
 			temporaryRecord.setLinkId(linkId);
 		}
 

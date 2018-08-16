@@ -218,6 +218,9 @@ public class SpiderPageProcessor implements PageProcessor {
 		Matcher matcher = pattern.matcher(htmlStr);
 
 		//对所有链接进行补全
+		if (StrUtil.isBlank(path)) {
+			path = "";
+		}
 		String fullPath;
 		if (!path.endsWith("/")) {
 			path += "/";
