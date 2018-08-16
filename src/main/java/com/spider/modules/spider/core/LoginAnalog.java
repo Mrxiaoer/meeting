@@ -124,7 +124,7 @@ public class LoginAnalog {
 					String verifycodeUrl = loginInfo.getVerifycodeUrl();
 					String verifyCodeValue = null;
 					ChaoJiYingResult cjyResult = null;
-					if (verifycodeUrl != null) {
+					if (StrUtil.isNotBlank(verifyCodeXpath) && verifycodeUrl != null) {
 						//截取验证码
 						Map<String, Object> jtResult =
 								jieTu.savePage2Pic(verifycodeUrl, cookieSet,
@@ -171,7 +171,7 @@ public class LoginAnalog {
 						passwordElement.clear();
 						passwordElement.sendKeys(passwordValue);
 						//是否有验证码
-						if (StrUtil.isNotBlank(verifyCodeXpath)) {
+						if (StrUtil.isNotBlank(verifyCodeXpath) && StrUtil.isNotBlank(verifyCodeValue)) {
 							WebElement verifyCodeElement = driver.findElementByXPath(verifyCodeXpath);
 							verifyCodeElement.clear();
 							verifyCodeElement.sendKeys(verifyCodeValue);
