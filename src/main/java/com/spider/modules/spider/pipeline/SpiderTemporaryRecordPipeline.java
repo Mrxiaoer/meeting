@@ -40,7 +40,7 @@ public class SpiderTemporaryRecordPipeline implements Pipeline {
 			int linkId = resultItems.get(SpiderConstant.LINKID);
 			//html写入文件
 			String fileName = linkId + temporaryRecord.getUrl();
-			String filePath = Thread.currentThread().getContextClassLoader().getResource("").getPath() + "/static/htmlFile"
+			String filePath = Thread.currentThread().getContextClassLoader().getResource("").getPath() + "static/htmlFile"
 					+ DigestUtils.md5Hex(fileName);
 			try {
 				MyStringUtil.WriteStringToFile(filePath, html, false);
