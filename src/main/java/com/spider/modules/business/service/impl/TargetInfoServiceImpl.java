@@ -182,7 +182,7 @@ public class TargetInfoServiceImpl implements TargetInfoService {
         
          //采集到的表头插入数据库中
         for(String vaule:spiderHead) {
-            if (vaule != null && vaule.length() != 0){
+            if (vaule != null || vaule.length() != 0){
                 PageInfoEntity pageInfo = new PageInfoEntity();
                 pageInfo.setNameCn(vaule);
                 pageInfo.setResultId(resultInfo.getId());
