@@ -7,7 +7,7 @@
         <result property="id" column="id"/>
         <result property="link_id" column="linkId"/>
         <result property="url" column="url"/>
-        <result property="html" column="html"/>
+        <result property="htmlFilePath" column="html_file_path"/>
         <result property="create_time" column="createTime"/>
     </resultMap>
 
@@ -24,8 +24,8 @@
             <if test="url!=null">
                 `url`,
             </if>
-            <if test="html!=null">
-                `html`,
+            <if test="htmlFilePath!=null">
+                `html_file_path`,
             </if>
             `create_time`,
             `update_time`,
@@ -43,8 +43,8 @@
             <if test="url!=null">
                 #{url},
             </if>
-            <if test="html!=null">
-                #{html},
+            <if test="htmlFilePath!=null">
+                #{htmlFilePath},
             </if>
             current_timestamp,
             current_timestamp,
@@ -62,8 +62,8 @@
             <if test="url != null and url!=''">
                 `url` = #{url},
             </if>
-            <if test="html != null and html!=''">
-                `html` = #{html},
+            <if test="htmlFilePath != null and htmlFilePath!=''">
+                `html_file_path` = #{htmlFilePath},
             </if>
             <if test="createTime != null and createTime!=''">
                 `create_time` = #{createTime},
@@ -110,8 +110,8 @@
             <if test="url != null">
                 `url` = #{url} and
             </if>
-            <if test="html != null">
-                `html` = #{html} and
+            <if test="htmlFilePath != null">
+                `html_file_path` = #{htmlFilePath} and
             </if>
             <if test="createTime != null">
                 `create_time` = #{createTime} and

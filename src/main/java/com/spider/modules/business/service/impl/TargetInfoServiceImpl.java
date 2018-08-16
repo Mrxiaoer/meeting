@@ -92,7 +92,7 @@ public class TargetInfoServiceImpl implements TargetInfoService {
         TemporaryRecordEntity rc = new TemporaryRecordEntity();
         rc = temporaryRecordService.queryBylinkId(linkId);
         
-        return rc.getHtml();
+        return rc.getHtmlFilePath();
     }
     /*模拟登录第2步*/
     @Override
@@ -182,12 +182,14 @@ public class TargetInfoServiceImpl implements TargetInfoService {
         
          //采集到的表头插入数据库中
         for(String vaule:spiderHead) {
-           PageInfoEntity pageInfo = new PageInfoEntity();
-           pageInfo.setNameCn(vaule);
-           pageInfo.setResultId(resultInfo.getId());
-           MyStringUtil myStringUtil = new MyStringUtil();
-           pageInfo.setNameEn(myStringUtil.getPinYinHeadChar(vaule));
-           pageInfoService.save(pageInfo);
+            if (vaule != null && vaule.length() != 0){
+                PageInfoEntity pageInfo = new PageInfoEntity();
+                pageInfo.setNameCn(vaule);
+                pageInfo.setResultId(resultInfo.getId());
+                MyStringUtil myStringUtil = new MyStringUtil();
+                pageInfo.setNameEn(myStringUtil.getPinYinHeadChar(vaule));
+                pageInfoService.save(pageInfo);
+            }
         }
          //采集的结果返回给前端
         List<PageInfoEntity> pageInfos = pageInfoService.queryByResultId(resultInfo.getId());
@@ -220,14 +222,6 @@ public class TargetInfoServiceImpl implements TargetInfoService {
                 pageInfoService.update(prs);
             }
         }
-        //前端无进行操作resultinfo删除
-        /*List<PageInfoEntity> delect = pageInfoService.listByResultId(resultId);
-        if(delect.size() < 1){
-            ResultInfoEntity rs = new ResultInfoEntity();
-            rs.setId(resultId);
-            rs.setState(Constant.VALUE_ZERO);
-            resultInfoDao.update(rs);
-        }*/
     }
 
 }

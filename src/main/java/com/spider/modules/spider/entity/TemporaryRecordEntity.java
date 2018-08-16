@@ -37,8 +37,8 @@ public class TemporaryRecordEntity implements Serializable {
 	@Column(columnDefinition = "varchar(255) default '' COMMENT '目标链接'", nullable = false)
 	private String url;
 	//HTML页面
-	@Column(columnDefinition = "longtext COMMENT 'HTML页面'", nullable = false)
-	private String html;
+	@Column(columnDefinition = "longtext COMMENT 'HTML页面文件地址'", nullable = false)
+	private String htmlFilePath;
 	//创建时间
 	@Column(columnDefinition = "datetime default CURRENT_TIMESTAMP COMMENT '创建时间'", nullable = false)
 	private Date createTime;
@@ -70,12 +70,12 @@ public class TemporaryRecordEntity implements Serializable {
 		this.url = url;
 	}
 
-	public String getHtml() {
-		return html;
+	public String getHtmlFilePath() {
+		return htmlFilePath;
 	}
 
-	public void setHtml(String html) {
-		this.html = html;
+	public void setHtmlFilePath(String htmlFilePath) {
+		this.htmlFilePath = htmlFilePath;
 	}
 
 	public Date getCreateTime() {
