@@ -33,7 +33,7 @@ public class HtmlProcess {
 		String filePath = temporaryRecord.getHtmlFilePath();
 		String htmlStr = null;
 		try {
-			htmlStr = FileIOUtil.readInfoFromFile(filePath);
+			htmlStr = FileIOUtil.readStringFromFile(filePath);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

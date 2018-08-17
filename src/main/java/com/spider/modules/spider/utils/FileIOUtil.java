@@ -29,12 +29,12 @@ public class FileIOUtil {
 				throw new IOException("文件夹创建失败");
 			}
 		}
-		//		if (!file.exists()) {
-		//			if (!file.createNewFile()) {
-		//				logger.error("文件{}创建失败", filePath);
-		//				throw new IOException("文件创建失败");
-		//			}
-		//		}
+		if (!file.exists()) {
+			if (!file.createNewFile()) {
+				logger.error("文件{}创建失败", filePath);
+				throw new IOException("文件创建失败");
+			}
+		}
 		//		try (FileWriter fw = new FileWriter(file, isAppend)) {
 		//			try (BufferedWriter bw = new BufferedWriter(fw)) {
 		//				bw.append(str);

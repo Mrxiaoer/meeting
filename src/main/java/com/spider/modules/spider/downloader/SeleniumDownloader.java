@@ -90,16 +90,18 @@ public class SeleniumDownloader implements Downloader, Closeable {
 					for (Map.Entry<String, String> cookieEntry : cookiemap.getValue().entrySet()) {
 						try {
 							manage.addCookie(
-									new Cookie(
-											cookieEntry.getKey(), cookieEntry.getValue(), cookiemap.getKey(), "/", null));
-						} catch (Exception e) {
-							manage.addCookie(
-									new Cookie(
-											cookieEntry.getKey(),
-											cookieEntry.getValue(),
-											"." + cookiemap.getKey(),
-											"/",
+									new Cookie(cookieEntry.getKey(), cookieEntry.getValue(), cookiemap.getKey(), "/",
 											null));
+						} catch (Exception e) {
+							if (cookiemap.getKey().startsWith(".")) {
+								manage.addCookie(new Cookie(cookieEntry.getKey(), cookieEntry.getValue(),
+										cookiemap.getKey().substring(1, cookiemap.getKey().length() - 1), "/", null));
+							} else {
+								manage.addCookie(
+										new Cookie(cookieEntry.getKey(), cookieEntry.getValue(), "." + cookiemap.getKey(),
+												"/", null));
+							}
+
 						}
 					}
 				}
