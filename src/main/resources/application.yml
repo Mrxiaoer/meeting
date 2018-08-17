@@ -14,7 +14,7 @@ spring:
         name: spider-data
     # 环境 dev|test|prod
     profiles:
-        active: dev
+        active: test
     # jackson时间格式化
     jackson:
         time-zone: GMT+8

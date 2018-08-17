@@ -36,8 +36,8 @@ public class TemporaryRecordEntity implements Serializable {
 	//目标链接
 	@Column(columnDefinition = "varchar(255) default '' COMMENT '目标链接'", nullable = false)
 	private String url;
-	//HTML页面
-	@Column(columnDefinition = "longtext COMMENT 'HTML页面文件地址'", nullable = false)
+	//HTML页面文件路径
+	@Column(columnDefinition = "varchar(255) COMMENT 'HTML页面文件路径'", nullable = false)
 	private String htmlFilePath;
 	//创建时间
 	@Column(columnDefinition = "datetime default CURRENT_TIMESTAMP COMMENT '创建时间'", nullable = false)

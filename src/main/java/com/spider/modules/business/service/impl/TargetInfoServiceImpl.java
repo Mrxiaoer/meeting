@@ -131,7 +131,7 @@ public class TargetInfoServiceImpl implements TargetInfoService {
         SpiderRule spiderRule = new SpiderRule();
         spiderRule.setIsGetText(false);
         spiderPage.startSpider(linkId, analogLogin.getTargetUrl(), false, false, spiderRule, cookies, spiderTemporaryRecordPipeline);
-        if( !temporaryRecordService.queryBylinkId(linkId).getUrl().equals(analogLogin.getTargetUrl()) ){
+        if( !analogLogin.getTargetUrl().equals(temporaryRecordService.queryBylinkId(linkId).getUrl()) ){
             try {
                 cookies =  loginAnalog.login(analogLogin.getId());
             }catch (Exception e){

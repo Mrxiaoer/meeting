@@ -4,7 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.spider.modules.spider.dao.TemporaryRecordDao;
 import com.spider.modules.spider.entity.SpiderRule;
 import com.spider.modules.spider.entity.TemporaryRecordEntity;
-import com.spider.modules.spider.utils.MyStringUtil;
+import com.spider.modules.spider.utils.FileIOUtil;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -31,14 +31,14 @@ public class HtmlProcess {
 		//读取html文件内容
 		temporaryRecord = temporaryRecordDao.selectOne(temporaryRecord);
 		String filePath = temporaryRecord.getHtmlFilePath();
-		StringBuilder htmlStr = null;
+		String htmlStr = null;
 		try {
-			htmlStr = MyStringUtil.readInfoFromFile(filePath);
+			htmlStr = FileIOUtil.readInfoFromFile(filePath);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		//转化成html
-		Html html = Html.create(htmlStr.toString());
+		Html html = Html.create(htmlStr);
 
 		if (StrUtil.isEmpty(spiderRule.getXpath())) {
 			spiderRule.setXpath("/html");
