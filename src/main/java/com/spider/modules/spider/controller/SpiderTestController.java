@@ -1,34 +1,25 @@
 package com.spider.modules.spider.controller;
 
-import cn.hutool.json.JSONUtil;
 import com.spider.modules.spider.config.PhantomJSDriverPool;
-import com.spider.modules.spider.config.SpiderConstant;
 import com.spider.modules.spider.core.LoginAnalog;
 import com.spider.modules.spider.core.SpiderPage;
 import com.spider.modules.spider.entity.AnalogLoginEntity;
-import com.spider.modules.spider.entity.ChaoJiYingResult;
 import com.spider.modules.spider.entity.SpiderRule;
 import com.spider.modules.spider.pipeline.SpiderContentPipeline;
 import com.spider.modules.spider.pipeline.SpiderTemporaryRecordPipeline;
 import com.spider.modules.spider.service.AnalogLoginService;
 import com.spider.modules.spider.service.TemporaryRecordService;
-import com.spider.modules.spider.utils.ChaoJiYing;
+import com.spider.modules.spider.utils.FilePathUtil;
 import com.spider.modules.spider.utils.JieTu;
+import java.util.Set;
 import org.openqa.selenium.Cookie;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import us.codecraft.webmagic.utils.UrlUtils;
-
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
 
 /**
  * 测试
@@ -39,7 +30,6 @@ import java.util.Set;
  */
 @RestController
 @RequestMapping("spider")
-@Scope("session")
 public class SpiderTestController {
 
 	private final AnalogLoginService analogLoginService;
@@ -48,14 +38,14 @@ public class SpiderTestController {
 	private final JieTu jieTu;
 	private final SpiderTemporaryRecordPipeline spiderTemporaryRecordPipeline;
 	private final TemporaryRecordService temporaryRecordService;
+	@Autowired
+	PhantomJSDriverPool phantomJSDriverPool;
 	private Logger logger = LoggerFactory.getLogger(SpiderTestController.class);
 
 	@Autowired
-	PhantomJSDriverPool phantomJSDriverPool;
-
-	@Autowired
-	public SpiderTestController(AnalogLoginService analogLoginService, LoginAnalog loginAnalog, SpiderPage spiderPage, JieTu jieTu,
-	                            SpiderTemporaryRecordPipeline spiderTemporaryRecordPipeline, TemporaryRecordService temporaryRecordService) {
+	public SpiderTestController(AnalogLoginService analogLoginService, LoginAnalog loginAnalog, SpiderPage spiderPage,
+			JieTu jieTu,
+			SpiderTemporaryRecordPipeline spiderTemporaryRecordPipeline, TemporaryRecordService temporaryRecordService) {
 		this.analogLoginService = analogLoginService;
 		this.loginAnalog = loginAnalog;
 		this.spiderPage = spiderPage;
@@ -65,10 +55,13 @@ public class SpiderTestController {
 	}
 
 	@RequestMapping("/allProcess")
-	public void allProcess(String url, String loginButtonXpath, String usernameXpath, String passwordXpath, String verifycodeXpath,
-	                       String verifyCodeUrl, String username, String password) {
+	public void allProcess(String url, String loginButtonXpath, String usernameXpath, String passwordXpath,
+			String verifycodeXpath,
+			String verifyCodeUrl, String username, String password) {
 
-		Set<Cookie> cookies = this.tryLogin(url, loginButtonXpath, usernameXpath, passwordXpath, verifycodeXpath, verifyCodeUrl, username, password);
+		Set<Cookie> cookies = this
+				.tryLogin(url, loginButtonXpath, usernameXpath, passwordXpath, verifycodeXpath, verifyCodeUrl, username,
+						password);
 
 		this.getPageByCookie(url, cookies);
 		System.out.println(phantomJSDriverPool.listAllObjects());
@@ -96,17 +89,21 @@ public class SpiderTestController {
 	}
 
 	@RequestMapping("/tryLogin")
-	public Set<Cookie> tryLogin(String loginUrl, String loginButtonXpath, String usernameXpath, String passwordXpath, String verifycodeXpath,
-	                            String verifyCodeUrl, String username, String password) {
+	public Set<Cookie> tryLogin(String loginUrl, String loginButtonXpath, String usernameXpath, String passwordXpath,
+			String verifycodeXpath,
+			String verifyCodeUrl, String username, String password) {
 
-		int id = this.saveLoginInfo(loginUrl, loginButtonXpath, usernameXpath, passwordXpath, verifycodeXpath, verifyCodeUrl, username, password);
+		int id = this.saveLoginInfo(loginUrl, loginButtonXpath, usernameXpath, passwordXpath, verifycodeXpath,
+				verifyCodeUrl,
+				username, password);
 
 		return this.loginAnalog(id);
 	}
 
 	@RequestMapping("/saveLoginInfo")
-	public int saveLoginInfo(String loginUrl, String loginButtonXpath, String usernameXpath, String passwordXpath, String verifycodeXpath,
-	                         String verifyCodeUrl, String username, String password) {
+	public int saveLoginInfo(String loginUrl, String loginButtonXpath, String usernameXpath, String passwordXpath,
+			String verifycodeXpath,
+			String verifyCodeUrl, String username, String password) {
 
 		AnalogLoginEntity analogLogin = new AnalogLoginEntity();
 		analogLogin.setTargetUrl(loginUrl);
@@ -141,7 +138,8 @@ public class SpiderTestController {
 	public void jietu() {
 
 		try {
-			jieTu.savePage2Pic("http://115.233.227.46:18080/zqdata/login/verifyCode?random=0.7304289337922849", null, "vc-" + System.currentTimeMillis());
+			jieTu.savePage2Pic("http://115.233.227.46:18080/zqdata/login/verifyCode?random=0.7304289337922849", null,
+					"vc-" + System.currentTimeMillis());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -156,4 +154,10 @@ public class SpiderTestController {
 
 	}
 
+	@RequestMapping("/pathTest")
+	public String pathTest() {
+		String p = FilePathUtil.getBasePath();
+		System.out.println(p);
+		return p;
+	}
 }

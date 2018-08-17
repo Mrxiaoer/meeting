@@ -62,12 +62,10 @@ public class Tesseract implements ITesseract {
 		this.psm = -1;
 		this.ocrEngineMode = 3;
 		this.prop = new Properties();
-		this.configList = new ArrayList();
+		this.configList = new ArrayList<>();
 
 		try {
 			this.datapath = System.getProperty("TESSDATA_PREFIX");
-		} catch (Exception var5) {
-			;
 		} finally {
 			if (this.datapath == null) {
 				this.datapath = "./";
@@ -121,7 +119,6 @@ public class Tesseract implements ITesseract {
 		if (var1 != null) {
 			this.configList.addAll(var1);
 		}
-
 	}
 
 	@Override

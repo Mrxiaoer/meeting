@@ -3,6 +3,7 @@ package com.spider.modules.spider.pipeline;
 import com.spider.modules.spider.config.SpiderConstant;
 import com.spider.modules.spider.entity.TemporaryRecordEntity;
 import com.spider.modules.spider.service.TemporaryRecordService;
+import com.spider.modules.spider.utils.FilePathUtil;
 import com.spider.modules.spider.utils.MyStringUtil;
 import java.io.IOException;
 import java.util.List;
@@ -40,15 +41,15 @@ public class SpiderTemporaryRecordPipeline implements Pipeline {
 			int linkId = resultItems.get(SpiderConstant.LINKID);
 			//html写入文件
 			String fileName = linkId + temporaryRecord.getUrl();
-			String filePath = Thread.currentThread().getContextClassLoader().getResource("").getPath() + "static/htmlFile"
-					+ DigestUtils.md5Hex(fileName);
+			String childPath = "static/htmlFile" + DigestUtils.md5Hex(fileName) + ".html";
+			String filePath = FilePathUtil.getBasePath() + childPath;
 			try {
 				MyStringUtil.WriteStringToFile(filePath, html, false);
 			} catch (IOException e) {
 				e.printStackTrace();
 				logger.error("IOException:{}", e.getMessage());
 			}
-			temporaryRecord.setHtmlFilePath(filePath);
+			temporaryRecord.setHtmlFilePath(childPath);
 			temporaryRecord.setLinkId(linkId);
 		}
 

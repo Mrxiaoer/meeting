@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
  */
 public class PhantomJSDriverPool extends GenericObjectPool<PhantomJSDriver> {
 
-	Logger logger = LoggerFactory.getLogger(this.getClass());
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	public PhantomJSDriverPool(PooledObjectFactory<PhantomJSDriver> factory) {
 		super(factory);

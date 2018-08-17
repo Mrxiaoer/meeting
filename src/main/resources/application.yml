@@ -14,7 +14,7 @@ spring:
         name: spider-data
     # 环境 dev|test|prod
     profiles:
-        active: test
+        active: dev
     # jackson时间格式化
     jackson:
         time-zone: GMT+8
@@ -46,6 +46,8 @@ spring:
         database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
         hibernate:
             ddl-auto: update
+    resources:
+        static-locations: classpath:static/,file:static/
 
 #mybatis
 mybatis-plus:
