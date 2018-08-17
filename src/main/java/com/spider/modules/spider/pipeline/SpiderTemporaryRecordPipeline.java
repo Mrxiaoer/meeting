@@ -41,7 +41,8 @@ public class SpiderTemporaryRecordPipeline implements Pipeline {
 			int linkId = resultItems.get(SpiderConstant.LINKID);
 			//html写入文件
 			String fileName = linkId + temporaryRecord.getUrl();
-			String childPath = "static/htmlFile" + DigestUtils.md5Hex(fileName) + ".html";
+			logger.info("写入文件{}", DigestUtils.md5Hex(fileName) + ".html");
+			String childPath = "static/htmlFile/" + DigestUtils.md5Hex(fileName) + ".html";
 			String filePath = FilePathUtil.getBasePath() + childPath;
 			try {
 				MyStringUtil.WriteStringToFile(filePath, html, false);
