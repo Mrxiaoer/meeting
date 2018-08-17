@@ -72,7 +72,9 @@ public class SeleniumDownloader implements Downloader, Closeable {
 				var9.printStackTrace();
 			}
 
+			driver.get(request.getUrl());
 			WebDriver.Options manage = driver.manage();
+			manage.deleteAllCookies();
 
 			Site site = task.getSite();
 			if (site.getCookies() != null) {
