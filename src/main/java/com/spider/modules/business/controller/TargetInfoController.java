@@ -51,9 +51,9 @@ public class TargetInfoController {
      */
     @GetMapping("/analog_login_one")
     public R tospider(@RequestParam("id") Integer linkId) {
-        String html = targetInfoService.tospider(linkId);
-        Html content =  Html.create(html);
-        return  R.ok().put("contents", html);
+        String html =  targetInfoService.tospider(linkId);
+//        String html = "http://127.0.0.1:8899/" + targetInfoService.tospider(linkId);
+        return  R.ok().put("src", html);
     }
     
     /**
@@ -82,7 +82,9 @@ public class TargetInfoController {
     @GetMapping("/spdier_point")
     public R getOneById(@RequestParam Integer linkId) {
        TemporaryRecordEntity temporary = targetInfoService.tothirdspider(linkId);
-        return R.ok().put("url", temporary.getUrl()).put("contents",temporary.getHtmlFilePath());
+         String contents =  temporary.getHtmlFilePath();
+//       String contents = "http://127.0.0.1:8899/" + temporary.getHtmlFilePath();
+        return R.ok().put("url", temporary.getUrl()).put("src",contents);
         
     }
     
