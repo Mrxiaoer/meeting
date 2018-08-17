@@ -3,6 +3,7 @@ package com.spider.modules.business.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.spider.modules.spider.utils.FileIOUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,6 +45,7 @@ public class TargetInfoController {
     TargetInfoService targetInfoService;
      
 
+
     /**
      * 采集登录页的Html
      * @param linkId
@@ -51,9 +53,12 @@ public class TargetInfoController {
      */
     @GetMapping("/analog_login_one")
     public R tospider(@RequestParam("id") Integer linkId) {
-        String html =  targetInfoService.tospider(linkId);
-//        String html = "http://127.0.0.1:8899/" + targetInfoService.tospider(linkId);
-        return  R.ok().put("src", html);
+        try {
+            String contents = FileIOUtil.readStringFromFile(targetInfoService.tospider(linkId));
+            return R.ok().put("contents", contents);
+        }catch (Exception e){
+            return R.error();
+        }
     }
     
     /**
@@ -82,10 +87,13 @@ public class TargetInfoController {
     @GetMapping("/spdier_point")
     public R getOneById(@RequestParam Integer linkId) {
        TemporaryRecordEntity temporary = targetInfoService.tothirdspider(linkId);
-         String contents =  temporary.getHtmlFilePath();
-//       String contents = "http://127.0.0.1:8899/" + temporary.getHtmlFilePath();
-        return R.ok().put("url", temporary.getUrl()).put("src",contents);
-        
+        try {
+            String contents = FileIOUtil.readStringFromFile( temporary.getHtmlFilePath());
+            return R.ok().put("contents", contents);
+        }catch (Exception e){
+            return R.error();
+        }
+
     }
     
     /**
