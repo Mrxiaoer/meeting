@@ -72,9 +72,9 @@ public class SeleniumDownloader implements Downloader, Closeable {
 				var9.printStackTrace();
 			}
 
-			driver.get(request.getUrl());
+			//			driver.get(request.getUrl());
 			WebDriver.Options manage = driver.manage();
-			manage.deleteAllCookies();
+			//			manage.deleteAllCookies();
 
 			Site site = task.getSite();
 			if (site.getCookies() != null) {
@@ -88,24 +88,12 @@ public class SeleniumDownloader implements Downloader, Closeable {
 			if (site.getAllCookies() != null) {
 				Set<Map.Entry<String, Map<String, String>>> allCookieSet = site.getAllCookies().entrySet();
 
-				for (Map.Entry<String, Map<String, String>> cookiemap : allCookieSet) {
-					for (Map.Entry<String, String> cookieEntry : cookiemap.getValue().entrySet()) {
-						try {
-							manage.addCookie(
-									new Cookie(cookieEntry.getKey(), cookieEntry.getValue(), cookiemap.getKey(), "/",
-											null));
-						} catch (Exception e) {
-							if (cookiemap.getKey().startsWith(".")) {
-								manage.addCookie(new Cookie(cookieEntry.getKey(), cookieEntry.getValue(),
-										cookiemap.getKey().substring(1, cookiemap.getKey().length() - 1), "/", null));
-							} else {
-								manage.addCookie(
-										new Cookie(cookieEntry.getKey(), cookieEntry.getValue(), "." + cookiemap.getKey(),
-												"/", null));
-							}
-
-						}
-					}
+				boolean canSet = true;
+				canSet = setCookies(manage,allCookieSet);
+				if (!canSet) {
+					driver.get(request.getUrl());
+					manage.deleteAllCookies();
+					canSet = setCookies(manage,allCookieSet);
 				}
 			}
 
@@ -149,5 +137,32 @@ public class SeleniumDownloader implements Downloader, Closeable {
 	@Override
 	public void close() {
 		logger.info("close this downloader!");
+	}
+
+	private boolean setCookies(WebDriver.Options manage,Set<Map.Entry<String, Map<String, String>>> allCookieSet){
+		boolean canSet = true;
+		for (Map.Entry<String, Map<String, String>> cookiemap : allCookieSet) {
+			for (Map.Entry<String, String> cookieEntry : cookiemap.getValue().entrySet()) {
+				try {
+					manage.addCookie(
+							new Cookie(cookieEntry.getKey(), cookieEntry.getValue(), cookiemap.getKey(), "/",
+									null));
+				} catch (Exception e) {
+					try {
+						if (cookiemap.getKey().startsWith(".")) {
+							manage.addCookie(new Cookie(cookieEntry.getKey(), cookieEntry.getValue(),
+									cookiemap.getKey().substring(1, cookiemap.getKey().length() - 1), "/",
+									null));
+						} else {
+							manage.addCookie(new Cookie(cookieEntry.getKey(), cookieEntry.getValue(),
+									"." + cookiemap.getKey(), "/", null));
+						}
+					} catch (Exception ex) {
+						canSet = false;
+					}
+				}
+			}
+		}
+		return canSet;
 	}
 }
