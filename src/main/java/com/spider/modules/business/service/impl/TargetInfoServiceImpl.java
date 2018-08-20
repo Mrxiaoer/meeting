@@ -11,6 +11,7 @@ import com.spider.modules.business.service.LinkInfoService;
 import com.spider.modules.business.service.PageInfoService;
 import com.spider.modules.business.service.ResultInfoService;
 import com.spider.modules.business.service.TargetInfoService;
+import com.spider.modules.spider.config.PhantomJSDriverPool;
 import com.spider.modules.spider.core.HtmlProcess;
 import com.spider.modules.spider.core.LoginAnalog;
 import com.spider.modules.spider.core.SpiderPage;
@@ -32,6 +33,7 @@ import java.util.Set;
 import javax.transaction.Transactional;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +71,8 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 	private LoginAnalog loginAnalog;
 	@Autowired
 	private SpiderPage spiderPage;
+	@Autowired
+	private PhantomJSDriverPool phantomJSDriverPool;
 
 	/**
 	 * 模拟登录返回登录页
@@ -80,7 +84,9 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 		//logger.info("linkinfo"+linkInfo);
 		SpiderRule spiderRule = new SpiderRule();
 		spiderRule.setIsGetText(false);
-		spiderPage.startSpider(linkId, linkInfo.getUrl(), false, false, spiderRule, null, spiderTemporaryRecordPipeline);
+		spiderPage
+				.startSpider(linkId, linkInfo.getUrl(), false, false, spiderRule, null, spiderTemporaryRecordPipeline,
+						null);
 		TemporaryRecordEntity rc = new TemporaryRecordEntity();
 		rc = temporaryRecordService.queryBylinkId(linkId);
 
@@ -89,51 +95,59 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 
 	/*模拟登录第2步*/
 	@Override
-	public LinkInfoEntity update(TargetInfoEntity targetInfo, Integer analogId) {
+	public LinkInfoEntity update(TargetInfoEntity targetInfo, Integer analogId) throws Exception {
 		AnalogLoginEntity analogLogin = new AnalogLoginEntity();
 		BeanUtil.copyProperties(targetInfo, analogLogin);
 		analogLogin.setId(analogId);
 		analogLoginDao.updateAnalogLogin(analogLogin);
 		java.util.Set<Cookie> cookies = null;
+		//模拟浏览器创建连接，发起请求
+		PhantomJSDriver driver = phantomJSDriverPool.borrowPhantomJSDriver();
 		try {
-			cookies = loginAnalog.login(analogLogin.getId());
+			cookies = loginAnalog.login(analogLogin.getId(), driver);
+			if (cookies != null) {
+				LinkInfoEntity linkInfo = new LinkInfoEntity();
+				linkInfo.setHasTarget(Constant.SUPER_ADMIN);
+				linkInfo.setLinkId(targetInfo.getLinkId());
+				linkInfoService.update(linkInfo);
+				LinkInfoEntity link = linkInfoService.queryById(targetInfo.getLinkId());
+				return link;
+			} else {
+				return null;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-		if (cookies != null) {
-			LinkInfoEntity linkInfo = new LinkInfoEntity();
-			linkInfo.setHasTarget(Constant.SUPER_ADMIN);
-			linkInfo.setLinkId(targetInfo.getLinkId());
-			linkInfoService.update(linkInfo);
-			LinkInfoEntity link = linkInfoService.queryById(targetInfo.getLinkId());
-			return link;
-		} else {
-
 			return null;
+		} finally {
+			phantomJSDriverPool.returnObject(driver);
 		}
-
 	}
 
 	@Override
-	public TemporaryRecordEntity tothirdspider(Integer linkId) {
+	public TemporaryRecordEntity tothirdspider(Integer linkId) throws Exception {
 		LinkInfoEntity linkInfo = linkInfoService.queryById(linkId);
 		AnalogLoginEntity analogLogin = analogLoginService.getOneById(linkInfo.getAnalogId());
 		String cookie = analogLogin.getCookie();
 		Set<Cookie> cookies = MyStringUtil.json2cookie(cookie);
 		SpiderRule spiderRule = new SpiderRule();
 		spiderRule.setIsGetText(false);
-		spiderPage.startSpider(linkId, analogLogin.getTargetUrl(), false, false, spiderRule, cookies,
-				spiderTemporaryRecordPipeline);
-		if (!analogLogin.getTargetUrl().equals(temporaryRecordService.queryBylinkId(linkId).getUrl())) {
-			try {
-				cookies = loginAnalog.login(analogLogin.getId());
-			} catch (NoSuchElementException nse) {
-				throw nse;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+		PhantomJSDriver driver = phantomJSDriverPool.borrowPhantomJSDriver();
+		try {
 			spiderPage.startSpider(linkId, analogLogin.getTargetUrl(), false, false, spiderRule, cookies,
-					spiderTemporaryRecordPipeline);
+					spiderTemporaryRecordPipeline, driver);
+			if (!analogLogin.getTargetUrl().equals(temporaryRecordService.queryBylinkId(linkId).getUrl())) {
+				try {
+					cookies = loginAnalog.login(analogLogin.getId(), driver);
+				} catch (NoSuchElementException nse) {
+					throw nse;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				spiderPage.startSpider(linkId, analogLogin.getTargetUrl(), false, false, spiderRule, cookies,
+						spiderTemporaryRecordPipeline, driver);
+			}
+		} finally {
+			phantomJSDriverPool.returnObject(driver);
 		}
 		return temporaryRecordService.queryBylinkId(linkId);
 

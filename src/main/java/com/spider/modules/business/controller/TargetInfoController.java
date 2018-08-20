@@ -72,8 +72,13 @@ public class TargetInfoController {
         LinkInfoEntity linkInfoone = linkInfoService.queryById(targetInfo.getLinkId());
         Integer analogId = linkInfoone.getAnalogId();
         targetInfo.setUrl(linkInfoone.getUrl());
-        LinkInfoEntity linkInfo = targetInfoService.update(targetInfo,analogId);
-        if(linkInfo == null){
+	    LinkInfoEntity linkInfo = null;
+	    try {
+		    linkInfo = targetInfoService.update(targetInfo,analogId);
+	    } catch (Exception e) {
+		    e.printStackTrace();
+	    }
+	    if(linkInfo == null){
             return R.error("模拟登录失败~");
         }else {
             return R.ok().put("linkInfo", linkInfo);
@@ -87,8 +92,13 @@ public class TargetInfoController {
      */
     @GetMapping("/spdier_point")
     public R getOneById(@RequestParam Integer linkId) {
-       TemporaryRecordEntity temporary = targetInfoService.tothirdspider(linkId);
-        try {
+	    TemporaryRecordEntity temporary = null;
+	    try {
+		    temporary = targetInfoService.tothirdspider(linkId);
+	    } catch (Exception e) {
+		    e.printStackTrace();
+	    }
+	    try {
             String contents = FileIOUtil.readStringFromFile( temporary.getHtmlFilePath());
             return R.ok().put("contents", contents);
         }catch (NoSuchElementException nse){

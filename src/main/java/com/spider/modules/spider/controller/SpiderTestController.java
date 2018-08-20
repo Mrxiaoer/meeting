@@ -54,51 +54,51 @@ public class SpiderTestController {
 		this.temporaryRecordService = temporaryRecordService;
 	}
 
-	@RequestMapping("/allProcess")
-	public void allProcess(String url, String loginButtonXpath, String usernameXpath, String passwordXpath,
-			String verifycodeXpath,
-			String verifyCodeUrl, String username, String password) {
+//	@RequestMapping("/allProcess")
+//	public void allProcess(String url, String loginButtonXpath, String usernameXpath, String passwordXpath,
+//			String verifycodeXpath,
+//			String verifyCodeUrl, String username, String password) {
+//
+//		Set<Cookie> cookies = this
+//				.tryLogin(url, loginButtonXpath, usernameXpath, passwordXpath, verifycodeXpath, verifyCodeUrl, username,
+//						password);
+//
+//		this.getPageByCookie(url, cookies);
+//		System.out.println(phantomJSDriverPool.listAllObjects());
+//		System.out.println(temporaryRecordService.getOneByUrl(url));
+//	}
 
-		Set<Cookie> cookies = this
-				.tryLogin(url, loginButtonXpath, usernameXpath, passwordXpath, verifycodeXpath, verifyCodeUrl, username,
-						password);
+//	private void getPageByCookie(String url, Set<Cookie> cookies) {
+//
+//		SpiderRule spiderRule = new SpiderRule();
+//		spiderRule.setIsGetText(false);
+//
+//		spiderPage.startSpider(10086, url, false, false, spiderRule, cookies, spiderTemporaryRecordPipeline);
+//
+//	}
 
-		this.getPageByCookie(url, cookies);
-		System.out.println(phantomJSDriverPool.listAllObjects());
-		System.out.println(temporaryRecordService.getOneByUrl(url));
-	}
+//	@RequestMapping("/getPage")
+//	public void getPage(String url, @RequestParam(required = false) int loginAnalogId) {
+//
+//		SpiderRule spiderRule = new SpiderRule();
+//		spiderRule.setIsGetText(false);
+//		analogLoginService.getOneById(loginAnalogId);
+//
+//		spiderPage.startSpider(10088, url, false, false, spiderRule, null, spiderTemporaryRecordPipeline);
+//
+//	}
 
-	private void getPageByCookie(String url, Set<Cookie> cookies) {
-
-		SpiderRule spiderRule = new SpiderRule();
-		spiderRule.setIsGetText(false);
-
-		spiderPage.startSpider(10086, url, false, false, spiderRule, cookies, spiderTemporaryRecordPipeline);
-
-	}
-
-	@RequestMapping("/getPage")
-	public void getPage(String url, @RequestParam(required = false) int loginAnalogId) {
-
-		SpiderRule spiderRule = new SpiderRule();
-		spiderRule.setIsGetText(false);
-		analogLoginService.getOneById(loginAnalogId);
-
-		spiderPage.startSpider(10088, url, false, false, spiderRule, null, spiderTemporaryRecordPipeline);
-
-	}
-
-	@RequestMapping("/tryLogin")
-	public Set<Cookie> tryLogin(String loginUrl, String loginButtonXpath, String usernameXpath, String passwordXpath,
-			String verifycodeXpath,
-			String verifyCodeUrl, String username, String password) {
-
-		int id = this.saveLoginInfo(loginUrl, loginButtonXpath, usernameXpath, passwordXpath, verifycodeXpath,
-				verifyCodeUrl,
-				username, password);
-
-		return this.loginAnalog(id);
-	}
+//	@RequestMapping("/tryLogin")
+//	public Set<Cookie> tryLogin(String loginUrl, String loginButtonXpath, String usernameXpath, String passwordXpath,
+//			String verifycodeXpath,
+//			String verifyCodeUrl, String username, String password) {
+//
+//		int id = this.saveLoginInfo(loginUrl, loginButtonXpath, usernameXpath, passwordXpath, verifycodeXpath,
+//				verifyCodeUrl,
+//				username, password);
+//
+//		return this.loginAnalog(id);
+//	}
 
 	@RequestMapping("/saveLoginInfo")
 	public int saveLoginInfo(String loginUrl, String loginButtonXpath, String usernameXpath, String passwordXpath,
@@ -121,18 +121,18 @@ public class SpiderTestController {
 
 	}
 
-	@RequestMapping("/loginAnalog")
-	public Set<Cookie> loginAnalog(int id) {
-
-		Set<Cookie> cookies = null;
-		try {
-			cookies = loginAnalog.login(id);
-		} catch (Exception e) {
-			logger.error("模拟登录失败！Exception: " + e.getMessage());
-			e.printStackTrace();
-		}
-		return cookies;
-	}
+//	@RequestMapping("/loginAnalog")
+//	public Set<Cookie> loginAnalog(int id) {
+//
+//		Set<Cookie> cookies = null;
+//		try {
+//			cookies = loginAnalog.login(id);
+//		} catch (Exception e) {
+//			logger.error("模拟登录失败！Exception: " + e.getMessage());
+//			e.printStackTrace();
+//		}
+//		return cookies;
+//	}
 
 	@RequestMapping("/jietu")
 	public void jietu() {
@@ -146,13 +146,13 @@ public class SpiderTestController {
 
 	}
 
-	@RequestMapping("/getContent")
-	public void getContent() {
-
-		SpiderRule spiderRule = new SpiderRule();
-		spiderPage.startSpider(1, "https://tool.lu/", false, false, spiderRule, null, new SpiderContentPipeline());
-
-	}
+//	@RequestMapping("/getContent")
+//	public void getContent() {
+//
+//		SpiderRule spiderRule = new SpiderRule();
+//		spiderPage.startSpider(1, "https://tool.lu/", false, false, spiderRule, null, new SpiderContentPipeline());
+//
+//	}
 
 	@RequestMapping("/pathTest")
 	public String pathTest() {

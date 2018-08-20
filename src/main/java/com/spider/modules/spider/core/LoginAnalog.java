@@ -64,7 +64,7 @@ public class LoginAnalog {
 	/**
 	 * 模拟登录操作，在此之前请把用户名，密码存入数据库
 	 */
-	public Set<Cookie> login(int id) throws Exception {
+	public Set<Cookie> login(int id, PhantomJSDriver driver) throws Exception {
 
 		Set<Cookie> resultCookies = null;
 
@@ -77,11 +77,11 @@ public class LoginAnalog {
 		Assert.notEmpty(targetUrl, "模拟登录--断言失败,targetUrl不为空!");
 
 		//模拟浏览器创建连接，发起请求
-		PhantomJSDriver driver = phantomJSDriverPool.borrowPhantomJSDriver();
+//		PhantomJSDriver driver = phantomJSDriverPool.borrowPhantomJSDriver();
 
 		// 创建 Pattern 对象
 		//        Pattern p = Pattern.compile("(https?://[\\S]*?)[^A-Z|a-z|0-9|\\u4e00-\\u9fa5|.|/|:|_|-]");
-		try {
+//		try {
 			//执行时间超出预算的话中断并抛出异常
 			Class[] paramClzs = {String.class};
 			Object[] paramObjs = {targetUrl};
@@ -247,9 +247,9 @@ public class LoginAnalog {
 				loginInfo.setCookie(MyStringUtil.cookie2json(resultCookies));
 				resultCookies = driver.manage().getCookies();
 			}
-		} finally {
-			phantomJSDriverPool.returnObject(driver);
-		}
+//		} finally {
+		//			phantomJSDriverPool.returnObject(driver);
+		//		}
 		return resultCookies;
 	}
 

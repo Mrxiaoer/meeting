@@ -2,6 +2,7 @@ package com.spider.modules.spider.downloader;
 
 import com.spider.modules.spider.config.PhantomJSDriverPool;
 import com.spider.modules.spider.entity.MyPage;
+import com.spider.modules.spider.entity.MySite;
 import java.io.Closeable;
 import java.util.Iterator;
 import java.util.Map;
@@ -16,7 +17,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Request;
-import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.downloader.Downloader;
 import us.codecraft.webmagic.selector.Html;
@@ -52,16 +52,19 @@ public class SeleniumDownloader implements Downloader, Closeable {
 
 	@Override
 	public MyPage download(Request request, Task task) {
+		MySite site = (MySite) task.getSite();
 
-		PhantomJSDriver driver = null;
+		PhantomJSDriver driver = site.getPhantomJSDriver();
 		MyPage page = new MyPage();
-		try {
-			driver = phantomJSDriverPool.borrowPhantomJSDriver();
-		} catch (InterruptedException var10) {
-			this.logger.warn("interrupted", var10);
-			return null;
-		} catch (Exception e) {
-			e.printStackTrace();
+		if (driver == null) {
+			try {
+				driver = phantomJSDriverPool.borrowPhantomJSDriver();
+			} catch (InterruptedException var10) {
+				this.logger.warn("interrupted", var10);
+				return null;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		try {
 			assert (driver != null);
@@ -76,7 +79,6 @@ public class SeleniumDownloader implements Downloader, Closeable {
 			WebDriver.Options manage = driver.manage();
 			//			manage.deleteAllCookies();
 
-			Site site = task.getSite();
 			if (site.getCookies() != null) {
 
 				for (Object o : site.getCookies().entrySet()) {
@@ -89,11 +91,11 @@ public class SeleniumDownloader implements Downloader, Closeable {
 				Set<Map.Entry<String, Map<String, String>>> allCookieSet = site.getAllCookies().entrySet();
 
 				boolean canSet = true;
-				canSet = setCookies(manage,allCookieSet);
+				canSet = setCookies(manage, allCookieSet);
 				if (!canSet) {
 					driver.get(request.getUrl());
 					manage.deleteAllCookies();
-					canSet = setCookies(manage,allCookieSet);
+					canSet = setCookies(manage, allCookieSet);
 				}
 			}
 
@@ -139,23 +141,22 @@ public class SeleniumDownloader implements Downloader, Closeable {
 		logger.info("close this downloader!");
 	}
 
-	private boolean setCookies(WebDriver.Options manage,Set<Map.Entry<String, Map<String, String>>> allCookieSet){
+	private boolean setCookies(WebDriver.Options manage, Set<Map.Entry<String, Map<String, String>>> allCookieSet) {
 		boolean canSet = true;
 		for (Map.Entry<String, Map<String, String>> cookiemap : allCookieSet) {
 			for (Map.Entry<String, String> cookieEntry : cookiemap.getValue().entrySet()) {
 				try {
 					manage.addCookie(
-							new Cookie(cookieEntry.getKey(), cookieEntry.getValue(), cookiemap.getKey(), "/",
-									null));
+							new Cookie(cookieEntry.getKey(), cookieEntry.getValue(), cookiemap.getKey(), "/", null));
 				} catch (Exception e) {
 					try {
 						if (cookiemap.getKey().startsWith(".")) {
 							manage.addCookie(new Cookie(cookieEntry.getKey(), cookieEntry.getValue(),
-									cookiemap.getKey().substring(1, cookiemap.getKey().length() - 1), "/",
-									null));
+									cookiemap.getKey().substring(1, cookiemap.getKey().length() - 1), "/", null));
 						} else {
-							manage.addCookie(new Cookie(cookieEntry.getKey(), cookieEntry.getValue(),
-									"." + cookiemap.getKey(), "/", null));
+							manage.addCookie(
+									new Cookie(cookieEntry.getKey(), cookieEntry.getValue(), "." + cookiemap.getKey(), "/",
+											null));
 						}
 					} catch (Exception ex) {
 						canSet = false;

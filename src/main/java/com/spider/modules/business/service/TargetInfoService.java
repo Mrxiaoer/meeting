@@ -21,14 +21,14 @@ public interface TargetInfoService {
      * @param targetInfo,analogId
      * @return
      */
-    LinkInfoEntity update(TargetInfoEntity targetInfo,Integer analogId);
+    LinkInfoEntity update(TargetInfoEntity targetInfo,Integer analogId) throws Exception;
 
     /**
      * 单点采集，采集表头
      * 返回给前，选择要爬取得部分
      * @param linkId
      */
-    TemporaryRecordEntity tothirdspider(Integer linkId);
+    TemporaryRecordEntity tothirdspider(Integer linkId) throws Exception;
     
     /**
      * 获取xpath给前端返回采集的表头

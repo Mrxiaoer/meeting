@@ -8,6 +8,7 @@ import com.spider.modules.spider.pipeline.SpiderContentPipeline;
 import com.spider.modules.spider.processor.SpiderPageProcessor;
 import java.util.Set;
 import org.openqa.selenium.Cookie;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +40,7 @@ public class SpiderPage extends AbstractSpider {
 
 	@Override
 	public void startSpider(int linkId, String url, boolean allDomain, boolean isStaticPage, SpiderRule spiderRule,
-			Set<Cookie> cookieSet,
-			Pipeline pipeline) {
+			Set<Cookie> cookieSet, Pipeline pipeline, PhantomJSDriver phantomJSDriver) {
 
 		Assert.notEmpty(url, "爬取页面URL不能为空");
 
@@ -51,6 +51,7 @@ public class SpiderPage extends AbstractSpider {
 		SpiderPageProcessor processor = new SpiderPageProcessor(allDomain, spiderRule);
 		processor.setLinkId(linkId);
 		processor.setCookies(cookieSet);
+		processor.setPhantomJSDriver(phantomJSDriver);
 		Spider spider = Spider.create(processor).addUrl(url).addPipeline(pipeline);
 		if (!isStaticPage) {
 			spider.setDownloader(seleniumDownloader);

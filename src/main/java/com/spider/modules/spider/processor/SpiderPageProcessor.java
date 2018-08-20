@@ -7,6 +7,7 @@ import cn.hutool.core.util.URLUtil;
 import cn.hutool.http.HttpStatus;
 import com.spider.modules.spider.config.SpiderConstant;
 import com.spider.modules.spider.entity.MyPage;
+import com.spider.modules.spider.entity.MySite;
 import com.spider.modules.spider.entity.SpiderRule;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -18,6 +19,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.openqa.selenium.Cookie;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.Page;
@@ -41,10 +43,14 @@ public class SpiderPageProcessor implements PageProcessor {
 	/**
 	 * 抓取网站的相关配置，包括编码、抓取间隔、重试次数等
 	 */
-	private Site site = Site.me().setRetryTimes(3).setSleepTime(1000).setTimeOut(5000);
+	private MySite site = MySite.me().setRetryTimes(3).setSleepTime(1000).setTimeOut(5000);
 
 	private int linkId = 0;
 
+	/**
+	 * 用来存储driver信息
+	 */
+	private PhantomJSDriver phantomJSDriver;
 	/**
 	 * 用来存储cookie信息
 	 */
@@ -73,6 +79,14 @@ public class SpiderPageProcessor implements PageProcessor {
 
 	public void setLinkId(int linkId) {
 		this.linkId = linkId;
+	}
+
+	public PhantomJSDriver getPhantomJSDriver() {
+		return phantomJSDriver;
+	}
+
+	public void setPhantomJSDriver(PhantomJSDriver phantomJSDriver) {
+		this.phantomJSDriver = phantomJSDriver;
 	}
 
 	public Set<Cookie> getCookies() {
@@ -208,6 +222,8 @@ public class SpiderPageProcessor implements PageProcessor {
 				site.addCookie(cookie.getDomain(), cookie.getName(), cookie.getValue());
 			}
 		}
+
+		site.setPhantomJSDriver(phantomJSDriver);
 
 		return site;
 	}

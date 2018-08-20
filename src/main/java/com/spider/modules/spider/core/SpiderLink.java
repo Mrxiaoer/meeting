@@ -7,6 +7,7 @@ import com.spider.modules.spider.pipeline.SpiderContentPipeline;
 import com.spider.modules.spider.processor.SpiderLinkProcessor;
 import java.util.Set;
 import org.openqa.selenium.Cookie;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +35,7 @@ public class SpiderLink extends AbstractSpider {
 
 	@Override
 	public void startSpider(int linkId, String url, boolean allDomain, boolean isStaticPage, SpiderRule spiderRule,
-			Set<Cookie> cookieSet,
-			Pipeline pipeline) {
+			Set<Cookie> cookieSet, Pipeline pipeline, PhantomJSDriver phantomJSDriver) {
 		Spider spider = Spider.create(new SpiderLinkProcessor(allDomain)).addUrl(url)
 				.addPipeline(new SpiderContentPipeline());
 		if (!isStaticPage) {
