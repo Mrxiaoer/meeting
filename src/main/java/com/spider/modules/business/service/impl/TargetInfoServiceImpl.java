@@ -140,7 +140,7 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 		 * 判断目标页是否采集成功
 		 */
 		TemporaryRecordEntity temporaryRecord =  temporaryRecordService.queryBylinkId(linkId);
-		if( !linkInfo.getUrl().equals(MyStringUtil.urlCutParam(temporaryRecord.getUrl()))){
+		if( !MyStringUtil.urlCutParam(linkInfo.getUrl()).equals(MyStringUtil.urlCutParam(temporaryRecord.getUrl()))){
 			linkInfo.setFailTime(linkInfo.getFailTime() +  1);
 			linkInfoService.update(linkInfo);
 			if(linkInfo.getFailTime() % 3 == 0){
