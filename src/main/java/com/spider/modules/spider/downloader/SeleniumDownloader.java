@@ -56,7 +56,9 @@ public class SeleniumDownloader implements Downloader, Closeable {
 
 		PhantomJSDriver driver = site.getPhantomJSDriver();
 		MyPage page = new MyPage();
+		boolean needReturn = false;
 		if (driver == null) {
+			needReturn = true;
 			try {
 				driver = phantomJSDriverPool.borrowPhantomJSDriver();
 			} catch (InterruptedException var10) {
@@ -119,13 +121,15 @@ public class SeleniumDownloader implements Downloader, Closeable {
 			page.setUrlPath(urlPath);
 			page.setRequest(request);
 		} finally {
-			try {
-				this.phantomJSDriverPool.returnObject(driver);
-			} catch (Exception e) {
+			if (needReturn) {
 				try {
-					this.phantomJSDriverPool.invalidateObject(driver);
-				} catch (Exception e1) {
-					e1.printStackTrace();
+					this.phantomJSDriverPool.returnObject(driver);
+				} catch (Exception e) {
+					try {
+						this.phantomJSDriverPool.invalidateObject(driver);
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
 				}
 			}
 		}
