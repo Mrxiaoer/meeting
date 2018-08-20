@@ -112,7 +112,7 @@ public class LinkInfoServiceImpl extends ServiceImpl<LinkInfoDao, LinkInfoEntity
         }
         if(!(linkInfo.getSystem() == null || linkInfo.getModule() == null)){
             LinkInfoEntity oldlink = linkInfoDao.queryById(linkInfo.getLinkId());
-            if(oldlink.getSystem() != linkInfo.getSystem() || oldlink.getModule() != linkInfo.getModule()){
+            if(!oldlink.getSystem().equals(linkInfo.getSystem()) || !oldlink.getModule().equals(linkInfo.getModule())){
                 ResultInfoEntity rs = new ResultInfoEntity();
                 rs.setLinkId(linkInfo.getLinkId());
                 ResultInfoEntity rsg = new ResultInfoEntity();
