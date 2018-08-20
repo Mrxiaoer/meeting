@@ -126,9 +126,8 @@ public class LoginAnalog {
 					ChaoJiYingResult cjyResult = null;
 					if (StrUtil.isNotBlank(verifyCodeXpath) && verifycodeUrl != null) {
 						//截取验证码
-						Map<String, Object> jtResult =
-								jieTu.savePage2Pic(verifycodeUrl, cookieSet,
-										"vc-" + System.currentTimeMillis() + "-" + new Random().nextInt(100));
+						Map<String, Object> jtResult = jieTu.savePage2Pic(verifycodeUrl, cookieSet,
+								"vc-" + System.currentTimeMillis() + "-" + new Random().nextInt(100));
 						cookieSet = (Set<Cookie>) jtResult.get(SpiderConstant.COOKIES);
 						int cjyTry = 0;
 						boolean cjyFlag = true;
@@ -172,17 +171,25 @@ public class LoginAnalog {
 						passwordElement.sendKeys(passwordValue);
 						//是否有验证码
 						if (StrUtil.isNotBlank(verifyCodeXpath) && StrUtil.isNotBlank(verifyCodeValue)) {
-							WebElement verifyCodeElement = driver.findElementByXPath(verifyCodeXpath);
+							WebElement verifyCodeElement = null;
+							//							try {
+							verifyCodeElement = driver.findElementByXPath(verifyCodeXpath);
 							verifyCodeElement.clear();
 							verifyCodeElement.sendKeys(verifyCodeValue);
 							logger.info("用户名：{} ；密码：{} ；验证码：{} ；", usernameElement.getAttribute("value"),
-									passwordElement.getAttribute("value"),
-									verifyCodeElement.getAttribute("value"));
-							logger.info("==>模拟登录--有验证码，进行尝试，URL=" + targetUrl);
+									passwordElement.getAttribute("value"), verifyCodeElement.getAttribute("value"));
+							logger.info("==>模拟登录--有验证码，进行尝试，URL={}", targetUrl);
+							//							} catch (NoSuchElementException nse) {
+							//								logger.error("没有此验证码元素{}", nse);
+							//								logger.info("用户名：{} ；密码：{} ；", usernameElement.getAttribute
+							// ("value"),
+							//										passwordElement.getAttribute("value"));
+							//								logger.info("==>模拟登录--无验证码，进行尝试，URL={}", targetUrl);
+							//							}
 						} else {
 							logger.info("用户名：{} ；密码：{} ；", usernameElement.getAttribute("value"),
 									passwordElement.getAttribute("value"));
-							logger.info("==>模拟登录--无验证码，进行尝试，URL=" + targetUrl);
+							logger.info("==>模拟登录--无验证码，进行尝试，URL={}", targetUrl);
 						}
 						//模拟点击
 						WebElement loginButtonElement = driver.findElementByXPath(loginButtonXpath);
