@@ -39,6 +39,12 @@ public class ElementInfoServiceImpl extends ServiceImpl<ElementInfoDao, ElementI
     }
 
     @Override
+    public ElementInfoEntity selectByPageId(Integer pageId){
+        ElementInfoEntity elementInfo = new ElementInfoEntity();
+        elementInfo.setPageId(pageId);
+        return  elementInfoDao.selectOne(elementInfo);
+    }
+    @Override
     public void save(ElementInfoEntity elementInfo) {
         elementInfoDao.insert(elementInfo);
     }

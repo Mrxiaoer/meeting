@@ -123,6 +123,7 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 		}
 	}
 
+	/*单点采集第一步*/
 	@Override
 	public TemporaryRecordEntity tothirdspider(Integer linkId) throws Exception {
 		LinkInfoEntity linkInfo = linkInfoService.queryById(linkId);
@@ -149,8 +150,26 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 		} finally {
 			phantomJSDriverPool.returnObject(driver);
 		}
-		return temporaryRecordService.queryBylinkId(linkId);
-
+		/**
+		 * 判断目标页是否采集成功
+		 */
+		TemporaryRecordEntity temporaryRecord =  temporaryRecordService.queryBylinkId(linkId);
+		if( !MyStringUtil.urlCutParam(linkInfo.getUrl()).equals(MyStringUtil.urlCutParam(temporaryRecord.getUrl()))){
+			linkInfo.setFailTime(linkInfo.getFailTime() +  1);
+			linkInfoService.update(linkInfo);
+			if(linkInfo.getFailTime() % 3 == 0){
+				linkInfo.setHasTarget(Constant.VALUE_ZERO);
+				linkInfo.setFailTime(Constant.VALUE_ZERO);
+				linkInfoService.update(linkInfo);
+			}
+			return null;
+		}else{
+			if (linkInfo.getFailTime() != 0){
+				linkInfo.setFailTime(Constant.VALUE_ZERO);
+				linkInfoService.update(linkInfo);
+			}
+			return temporaryRecord;
+		}
 	}
 
 	@Override

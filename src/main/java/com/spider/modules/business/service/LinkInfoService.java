@@ -36,7 +36,7 @@ public interface LinkInfoService {
     PageUtils queryTerm(Map<String, Object> params);
 
     /**
-     * 静准查询
+     * 精准查询
      * @param params
      * @return
      */
@@ -62,4 +62,10 @@ public interface LinkInfoService {
 
 
     List<TimeTaskModel> timedTask();
+
+    /**
+     * 目标页登录不了，需重新登录
+     * @param linkId
+     */
+    void updateByTarget(Integer linkId);
 }

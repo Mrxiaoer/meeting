@@ -112,7 +112,7 @@ public class LinkInfoServiceImpl extends ServiceImpl<LinkInfoDao, LinkInfoEntity
         }
         if(!(linkInfo.getSystem() == null || linkInfo.getModule() == null)){
             LinkInfoEntity oldlink = linkInfoDao.queryById(linkInfo.getLinkId());
-            if(oldlink.getSystem() != linkInfo.getSystem() || oldlink.getModule() != linkInfo.getModule()){
+            if(!oldlink.getSystem().equals(linkInfo.getSystem()) || !oldlink.getModule().equals(linkInfo.getModule())){
                 ResultInfoEntity rs = new ResultInfoEntity();
                 rs.setLinkId(linkInfo.getLinkId());
                 ResultInfoEntity rsg = new ResultInfoEntity();
@@ -156,5 +156,13 @@ public class LinkInfoServiceImpl extends ServiceImpl<LinkInfoDao, LinkInfoEntity
             timeTaskModels.get(flagMap.get(entity.getSystem())).getChildren().add(child);
         }
         return timeTaskModels;
+    }
+
+    @Override
+    public void  updateByTarget(Integer linkId){
+        LinkInfoEntity linkInfo = new LinkInfoEntity();
+        linkInfo.setLinkId(linkId);
+        linkInfo.setHasTarget(Constant.VALUE_ZERO);linkInfoDao.update(linkInfo);
+        linkInfoDao.update(linkInfo);
     }
 }

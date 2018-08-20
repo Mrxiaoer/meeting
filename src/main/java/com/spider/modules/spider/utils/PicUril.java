@@ -19,7 +19,7 @@ public class PicUril {
 	 * @param sfile   需要去噪的图像
 	 * @param destDir 去噪后的图像保存地址
 	 */
-	public static void cleanLinesInImage(File sfile, String destDir) throws IOException {
+	public static File cleanLinesInImage(File sfile, String destDir) throws IOException {
 		File destF = new File(destDir);
 		if (!destF.exists()) {
 			destF.mkdirs();
@@ -83,7 +83,9 @@ public class PicUril {
 			}
 		}
 
-		ImageIO.write(binaryBufferedImage, "jpg", new File(destDir, sfile.getName()));
+		File resultFile = new File(destDir, sfile.getName());
+		ImageIO.write(binaryBufferedImage, "jpg", resultFile);
+		return resultFile;
 	}
 
 	private static boolean isBlack(int colorInt) {

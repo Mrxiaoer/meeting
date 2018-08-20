@@ -135,8 +135,8 @@ public class LoginAnalog {
 						if (useOcr && tryNum < 1) {
 							//ocr解析验证码
 							File file = new File(jtResult.get(SpiderConstant.IMAGE_PATH).toString());
-							PicUril.cleanLinesInImage(file, destDir + year + "-" + month + "-" + day);
-							verifyCodeValue = OCRUtil.identifyCode(file);
+							File returnFile = PicUril.cleanLinesInImage(file, destDir + year + "-" + month + "-" + day);
+							verifyCodeValue = OCRUtil.identifyCode(returnFile);
 							cjyFlag = false;
 						} else {
 							while (cjyTry < 3 && cjyFlag) {
