@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.spider.modules.spider.utils.FileIOUtil;
+import org.openqa.selenium.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -90,7 +91,9 @@ public class TargetInfoController {
         try {
             String contents = FileIOUtil.readStringFromFile( temporary.getHtmlFilePath());
             return R.ok().put("contents", contents);
-        }catch (Exception e){
+        }catch (NoSuchElementException nse){
+            return R.error(1404,"某些页面元素未找到，可能页面被改动，请重新模拟登陆！");
+        } catch (Exception e){
             return R.error();
         }
 
