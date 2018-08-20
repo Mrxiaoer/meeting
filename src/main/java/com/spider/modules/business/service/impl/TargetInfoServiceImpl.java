@@ -1,6 +1,7 @@
 package com.spider.modules.business.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.StrUtil;
 import com.spider.common.utils.Constant;
 import com.spider.modules.business.dao.ResultInfoDao;
 import com.spider.modules.business.entity.LinkInfoEntity;
@@ -11,6 +12,7 @@ import com.spider.modules.business.service.LinkInfoService;
 import com.spider.modules.business.service.PageInfoService;
 import com.spider.modules.business.service.ResultInfoService;
 import com.spider.modules.business.service.TargetInfoService;
+import com.spider.modules.spider.config.PhantomJSDriverFactory;
 import com.spider.modules.spider.config.PhantomJSDriverPool;
 import com.spider.modules.spider.core.HtmlProcess;
 import com.spider.modules.spider.core.LoginAnalog;
@@ -25,6 +27,8 @@ import com.spider.modules.spider.pipeline.SpiderTemporaryRecordPipeline;
 import com.spider.modules.spider.service.AnalogLoginService;
 import com.spider.modules.spider.service.TemporaryRecordService;
 import com.spider.modules.spider.utils.MyStringUtil;
+
+import java.sql.Driver;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -73,6 +77,8 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 	private SpiderPage spiderPage;
 	@Autowired
 	private PhantomJSDriverPool phantomJSDriverPool;
+	@Autowired
+    PhantomJSDriverFactory phantomJSDriverFactory;
 
 	/**
 	 * 模拟登录返回登录页
@@ -84,11 +90,21 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 		//logger.info("linkinfo"+linkInfo);
 		SpiderRule spiderRule = new SpiderRule();
 		spiderRule.setIsGetText(false);
-		spiderPage
-				.startSpider(linkId, linkInfo.getUrl(), false, false, spiderRule, null, spiderTemporaryRecordPipeline,
+		spiderPage.startSpider(linkId, linkInfo.getUrl(), false, false, spiderRule, null, spiderTemporaryRecordPipeline,
 						null);
-		TemporaryRecordEntity rc = new TemporaryRecordEntity();
-		rc = temporaryRecordService.queryBylinkId(linkId);
+		TemporaryRecordEntity rc = temporaryRecordService.queryBylinkId(linkId);
+		if (MyStringUtil.urlCutParam(rc.getUrl()).equals(MyStringUtil.urlCutParam(linkInfo.getUrl()))){
+            PhantomJSDriver driver = null;
+            try {
+                driver = phantomJSDriverFactory.create();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            spiderPage.startSpider(linkId, linkInfo.getUrl(), false, false, spiderRule, null, spiderTemporaryRecordPipeline,
+                    driver);
+            driver.quit();
+            rc = temporaryRecordService.queryBylinkId(linkId);
+        }
 
 		return rc.getHtmlFilePath();
 	}
@@ -211,7 +227,9 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 
 		//采集到的表头插入数据库中
 		for (String vaule : spiderHead) {
-			if (vaule != null || vaule.length() != 0) {
+//            StrUtil.isNotBlank(vaule)
+			if (StrUtil.isNotBlank(vaule) ) {
+			    logger.info(vaule);
 				PageInfoEntity pageInfo = new PageInfoEntity();
 				pageInfo.setNameCn(vaule);
 				pageInfo.setResultId(resultInfo.getId());
