@@ -50,7 +50,7 @@ public interface PageInfoService {
 
     /**
      * 信息转化
-     * @param params
+     * @param provisional
      */
     void updatePageAndElement(ProvisionalEntity provisional);
 

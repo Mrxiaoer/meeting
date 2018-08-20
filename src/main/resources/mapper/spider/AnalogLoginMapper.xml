@@ -165,21 +165,21 @@
     </update>
 
     <resultMap type="com.spider.modules.spider.entity.AnalogLoginEntity" id="AnalogLoginMap">
-        <result property="id" column="id"/>
-        <result property="cookie" column="cookie"/>
-        <result property="host" column="host"/>
-        <result property="domain" column="domain"/>
-        <result property="login_button_xpath" column="loginButtonXpath"/>
-        <result property="is_enable" column="isEnable"/>
-        <result property="password_xpath" column="passwordXpath"/>
-        <result property="username_xpath" column="usernameXpath"/>
-        <result property="verifycode_xpath" column="verifycodeXpath"/>
-        <result property="password" column="password"/>
-        <result property="username" column="username"/>
-        <result property="verifycode_url" column="verifycodeUrl"/>
-        <result property="target_url" column="targetUrl"/>
-        <result property="now_url" column="nowUrl"/>
-        <result property="str_of_index" column="strOfIndex"/>
+        <result column="id" property="id"/>
+        <result column="cookie" property="cookie"/>
+        <result column="host" property="host"/>
+        <result column="domain" property="domain"/>
+        <result column="login_button_xpath" property="loginButtonXpath"/>
+        <result column="is_enable" property="isEnable"/>
+        <result column="password_xpath" property="passwordXpath"/>
+        <result column="username_xpath" property="usernameXpath"/>
+        <result column="verifycode_xpath" property="verifycodeXpath"/>
+        <result column="password" property="password"/>
+        <result column="username" property="username"/>
+        <result column="verifycode_url" property="verifycodeUrl"/>
+        <result column="target_url" property="targetUrl"/>
+        <result column="now_url" property="nowUrl"/>
+        <result column="str_of_index" property="strOfIndex"/>
     </resultMap>
 
     <select id="queryAnalogLogin" resultMap="AnalogLoginMap">

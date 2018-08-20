@@ -157,4 +157,12 @@ public class LinkInfoServiceImpl extends ServiceImpl<LinkInfoDao, LinkInfoEntity
         }
         return timeTaskModels;
     }
+
+    @Override
+    public void  updateByTarget(Integer linkId){
+        LinkInfoEntity linkInfo = new LinkInfoEntity();
+        linkInfo.setLinkId(linkId);
+        linkInfo.setHasTarget(Constant.VALUE_ZERO);linkInfoDao.update(linkInfo);
+        linkInfoDao.update(linkInfo);
+    }
 }

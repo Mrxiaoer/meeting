@@ -7,6 +7,7 @@
 		type="com.spider.modules.business.entity.ElementInfoEntity"
 		id="Base_ResultMap">
 		<id column="element_id" property="elementId"/>
+		<result column="page_id" property="pageId"/>
 		<result column="name_cn" property="nameCn"/>
 		<result column="name_en" property="nameEn"/>
 		<result column="source" property="source"/>
@@ -19,7 +20,7 @@
 		<result column="state" property="state"/>
 	</resultMap>
 	<sql id="Base_Column_List">
-		element_id,name_cn,name_en,source,information_name,type,len,remark,routine,result_id,state
+		element_id,page_id,name_cn,name_en,source,information_name,type,len,remark,routine,result_id,state
 	</sql>
 
 	<!-- 根据element_id查询数据 -->
@@ -29,6 +30,35 @@
 		element_id = #{elementId}
 	</select>
 
+	<select id="selectOne" parameterType="com.spider.modules.business.entity.ElementInfoEntity" resultMap="Base_ResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from spider_element_info
+		<trim prefix="where" suffixOverrides="and | or">
+			<if test="elementId != null">
+				`element_id` = #{elementId} and
+			</if>
+			<if test="pageId != null">
+				`page_id` = #{pageId} and
+			</if>
+			<if test="nameCn != null and nameCn != ''">
+				`name_cn` = #{nameCn} and
+			</if>
+			<if test="nameEn != null and nameEn!=''">
+				`name_en` = #{nameEn} and
+			</if>
+			<if test="type != null and type!=''">
+				`type` = #{type} and
+			</if>
+			<if test="remark != null and remark!=''">
+				`remark` = #{remark} and
+			</if>
+		</trim>
+		limit 1
+
+	</select>
+
+
 	<!-- 添加信息 -->
 	<insert id="insert"
 		parameterType="com.spider.modules.business.entity.ElementInfoEntity"
@@ -37,6 +67,9 @@
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="elementId != null">
 				element_id,
+			</if>
+			<if test="pageId != null">
+				page_id,
 			</if>
 			<if test="nameCn != null">
 				name_cn,
@@ -72,6 +105,9 @@
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="elementId != null">
 				#{elementId},
+			</if>
+			<if test="pageId != null">
+				#{pageId},
 			</if>
 			<if test="nameCn != null">
 				#{nameCn},
@@ -111,6 +147,9 @@
 		parameterType="com.spider.modules.business.entity.ElementInfoEntity">
 		update spider_element_info
 		<set>
+			<if test="pageId != null">
+				page_id = #{pageId},
+			</if>
 			<if test="nameCn != null and nameCn.trim() != ''">
 				name_cn = #{nameCn},
 			</if>

@@ -22,7 +22,6 @@ import com.spider.modules.spider.entity.TemporaryRecordEntity;
 import com.spider.modules.spider.service.AnalogLoginService;
 import com.spider.modules.spider.service.TemporaryRecordService;
 
-import us.codecraft.webmagic.selector.Html;
 /**
  * 采集页
  * @author yaonuan
@@ -45,8 +44,6 @@ public class TargetInfoController {
     @Autowired
     TargetInfoService targetInfoService;
      
-
-
     /**
      * 采集登录页的Html
      * @param linkId
@@ -88,15 +85,18 @@ public class TargetInfoController {
     @GetMapping("/spdier_point")
     public R getOneById(@RequestParam Integer linkId) {
        TemporaryRecordEntity temporary = targetInfoService.tothirdspider(linkId);
-        try {
-            String contents = FileIOUtil.readStringFromFile( temporary.getHtmlFilePath());
-            return R.ok().put("contents", contents);
-        }catch (NoSuchElementException nse){
-            return R.error(1404,"某些页面元素未找到，可能页面被改动，请重新模拟登陆！");
-        } catch (Exception e){
-            return R.error();
-        }
-
+       if (temporary == null){
+           return R.error();
+       }else {
+           try {
+               String contents = FileIOUtil.readStringFromFile(temporary.getHtmlFilePath());
+               return R.ok().put("contents", contents);
+           } catch (NoSuchElementException nse) {
+               return R.error(1404, "某些页面元素未找到，可能页面被改动，请重新模拟登陆！");
+           } catch (Exception e) {
+               return R.error();
+           }
+       }
     }
     
     /**

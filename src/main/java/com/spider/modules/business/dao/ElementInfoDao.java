@@ -18,6 +18,13 @@ public interface ElementInfoDao extends BaseMapper<ElementInfoEntity> {
      * @return
      */
     ElementInfoEntity queryById(Integer elementId);
+
+    /**
+     * 自定义查询一条
+     * @param elementInfo
+     * @return
+     */
+    ElementInfoEntity selectOne(ElementInfoEntity elementInfo);
     
     /**
      * 更新数据

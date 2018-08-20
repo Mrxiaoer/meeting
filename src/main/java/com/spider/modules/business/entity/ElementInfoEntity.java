@@ -15,27 +15,41 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @TableName("spider_element_info")
 public class ElementInfoEntity implements Serializable{
     private static final long serialVersionUID = 1L;
+
     //编码
     @TableId
     private Integer elementId;
+
+    //采集结果对比表的主键
+    private Integer pageId;
+
     //中文名
     private String nameCn;
+
     //英文名
     private String nameEn;
+
     //來源
     private String source;
+
     //资源项目名称
     private String informationName;
+
     //类型
     private String type;
+
     //类型字段长度
     private Integer len;
+
     //描述
     private String remark;
+
     //与link表的关联
     private Integer resultId;
+
     //默认值
     private String routine;
+
     //存在状态（1.存在;0.删除）
     @JsonIgnore
     private Integer state;
@@ -46,6 +60,14 @@ public class ElementInfoEntity implements Serializable{
 
     public void setElementId(Integer elementId) {
         this.elementId = elementId;
+    }
+
+    public Integer getPageId() {
+        return pageId;
+    }
+
+    public void setPageId(Integer pageId) {
+        this.pageId = pageId;
     }
 
     public String getNameCn() {

@@ -18,6 +18,13 @@ public interface ElementInfoService {
      * @return
      */
     ElementInfoEntity queryById(Integer elementId);
+
+    /**
+     * 根据pageId查询信息
+     * @param pageId
+     * @return
+     */
+    ElementInfoEntity selectByPageId(Integer pageId);
     
     /**
      * 更新数据

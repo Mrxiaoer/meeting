@@ -8,7 +8,7 @@
         <result property="link_id" column="linkId"/>
         <result property="url" column="url"/>
         <result property="htmlFilePath" column="html_file_path"/>
-        <result property="create_time" column="createTime"/>
+        <result property="createTime" column="create_time"/>
     </resultMap>
 
     <insert id="insertOne" useGeneratedKeys="true" keyProperty="id">

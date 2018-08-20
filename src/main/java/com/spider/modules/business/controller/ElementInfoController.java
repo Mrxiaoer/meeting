@@ -49,7 +49,18 @@ public class ElementInfoController {
         return R.ok().put("list", elementInfo);
        
     }
-    
+
+    /**
+     * 根据pageId查询elementInfo
+     * @param pageId
+     * @return
+     */
+    @GetMapping("/queryByPageId/{pageId}")
+    public R selectByPageId(@PathVariable Integer pageId){
+        ElementInfoEntity elementInfo = elementInfoService.selectByPageId(pageId);
+        return R.ok().put("list", elementInfo);
+    }
+
     /**
      * 更新数据
      * @param elementInfo
