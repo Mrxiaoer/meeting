@@ -64,7 +64,7 @@ public class LinkInfoEntity implements Serializable {
     /**
      * 模拟登录失败次数
      */
-    private Integer failTime;
+    private Integer failTimes;
 
     // 存在状态（1.存在;0.删除）
     @JsonIgnore
@@ -158,12 +158,12 @@ public class LinkInfoEntity implements Serializable {
         this.ruleId = ruleId;
     }
 
-    public Integer getFailTime() {
-        return failTime;
+    public Integer getFailTimes() {
+        return failTimes;
     }
 
-    public void setFailTime(Integer failTime) {
-        this.failTime = failTime;
+    public void setFailTimes(Integer failTimes) {
+        this.failTimes = failTimes;
     }
 
     public Integer getState() {

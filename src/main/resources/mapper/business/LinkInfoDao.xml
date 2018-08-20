@@ -16,11 +16,11 @@
 		<result column="remarks" property="remarks"/>
 		<result column="has_target" property="hasTarget"/>
 		<result column="rule_id" property="ruleId"/>
-        <result column="fail_time" property="failTime"/>
+        <result column="fail_times" property="failTimes"/>
 		<result column="state" property="state"/>
 	</resultMap>
 	<sql id="Base_Column_List">
-		link_id,analog_id,system,module,url,is_login,create_time,update_time,remarks,has_target,rule_id,fail_time,state
+		link_id,analog_id,system,module,url,is_login,create_time,update_time,remarks,has_target,rule_id,fail_times,state
 	</sql>
 
 	<!-- 查询所有数据 -->
@@ -144,8 +144,8 @@
 			<if test="ruleId != null">
 				rule_id,
 			</if>
-            <if test="failTime != null">
-                fail_time,
+            <if test="failTimes != null">
+                fail_times,
             </if>
 			<if test="state != null">
 				state,
@@ -185,8 +185,8 @@
 			<if test="ruleId != null">
 				#{ruleId},
 			</if>
-            <if test="failTime != null">
-                #{failTime},
+            <if test="failTimes != null">
+                #{failTimes},
             </if>
 			<if test="state != null">
 				#{state},
@@ -220,8 +220,8 @@
 			<if test="hasTarget != null">
 				has_target = #{hasTarget},
 			</if>
-            <if test="failTime != null">
-                fail_time = #{failTime},
+            <if test="failTimes != null">
+                fail_times = #{failTimes},
             </if>
 		</set>
 		where link_id = #{linkId}

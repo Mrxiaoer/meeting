@@ -155,17 +155,17 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 		 */
 		TemporaryRecordEntity temporaryRecord =  temporaryRecordService.queryBylinkId(linkId);
 		if( !MyStringUtil.urlCutParam(linkInfo.getUrl()).equals(MyStringUtil.urlCutParam(temporaryRecord.getUrl()))){
-			linkInfo.setFailTime(linkInfo.getFailTime() +  1);
+			linkInfo.setFailTimes(linkInfo.getFailTimes() +  1);
 			linkInfoService.update(linkInfo);
-			if(linkInfo.getFailTime() % 3 == 0){
+			if(linkInfo.getFailTimes() % 3 == 0){
 				linkInfo.setHasTarget(Constant.VALUE_ZERO);
-				linkInfo.setFailTime(Constant.VALUE_ZERO);
+				linkInfo.setFailTimes(Constant.VALUE_ZERO);
 				linkInfoService.update(linkInfo);
 			}
 			return null;
 		}else{
-			if (linkInfo.getFailTime() != 0){
-				linkInfo.setFailTime(Constant.VALUE_ZERO);
+			if (linkInfo.getFailTimes() != 0){
+				linkInfo.setFailTimes(Constant.VALUE_ZERO);
 				linkInfoService.update(linkInfo);
 			}
 			return temporaryRecord;
