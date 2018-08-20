@@ -4,7 +4,7 @@ import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.json.JSONUtil;
-import com.spider.modules.spider.config.PhantomJSDriverPool;
+import com.spider.modules.spider.config.PhantomJSDriverFactory;
 import com.spider.modules.spider.config.SpiderConstant;
 import com.spider.modules.spider.dao.AnalogLoginDao;
 import com.spider.modules.spider.entity.AnalogLoginEntity;
@@ -41,7 +41,7 @@ public class LoginAnalog {
 
 	private final AnalogLoginDao analogLoginDao;
 	private final JieTu jieTu;
-	private final PhantomJSDriverPool phantomJSDriverPool;
+	private final PhantomJSDriverFactory phantomJSDriverFactory;
 	private Logger logger = LoggerFactory.getLogger(LoginAnalog.class);
 	@Value("${VcCode.chaojiying.username}")
 	private String cjyUsername;
@@ -55,10 +55,10 @@ public class LoginAnalog {
 	private boolean useOcr;
 
 	@Autowired
-	public LoginAnalog(AnalogLoginDao analogLoginDao, JieTu jieTu, PhantomJSDriverPool phantomJSDriverPool) {
+	public LoginAnalog(AnalogLoginDao analogLoginDao, JieTu jieTu, PhantomJSDriverFactory phantomJSDriverFactory) {
 		this.analogLoginDao = analogLoginDao;
 		this.jieTu = jieTu;
-		this.phantomJSDriverPool = phantomJSDriverPool;
+		this.phantomJSDriverFactory = phantomJSDriverFactory;
 	}
 
 	/**
@@ -77,19 +77,29 @@ public class LoginAnalog {
 		Assert.notEmpty(targetUrl, "模拟登录--断言失败,targetUrl不为空!");
 
 		//模拟浏览器创建连接，发起请求
-//		PhantomJSDriver driver = phantomJSDriverPool.borrowPhantomJSDriver();
+		//		PhantomJSDriver driver = phantomJSDriverPool.borrowPhantomJSDriver();
 
 		// 创建 Pattern 对象
 		//        Pattern p = Pattern.compile("(https?://[\\S]*?)[^A-Z|a-z|0-9|\\u4e00-\\u9fa5|.|/|:|_|-]");
-//		try {
-			//执行时间超出预算的话中断并抛出异常
-			Class[] paramClzs = {String.class};
-			Object[] paramObjs = {targetUrl};
-			int timeOut = 10000;
+		//		try {
+		//执行时间超出预算的话中断并抛出异常
+		Class[] paramClzs = {String.class};
+		Object[] paramObjs = {targetUrl};
+		int timeOut = 10000;
+		boolean needChange = false;
+		PhantomJSDriver oldDriver = null;
+		try {
 			try {
 				long startTime = System.currentTimeMillis();
 				RunTimeout.timeoutMethod(driver, "get", paramClzs, paramObjs, timeOut);
-				logger.info("点击事件耗时{}毫秒！", System.currentTimeMillis() - startTime);
+				logger.info("获取页面耗时{}毫秒！", System.currentTimeMillis() - startTime);
+
+				if (MyStringUtil.urlCutParam(driver.getCurrentUrl()).equals(targetUrl)) {
+					needChange = true;
+					oldDriver = driver;
+					driver = phantomJSDriverFactory.create();
+					RunTimeout.timeoutMethod(driver, "get", paramClzs, paramObjs, timeOut);
+				}
 			} catch (RuntimeException re) {
 				//让程序继续往下执行
 				logger.info("获取页面超过{}毫秒！停止等待，向下执行！", timeOut);
@@ -245,9 +255,16 @@ public class LoginAnalog {
 			} else {
 				resultCookies = driver.manage().getCookies();
 				loginInfo.setCookie(MyStringUtil.cookie2json(resultCookies));
+				analogLoginDao.updateAnalogLogin(loginInfo);
 				resultCookies = driver.manage().getCookies();
 			}
-//		} finally {
+		} finally {
+			if (needChange) {
+				driver.quit();
+				driver = oldDriver;
+			}
+		}
+		//		} finally {
 		//			phantomJSDriverPool.returnObject(driver);
 		//		}
 		return resultCookies;
