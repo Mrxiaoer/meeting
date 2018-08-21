@@ -142,7 +142,7 @@ public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobDao, Schedule
       LinkInfoEntity linkInfo = linkInfoDao.queryById(Integer.parseInt(scheduleJob.getParams()));
       List<String> params = new ArrayList<>();
       params.add(linkInfo.getSystem());
-      params.add(linkInfo.getModule());
+      params.add(String.valueOf(linkInfo.getLinkId()));
       model.setParams(params);
     }
     return model;
