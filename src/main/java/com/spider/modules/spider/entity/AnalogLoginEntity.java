@@ -52,6 +52,9 @@ public class AnalogLoginEntity implements Serializable {
 	//登录页验证码xpath
 	@Column(columnDefinition = "varchar(127) COMMENT '登录页验证码xpath'")
 	private String verifycodeXpath;
+	//登录页验证码图片xpath
+	@Column(columnDefinition = "varchar(127) COMMENT '验证码图片xpath'")
+	private String verifycodePicXpath;
 	//登录页用户名
 	@Column(columnDefinition = "varchar(31) COMMENT '登录页用户名'")
 	private String username;
@@ -190,4 +193,12 @@ public class AnalogLoginEntity implements Serializable {
 	public void setIsEnable(Integer isEnable) {
 		this.isEnable = isEnable;
 	}
+
+    public String getVerifycodePicXpath() {
+        return verifycodePicXpath;
+    }
+
+    public void setVerifycodePicXpath(String verifycodePicXpath) {
+        this.verifycodePicXpath = verifycodePicXpath;
+    }
 }

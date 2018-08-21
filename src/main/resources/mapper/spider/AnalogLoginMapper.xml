@@ -52,6 +52,9 @@
             <if test="strOfIndex!=null">
                 `str_of_index`,
             </if>
+            <if test="verifycodePicXpath!=null">
+                `verifycode_pic_xpath`,
+            </if>
         </trim>
         )
         VALUES
@@ -102,6 +105,9 @@
             <if test="strOfIndex!=null">
                 #{strOfIndex},
             </if>
+            <if test="verifycodePicXpath!=null">
+                #{verifycodePicXpath},
+            </if>
         </trim>
         )
     </insert>
@@ -119,31 +125,21 @@
             <if test="domain != null and domain!=''">
                 `domain` = #{domain},
             </if>
-            <if test="loginButtonXpath != null and loginButtonXpath!=''">
                 `login_button_xpath` = #{loginButtonXpath},
-            </if>
             <if test="isEnable != null">
                 `is_enable` = #{isEnable},
             </if>
-            <if test="passwordXpath != null and passwordXpath!=''">
                 `password_xpath` = #{passwordXpath},
-            </if>
-            <if test="usernameXpath != null and usernameXpath!=''">
                 `username_xpath` = #{usernameXpath},
-            </if>
-            <if test="verifycodeXpath != null and verifycodeXpath!=''">
                 `verifycode_xpath` = #{verifycodeXpath},
-            </if>
             <if test="password != null and password!=''">
                 `password` = #{password},
             </if>
             <if test="username != null and username!=''">
                 `username` = #{username},
             </if>
-            <if test="verifycodeUrl != null and verifycodeUrl!=''">
                 `verifycode_url` = #{verifycodeUrl},
-            </if>
-            <if test="targetUrl != null and targetUrl!=''">
+            <if test="targetUrl != null and targetUrl != ''">
                 `target_url` = #{targetUrl},
             </if>
             <if test="nowUrl!=null and nowUrl!=''">
@@ -151,6 +147,9 @@
             </if>
             <if test="strOfIndex!=null and strOfIndex!=''">
                 `str_of_index` = #{strOfIndex},
+            </if>
+            <if test="verifycodePicXpath!=null and verifycodePicXpath!=''">
+                `verifycode_pic_xpath` = #{verifycodePicXpath},
             </if>
         </trim>
         WHERE
@@ -180,6 +179,7 @@
         <result column="target_url" property="targetUrl"/>
         <result column="now_url" property="nowUrl"/>
         <result column="str_of_index" property="strOfIndex"/>
+        <result column="verifycode_pic_xpath" property="verifycodePicXpath"/>
     </resultMap>
 
     <select id="queryAnalogLogin" resultMap="AnalogLoginMap">
@@ -231,6 +231,9 @@
             </if>
             <if test="strOfIndex != null and strOfIndex!=''">
                 `str_of_index` = #{strOfIndex} and
+            </if>
+            <if test="verifycodePicXpath != null and verifycodePicXpath!=''">
+                `verifycode_pic_xpath` = #{verifycodePicXpath} and
             </if>
         </trim>
     </select>
@@ -285,6 +288,9 @@
             <if test="strOfIndex != null and strOfIndex!=''">
                 `str_of_index` = #{strOfIndex} and
             </if>
+            <if test="verifycodePicXpath != null and verifycodePicXpath!=''">
+                `verifycode_pic_xpath` = #{verifycodePicXpath} and
+            </if>
         </trim>
         limit 1
     </select>
@@ -315,6 +321,7 @@
             `target_url`,
             `now_url`,
             `str_of_index`,
+            `verifycode_pic_xpath`,
         </trim>
     </sql>
 

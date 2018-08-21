@@ -37,6 +37,8 @@ public class TargetInfoEntity implements Serializable{
     private String strOfIndex;
     //是否启用[0否、1是]
     private Integer isEnable;
+    //登录页验证码图片xpath
+    private String verifycodePicXpath;
     
     public Integer getLinkId() {
         return linkId;
@@ -135,4 +137,11 @@ public class TargetInfoEntity implements Serializable{
         this.isEnable = isEnable;
     }
 
+    public String getVerifycodePicXpath() {
+        return verifycodePicXpath;
+    }
+
+    public void setVerifycodePicXpath(String verifycodePicXpath) {
+        this.verifycodePicXpath = verifycodePicXpath;
+    }
 }
