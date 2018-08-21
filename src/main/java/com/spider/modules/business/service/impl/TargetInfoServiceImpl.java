@@ -28,7 +28,6 @@ import com.spider.modules.spider.service.AnalogLoginService;
 import com.spider.modules.spider.service.TemporaryRecordService;
 import com.spider.modules.spider.utils.MyStringUtil;
 
-import java.sql.Driver;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -50,7 +49,6 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 
 	@Autowired
 	AnalogLoginDao analogLoginDao;
-
 	@Autowired
 	TemporaryRecordDao temporaryRecordDao;
 	@Autowired
@@ -87,7 +85,6 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 	public String tospider(Integer linkId) {
 
 		LinkInfoEntity linkInfo = linkInfoService.queryById(linkId);
-		//logger.info("linkinfo"+linkInfo);
 		SpiderRule spiderRule = new SpiderRule();
 		spiderRule.setIsGetText(false);
 		spiderPage.startSpider(linkId, linkInfo.getUrl(), false, false, spiderRule, null, spiderTemporaryRecordPipeline,
@@ -118,10 +115,11 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 		analogLoginDao.updateAnalogLogin(analogLogin);
 		java.util.Set<Cookie> cookies = null;
 		//模拟浏览器创建连接，发起请求
+
 		PhantomJSDriver driver = phantomJSDriverPool.borrowPhantomJSDriver();
 		try {
 			cookies = loginAnalog.login(analogLogin.getId(), driver);
-			if (cookies != null) {
+ 			if (cookies != null) {
 				LinkInfoEntity linkInfo = new LinkInfoEntity();
 				linkInfo.setHasTarget(Constant.SUPER_ADMIN);
 				linkInfo.setLinkId(targetInfo.getLinkId());
@@ -131,9 +129,12 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 			} else {
 				return null;
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
+		}catch (NoSuchMethodException nosuch){
+		   logger.info("登录信息填写有误,请重新操作!");
+		   return null;
+        } catch (Exception e) {
+            logger.info("登录信息填写有误,请重新操作!");
+            return null;
 		} finally {
 			phantomJSDriverPool.returnObject(driver);
 		}
@@ -158,7 +159,7 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 				} catch (NoSuchElementException nse) {
 					throw nse;
 				} catch (Exception e) {
-					e.printStackTrace();
+					throw e;
 				}
 				spiderPage.startSpider(linkId, analogLogin.getTargetUrl(), false, false, spiderRule, cookies,
 						spiderTemporaryRecordPipeline, driver);
@@ -227,7 +228,6 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 
 		//采集到的表头插入数据库中
 		for (String vaule : spiderHead) {
-//            StrUtil.isNotBlank(vaule)
 			if (StrUtil.isNotBlank(vaule) ) {
 			    logger.info(vaule);
 				PageInfoEntity pageInfo = new PageInfoEntity();
