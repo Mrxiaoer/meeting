@@ -146,7 +146,10 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 		LinkInfoEntity linkInfo = linkInfoService.queryById(linkId);
 		AnalogLoginEntity analogLogin = analogLoginService.getOneById(linkInfo.getAnalogId());
 		String cookie = analogLogin.getCookie();
-		Set<Cookie> cookies = MyStringUtil.json2cookie(cookie);
+		Set<Cookie> cookies = null ;
+		if (cookie != null){
+		    cookies = MyStringUtil.json2cookie(cookie);
+        }
 		SpiderRule spiderRule = new SpiderRule();
 		spiderRule.setIsGetText(false);
 		PhantomJSDriver driver = phantomJSDriverPool.borrowPhantomJSDriver();
