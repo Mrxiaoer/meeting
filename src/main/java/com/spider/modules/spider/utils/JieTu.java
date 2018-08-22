@@ -63,12 +63,10 @@ public class JieTu {
 					Cookie cook;
 					if (cookie.getDomain().startsWith(".")) {
 						cook = new Cookie(cookie.getName(), cookie.getValue(), cookie.getDomain().substring(1),
-								cookie.getPath(), cookie.getExpiry(),
-								cookie.isSecure(), cookie.isHttpOnly());
+								cookie.getPath(), cookie.getExpiry(), cookie.isSecure(), cookie.isHttpOnly());
 					} else {
 						cook = new Cookie(cookie.getName(), cookie.getValue(), "." + cookie.getDomain(), cookie.getPath(),
-								cookie.getExpiry(),
-								cookie.isSecure(), cookie.isHttpOnly());
+								cookie.getExpiry(), cookie.isSecure(), cookie.isHttpOnly());
 					}
 					phantomjsDriver.manage().addCookie(cook);
 				}
@@ -78,8 +76,8 @@ public class JieTu {
 			//放大图片
 			try {
 				phantomjsDriver.executeScript(
-						"document.body.getElementsByTagName(\"img\")[0].setAttribute('style', 'width: 100% !important;"
-								+ "height: 100% !important')");
+						"document.body.getElementsByTagName(\"img\")[0].setAttribute('style', 'width: 100%;"
+								+ "height: 100%')");
 			} catch (Exception ex) {
 				throw new Exception("无法获取验证码截图", ex);
 			}
@@ -103,6 +101,51 @@ public class JieTu {
 			}
 		}
 		return resultMap;
+	}
+
+	public String saveVc(PhantomJSDriver driver, String vcXpath, String fileName) throws Exception {
+		assert (driver != null);
+		Calendar cal = Calendar.getInstance();
+		int year = cal.get(Calendar.YEAR);
+		int month = cal.get(Calendar.MONTH) + 1;
+		int day = cal.get(Calendar.DATE);
+		String imageLocalPath = imagePath + year + "-" + month + "-" + day + "/" + fileName + ".jpg";
+		//放大图片
+		int trynum = 0;
+		boolean isOk = false;
+		while (trynum < 5 && !isOk) {
+			try {
+				driver.executeScript("document.evaluate('" + vcXpath + "', document, null, XPathResult"
+						+ ".FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.setAttribute('style', 'position: fixed;width: "
+						+ "100%;" + "z-index: 9999;top: 0;height: 100%;left: 0;')");
+				isOk = true;
+			} catch (Exception ex) {
+				Thread.sleep(500);
+				trynum += 1;
+			}
+		}
+		if (!isOk) {
+			throw new Exception("无法获取验证码截图");
+		}
+		File scrFile = driver.getScreenshotAs(OutputType.FILE);
+		BufferedImage bufferedImage = ImageIO.read(scrFile);
+		try {
+			driver.executeScript("document.evaluate('" + vcXpath + "', document, null, XPathResult"
+					+ ".FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.removeAttribute('style', 'position: fixed;width: "
+					+ "100%;z-index: 9999;top: 0;height: 100vh;left: 0;')");
+		} catch (Exception ex) {
+			throw new Exception("还原页面失败：", ex);
+		}
+		//压缩存储
+		File destFile = new File(imageLocalPath);
+		if (!destFile.exists()) {
+			boolean mk = destFile.mkdirs();
+			if (mk) {
+				logger.info("创建验证码图片文件目录完成！");
+			}
+		}
+		ImageUtil.scale(bufferedImage, destFile, 0.5F);
+		return imageLocalPath;
 	}
 
 }

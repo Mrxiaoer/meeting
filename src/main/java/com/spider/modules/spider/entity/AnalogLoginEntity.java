@@ -28,9 +28,12 @@ public class AnalogLoginEntity implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	//登录链接
-	@Column(columnDefinition = "varchar(127) default '' COMMENT '登录链接'", nullable = false)
+	//目标页Url
+	@Column(columnDefinition = "varchar(127) default '' COMMENT '目标页Url'", nullable = false)
 	private String targetUrl;
+	//登录页Url
+	@Column(columnDefinition = "varchar(127) COMMENT '登录页Url'")
+	private String loginUrl;
 	//host
 	@Column(columnDefinition = "varchar(127) default '' COMMENT 'host'", nullable = false)
 	private String host;
@@ -67,9 +70,6 @@ public class AnalogLoginEntity implements Serializable {
 	//当前获取到的页面的url
 	@Column(columnDefinition = "varchar(255) COMMENT '当前获取到的页面的url'")
 	private String nowUrl;
-	//内容页标记字符串
-	@Column(columnDefinition = "varchar(255) COMMENT '内容页标记字符串'")
-	private String strOfIndex;
 	//是否启用[0否、1是]
 	@Column(columnDefinition = "int(1) default 1 COMMENT '是否启用[0否、1是]'", nullable = false)
 	private Integer isEnable;
@@ -178,12 +178,12 @@ public class AnalogLoginEntity implements Serializable {
 		this.nowUrl = nowUrl;
 	}
 
-	public String getStrOfIndex() {
-		return strOfIndex;
+	public String getLoginUrl() {
+		return loginUrl;
 	}
 
-	public void setStrOfIndex(String strOfIndex) {
-		this.strOfIndex = strOfIndex;
+	public void setLoginUrl(String loginUrl) {
+		this.loginUrl = loginUrl;
 	}
 
 	public Integer getIsEnable() {
@@ -194,11 +194,11 @@ public class AnalogLoginEntity implements Serializable {
 		this.isEnable = isEnable;
 	}
 
-    public String getVerifycodePicXpath() {
-        return verifycodePicXpath;
-    }
+	public String getVerifycodePicXpath() {
+		return verifycodePicXpath;
+	}
 
-    public void setVerifycodePicXpath(String verifycodePicXpath) {
-        this.verifycodePicXpath = verifycodePicXpath;
-    }
+	public void setVerifycodePicXpath(String verifycodePicXpath) {
+		this.verifycodePicXpath = verifycodePicXpath;
+	}
 }
