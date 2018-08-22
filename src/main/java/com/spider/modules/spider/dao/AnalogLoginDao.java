@@ -23,6 +23,11 @@ public interface AnalogLoginDao {
 	int updateAnalogLogin(AnalogLoginEntity analogLogin);
 
 	/**
+	 * 更新（4个xpath与验证码图片为空也更）
+	 */
+	int update(AnalogLoginEntity analogLogin);
+
+	/**
 	 * 查找
 	 */
 	List<AnalogLoginEntity> queryAnalogLogin(AnalogLoginEntity analogLogin);

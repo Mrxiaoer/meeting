@@ -214,6 +214,9 @@
 			<if test="remarks != null and remarks.trim() != ''">
 				remarks = #{remarks},
 			</if>
+            <if test="isLogin != null">
+                is_login = #{isLogin},
+            </if>
 			<if test="ruleId != null">
 				rule_id = #{ruleId},
 			</if>

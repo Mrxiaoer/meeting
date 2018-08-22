@@ -112,7 +112,7 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 		AnalogLoginEntity analogLogin = new AnalogLoginEntity();
 		BeanUtil.copyProperties(targetInfo, analogLogin);
 		analogLogin.setId(analogId);
-		analogLoginDao.updateAnalogLogin(analogLogin);
+		analogLoginDao.update(analogLogin);
 		java.util.Set<Cookie> cookies = null;
 		//模拟浏览器创建连接，发起请求
 

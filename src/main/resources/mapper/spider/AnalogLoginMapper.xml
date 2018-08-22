@@ -125,20 +125,82 @@
             <if test="domain != null and domain!=''">
                 `domain` = #{domain},
             </if>
+            <if test="loginButtonXpath != null and loginButtonXpath!=''">
                 `login_button_xpath` = #{loginButtonXpath},
+            </if>
             <if test="isEnable != null">
                 `is_enable` = #{isEnable},
             </if>
+            <if test="passwordXpath != null and passwordXpath != ''">
                 `password_xpath` = #{passwordXpath},
+            </if>
+            <if test="usernameXpath != null and usernameXpath !=''">
                 `username_xpath` = #{usernameXpath},
+            </if>
+            <if test="verifycodeXpath != null and verifycodeXpath != ''">
                 `verifycode_xpath` = #{verifycodeXpath},
+            </if>
             <if test="password != null and password!=''">
                 `password` = #{password},
             </if>
             <if test="username != null and username!=''">
                 `username` = #{username},
             </if>
+            <if test="verifycodeUrl != null and verifycodeUrl != ''">
                 `verifycode_url` = #{verifycodeUrl},
+            </if>
+            <if test="targetUrl != null and targetUrl != ''">
+                `target_url` = #{targetUrl},
+            </if>
+            <if test="nowUrl!=null and nowUrl!=''">
+                `now_url` = #{nowUrl},
+            </if>
+            <if test="strOfIndex!=null and strOfIndex!=''">
+                `str_of_index` = #{strOfIndex},
+            </if>
+            <if test="verifycodePicXpath!=null and verifycodePicXpath!=''">
+                `verifycode_pic_xpath` = #{verifycodePicXpath},
+            </if>
+        </trim>
+        WHERE
+        <trim suffixOverrides="and">
+            <if test="id != null and id!=''">
+                `id` = #{id} and
+            </if>
+            <if test="host != null and host!=''">
+                `host` = #{host} and
+            </if>
+        </trim>
+    </update>
+
+    <!--4个xpath以及验证码图片链接的修改，为空即更-->
+    <update id="update">
+        UPDATE `spider_analog_login`
+        SET
+        <trim suffixOverrides=",">
+            <if test="cookie != null and cookie!=''">
+                `cookie` = #{cookie},
+            </if>
+            <if test="host != null and host!=''">
+                `host` = #{host},
+            </if>
+            <if test="domain != null and domain!=''">
+                `domain` = #{domain},
+            </if>
+            `login_button_xpath` = #{loginButtonXpath},
+            <if test="isEnable != null">
+                `is_enable` = #{isEnable},
+            </if>
+            `password_xpath` = #{passwordXpath},
+            `username_xpath` = #{usernameXpath},
+            `verifycode_xpath` = #{verifycodeXpath},
+            <if test="password != null and password!=''">
+                `password` = #{password},
+            </if>
+            <if test="username != null and username!=''">
+                `username` = #{username},
+            </if>
+            `verifycode_url` = #{verifycodeUrl},
             <if test="targetUrl != null and targetUrl != ''">
                 `target_url` = #{targetUrl},
             </if>
