@@ -49,8 +49,8 @@
             <if test="nowUrl!=null">
                 `now_url`,
             </if>
-            <if test="strOfIndex!=null">
-                `str_of_index`,
+            <if test="loginUrl!=null">
+                `login_url`,
             </if>
             <if test="verifycodePicXpath!=null">
                 `verifycode_pic_xpath`,
@@ -102,8 +102,8 @@
             <if test="nowUrl!=null">
                 #{nowUrl},
             </if>
-            <if test="strOfIndex!=null">
-                #{strOfIndex},
+            <if test="loginUrl!=null">
+                #{loginUrl},
             </if>
             <if test="verifycodePicXpath!=null">
                 #{verifycodePicXpath},
@@ -145,8 +145,8 @@
             <if test="nowUrl!=null and nowUrl!=''">
                 `now_url` = #{nowUrl},
             </if>
-            <if test="strOfIndex!=null and strOfIndex!=''">
-                `str_of_index` = #{strOfIndex},
+            <if test="loginUrl!=null and loginUrl!=''">
+                `login_url` = #{loginUrl},
             </if>
             <if test="verifycodePicXpath!=null and verifycodePicXpath!=''">
                 `verifycode_pic_xpath` = #{verifycodePicXpath},
@@ -178,7 +178,7 @@
         <result column="verifycode_url" property="verifycodeUrl"/>
         <result column="target_url" property="targetUrl"/>
         <result column="now_url" property="nowUrl"/>
-        <result column="str_of_index" property="strOfIndex"/>
+        <result column="login_url" property="loginUrl"/>
         <result column="verifycode_pic_xpath" property="verifycodePicXpath"/>
     </resultMap>
 
@@ -229,8 +229,8 @@
             <if test="nowUrl != null and nowUrl!=''">
                 `now_url` = #{nowUrl} and
             </if>
-            <if test="strOfIndex != null and strOfIndex!=''">
-                `str_of_index` = #{strOfIndex} and
+            <if test="loginUrl != null and loginUrl!=''">
+                `login_url` = #{loginUrl} and
             </if>
             <if test="verifycodePicXpath != null and verifycodePicXpath!=''">
                 `verifycode_pic_xpath` = #{verifycodePicXpath} and
@@ -285,8 +285,8 @@
             <if test="nowUrl != null and nowUrl!=''">
                 `now_url` = #{nowUrl} and
             </if>
-            <if test="strOfIndex != null and strOfIndex!=''">
-                `str_of_index` = #{strOfIndex} and
+            <if test="loginUrl != null and loginUrl!=''">
+                `login_url` = #{loginUrl} and
             </if>
             <if test="verifycodePicXpath != null and verifycodePicXpath!=''">
                 `verifycode_pic_xpath` = #{verifycodePicXpath} and
@@ -320,7 +320,7 @@
             `verifycode_url`,
             `target_url`,
             `now_url`,
-            `str_of_index`,
+            `login_url`,
             `verifycode_pic_xpath`,
         </trim>
     </sql>

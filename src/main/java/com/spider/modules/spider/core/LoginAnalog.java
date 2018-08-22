@@ -73,13 +73,14 @@ public class LoginAnalog {
 		AnalogLoginEntity loginInfo = analogLoginDao.queryAnalogLoginLimit1(sie);
 
 		String targetUrl = loginInfo.getTargetUrl();
+		String loginUrl = loginInfo.getLoginUrl();
 		//断言targetUrl不为空
-		Assert.notEmpty(targetUrl, "模拟登录--断言失败,targetUrl不为空!");
+		Assert.notEmpty(targetUrl, "模拟登录--失败,targetUrl不能为空!");
 
 		//执行时间超出预算的话中断并抛出异常
 		Class[] paramClzs = {String.class};
 		Object[] paramObjs = {targetUrl};
-		int timeOut = 10000;
+		int timeOut = 5000;
 		boolean needChange = false;
 		PhantomJSDriver oldDriver = null;
 		try {
@@ -88,7 +89,9 @@ public class LoginAnalog {
 				RunTimeout.timeoutMethod(driver, "get", paramClzs, paramObjs, timeOut);
 				logger.info("获取页面耗时{}毫秒！", System.currentTimeMillis() - startTime);
 
+				//直接获取到目标页，则说明此浏览器驱动保留有此页面相关信息，则重新启动一个驱动用于访问
 				if (MyStringUtil.urlCutParam(driver.getCurrentUrl()).equals(targetUrl)) {
+					//替换驱动，在本次处理结束后退出驱动，并将原驱动返回池
 					needChange = true;
 					oldDriver = driver;
 					driver = phantomJSDriverFactory.create();
@@ -108,32 +111,37 @@ public class LoginAnalog {
 			String beforeUrl = MyStringUtil.urlCutParam(driver.getCurrentUrl());
 			//url相同说明可直接获取目标页
 			if (!beforeUrl.equals(targetUrl)) {
+				//当前页非预期登录页则获取预期登录页
+				if (StrUtil.isNotBlank(loginUrl) && !beforeUrl.equals(MyStringUtil.urlCutParam(loginUrl))) {
+					driver.get(loginUrl);
+				}
 				Calendar cal = Calendar.getInstance();
 				int year = cal.get(Calendar.YEAR);
 				int month = cal.get(Calendar.MONTH) + 1;
 				int day = cal.get(Calendar.DATE);
-				//尝试2次
+				//尝试n次
 				boolean flag = true;
 				int tryNum = 0;
 				int maxTry = 3;
 				while (flag && tryNum < maxTry) {
-					loginInfo = analogLoginDao.queryAnalogLoginLimit1(sie);
+					//					loginInfo = analogLoginDao.queryAnalogLoginLimit1(sie);
 					String usernameXpath = loginInfo.getUsernameXpath();
 					String usernameValue = loginInfo.getUsername();
 					String passwordXpath = loginInfo.getPasswordXpath();
 					String passwordValue = loginInfo.getPassword();
 					String verifyCodeXpath = loginInfo.getVerifycodeXpath();
-//					String verifycodePicXpath = loginInfo.getVerifycodeUrl();
+					//					String verifycodePicXpath = loginInfo.getVerifycodeUrl();
 					String loginButtonXpath = loginInfo.getLoginButtonXpath();
 
-					String verifycodeUrl = loginInfo.getVerifycodeUrl();
+					String verifyCodeUrl = loginInfo.getVerifycodeUrl();
 					String verifyCodeValue = null;
 					ChaoJiYingResult cjyResult = null;
-					if (StrUtil.isNotBlank(verifyCodeXpath) && verifycodeUrl != null) {
+					if (StrUtil.isNotBlank(verifyCodeXpath) && StrUtil.isNotBlank(verifyCodeUrl)) {
 						//截取验证码
-						Map<String, Object> jtResult = jieTu.savePage2Pic(verifycodeUrl, cookieSet,
+						Map<String, Object> jtResult = jieTu.savePage2Pic(verifyCodeUrl, cookieSet,
 								"vc-" + System.currentTimeMillis() + "-" + new Random().nextInt(100));
-//						jieTu.saveVc(driver,verifycodePicXpath,"vc-" + System.currentTimeMillis() + "-" + new Random().nextInt(100));
+						//						jieTu.saveVc(driver,verifycodePicXpath,"vc-" + System.currentTimeMillis() +
+						// "-" + new Random().nextInt(100));
 						cookieSet = (Set<Cookie>) jtResult.get(SpiderConstant.COOKIES);
 						int cjyTry = 0;
 						boolean cjyFlag = true;
@@ -151,7 +159,7 @@ public class LoginAnalog {
 										jtResult.get(SpiderConstant.IMAGE_PATH).toString());
 								cjyResult = JSONUtil.toBean(cjyBack, ChaoJiYingResult.class);
 								cjyTry++;
-								if ("-3001".equals(cjyResult.getErr_no()) || "-3002".equals(cjyResult.getErr_no())) {
+								if ("-3001" .equals(cjyResult.getErr_no()) || "-3002" .equals(cjyResult.getErr_no())) {
 									logger.info("==>超级鹰--请求超时！重试");
 									continue;
 								}
@@ -230,9 +238,11 @@ public class LoginAnalog {
 						String nowUrl = MyStringUtil.urlCutParam(driver.getCurrentUrl());
 						if (nowUrl.equals(tarUrl)) {
 							flag = false;
-						} else if (cjyResult != null) {
-							//向超级鹰报错
-							ChaoJiYing.ReportError(cjyUsername, cjyPassword, cjySoftId, cjyResult.getPic_id());
+						} else {
+							if (cjyResult != null) {
+								//向超级鹰报错
+								ChaoJiYing.ReportError(cjyUsername, cjyPassword, cjySoftId, cjyResult.getPic_id());
+							}
 							logger.info("登录失败！" + (tryNum < maxTry ? "重试。。。" : ""));
 						}
 					}
@@ -258,6 +268,7 @@ public class LoginAnalog {
 			if (needChange) {
 				driver.quit();
 				driver = oldDriver;
+				assert (driver != null);
 			}
 		}
 		return resultCookies;
