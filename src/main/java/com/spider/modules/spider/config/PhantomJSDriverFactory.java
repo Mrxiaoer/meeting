@@ -43,9 +43,9 @@ public class PhantomJSDriverFactory extends BasePooledObjectFactory<PhantomJSDri
 		cliArgsCap.add("--web-security=false");
 		cliArgsCap.add("--ssl-protocol=any");
 		cliArgsCap.add("--ignore-ssl-errors=true");
-		cliArgsCap.add("--load-images=false");
+		cliArgsCap.add("--load-images=true");
 		// 本地缓存
-		cliArgsCap.add("--disk-cache=true");
+		cliArgsCap.add("--disk-cache=false");
 		dcaps.setCapability(PhantomJSDriverService.PHANTOMJS_CLI_ARGS, cliArgsCap);
 		dcaps.setCapability(PhantomJSDriverService.PHANTOMJS_GHOSTDRIVER_CLI_ARGS,
 				new String[]{"--logLevel=" + (prop.getProperty("phantomjs_driver_loglevel") != null ? prop

@@ -36,7 +36,7 @@ public class SeleniumDownloader implements Downloader, Closeable {
 	@Autowired
 	private PhantomJSDriverPool phantomJSDriverPool;
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
-	private int sleepTime = 100;
+	private int sleepTime = 10000;
 
 	public SeleniumDownloader(String chromeDriverPath) {
 		System.getProperties().setProperty("webdriver.chrome.driver", chromeDriverPath);
@@ -71,12 +71,6 @@ public class SeleniumDownloader implements Downloader, Closeable {
 		try {
 			assert (driver != null);
 
-			try {
-				Thread.sleep((long) this.sleepTime);
-			} catch (InterruptedException var9) {
-				var9.printStackTrace();
-			}
-
 			//			driver.get(request.getUrl());
 			WebDriver.Options manage = driver.manage();
 			//			manage.deleteAllCookies();
@@ -103,6 +97,11 @@ public class SeleniumDownloader implements Downloader, Closeable {
 
 			this.logger.info("downloading page " + request.getUrl());
 			driver.get(request.getUrl());
+			try {
+				Thread.sleep((long) this.sleepTime);
+			} catch (InterruptedException var9) {
+				var9.printStackTrace();
+			}
 
 			WebElement webElement = driver.findElement(By.xpath("/html"));
 			String content = webElement.getAttribute("outerHTML");

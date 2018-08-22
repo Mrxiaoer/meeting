@@ -76,12 +76,6 @@ public class LoginAnalog {
 		//断言targetUrl不为空
 		Assert.notEmpty(targetUrl, "模拟登录--断言失败,targetUrl不为空!");
 
-		//模拟浏览器创建连接，发起请求
-		//		PhantomJSDriver driver = phantomJSDriverPool.borrowPhantomJSDriver();
-
-		// 创建 Pattern 对象
-		//        Pattern p = Pattern.compile("(https?://[\\S]*?)[^A-Z|a-z|0-9|\\u4e00-\\u9fa5|.|/|:|_|-]");
-		//		try {
 		//执行时间超出预算的话中断并抛出异常
 		Class[] paramClzs = {String.class};
 		Object[] paramObjs = {targetUrl};
@@ -129,6 +123,7 @@ public class LoginAnalog {
 					String passwordXpath = loginInfo.getPasswordXpath();
 					String passwordValue = loginInfo.getPassword();
 					String verifyCodeXpath = loginInfo.getVerifycodeXpath();
+//					String verifycodePicXpath = loginInfo.getVerifycodeUrl();
 					String loginButtonXpath = loginInfo.getLoginButtonXpath();
 
 					String verifycodeUrl = loginInfo.getVerifycodeUrl();
@@ -138,6 +133,7 @@ public class LoginAnalog {
 						//截取验证码
 						Map<String, Object> jtResult = jieTu.savePage2Pic(verifycodeUrl, cookieSet,
 								"vc-" + System.currentTimeMillis() + "-" + new Random().nextInt(100));
+//						jieTu.saveVc(driver,verifycodePicXpath,"vc-" + System.currentTimeMillis() + "-" + new Random().nextInt(100));
 						cookieSet = (Set<Cookie>) jtResult.get(SpiderConstant.COOKIES);
 						int cjyTry = 0;
 						boolean cjyFlag = true;
@@ -264,9 +260,6 @@ public class LoginAnalog {
 				driver = oldDriver;
 			}
 		}
-		//		} finally {
-		//			phantomJSDriverPool.returnObject(driver);
-		//		}
 		return resultCookies;
 	}
 
