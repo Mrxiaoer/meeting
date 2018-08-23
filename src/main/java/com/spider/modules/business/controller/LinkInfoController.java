@@ -1,5 +1,6 @@
 package com.spider.modules.business.controller;
 
+import com.spider.common.utils.Constant;
 import com.spider.common.utils.PageUtils;
 import com.spider.common.utils.R;
 import com.spider.modules.business.entity.LinkInfoEntity;
@@ -86,6 +87,7 @@ public class LinkInfoController {
      */
     @PostMapping("/update")
     public R update(@RequestBody LinkInfoEntity linkInfo){
+        linkInfo.setHasTarget(Constant.VALUE_ZERO);
         linkInfoService.update(linkInfo);
         return R.ok();
     }

@@ -107,7 +107,6 @@ public class LinkInfoServiceImpl extends ServiceImpl<LinkInfoDao, LinkInfoEntity
     @Override
     public void update(LinkInfoEntity linkInfo) {
         linkInfo.setUpdateTime(new Date());
-        linkInfo.setHasTarget(Constant.VALUE_ZERO);
         linkInfoDao.update(linkInfo);
 
         if(linkInfo.getUrl() != null || linkInfo.getLoginUrl() != null) {

@@ -122,7 +122,7 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 			cookies = loginAnalog.login(analogLogin.getId(), driver);
  			if (cookies != null) {
 				LinkInfoEntity linkInfo = new LinkInfoEntity();
-				linkInfo.setHasTarget(Constant.SUPER_ADMIN);
+				linkInfo.setHasTarget(Constant.VALUE_ONE);
 				linkInfo.setLinkId(targetInfo.getLinkId());
 				linkInfoService.update(linkInfo);
 				LinkInfoEntity link = linkInfoService.queryById(targetInfo.getLinkId());
