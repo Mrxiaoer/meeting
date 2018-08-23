@@ -66,7 +66,7 @@ public class LoginAnalog {
 	 */
 	public Set<Cookie> login(int id, PhantomJSDriver driver) throws Exception {
 
-		Set<Cookie> resultCookies = null;
+		Set<Cookie> resultCookies;
 
 		AnalogLoginEntity sie = new AnalogLoginEntity();
 		sie.setId(id);
@@ -185,7 +185,7 @@ public class LoginAnalog {
 						passwordElement.sendKeys(passwordValue);
 						//是否有验证码
 						if (StrUtil.isNotBlank(verifyCodeXpath) && StrUtil.isNotBlank(verifyCodeValue)) {
-							WebElement verifyCodeElement = null;
+							WebElement verifyCodeElement;
 							//							try {
 							verifyCodeElement = driver.findElementByXPath(verifyCodeXpath);
 							verifyCodeElement.clear();

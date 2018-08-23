@@ -3,6 +3,7 @@ package com.spider.modules.spider.downloader;
 import com.spider.modules.spider.config.PhantomJSDriverPool;
 import com.spider.modules.spider.entity.MyPage;
 import com.spider.modules.spider.entity.MySite;
+import com.spider.modules.spider.utils.MyStringUtil;
 import java.io.Closeable;
 import java.util.Iterator;
 import java.util.Map;
@@ -36,7 +37,7 @@ public class SeleniumDownloader implements Downloader, Closeable {
 	@Autowired
 	private PhantomJSDriverPool phantomJSDriverPool;
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
-	private int sleepTime = 10000;
+	private int sleepTime = 1000;
 
 	public SeleniumDownloader(String chromeDriverPath) {
 		System.getProperties().setProperty("webdriver.chrome.driver", chromeDriverPath);
@@ -103,22 +104,26 @@ public class SeleniumDownloader implements Downloader, Closeable {
 				var9.printStackTrace();
 			}
 
-			WebElement webElement = driver.findElement(By.xpath("/html"));
-			String content = webElement.getAttribute("outerHTML");
-			page.setRawText(content);
-			page.setHtml(new Html(content, request.getUrl()));
-			page.setUrl(new PlainText(driver.getCurrentUrl()));
-			// 设置path
-			String urlPath = null;
-			if (driver.manage().getCookies() != null) {
-				Iterator<Cookie> cookies = driver.manage().getCookies().iterator();
-				if (cookies.hasNext()) {
-					Cookie cookieEntry = cookies.next();
-					urlPath = cookieEntry.getPath();
+			//获取页面与期待页面不符的情况
+			if (MyStringUtil.urlCutParam(driver.getCurrentUrl()).equals(MyStringUtil.urlCutParam(request.getUrl()))) {
+				WebElement webElement = driver.findElement(By.xpath("/html"));
+				String content = webElement.getAttribute("outerHTML");
+				page.setRawText(content);
+				page.setHtml(new Html(content, request.getUrl()));
+				page.setUrl(new PlainText(driver.getCurrentUrl()));
+				// 设置path
+				String urlPath = null;
+				if (driver.manage().getCookies() != null) {
+					Iterator<Cookie> cookies = driver.manage().getCookies().iterator();
+					if (cookies.hasNext()) {
+						Cookie cookieEntry = cookies.next();
+						urlPath = cookieEntry.getPath();
+					}
 				}
+				page.setUrlPath(urlPath);
 			}
-			page.setUrlPath(urlPath);
 			page.setRequest(request);
+
 		} finally {
 			if (needReturn) {
 				try {

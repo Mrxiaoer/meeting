@@ -35,11 +35,12 @@ public class SpiderTemporaryRecordPipeline implements Pipeline {
 	@Override
 	public void process(ResultItems resultItems, Task task) {
 		TemporaryRecordEntity temporaryRecord = new TemporaryRecordEntity();
-		temporaryRecord.setUrl(resultItems.get(MyStringUtil.urlCutParam(SpiderConstant.URL)));
 		List<String> objs = resultItems.get(SpiderConstant.SELECTOBJS);
+		int linkId = resultItems.get(SpiderConstant.LINKID);
+		temporaryRecord.setLinkId(linkId);
 		if (resultItems.get(SpiderConstant.SELECTOBJS) != null && objs.size() >= 1) {
+			temporaryRecord.setUrl(resultItems.get(MyStringUtil.urlCutParam(SpiderConstant.URL)));
 			String html = objs.get(0);
-			int linkId = resultItems.get(SpiderConstant.LINKID);
 			//html写入文件
 			String fileName = linkId + temporaryRecord.getUrl();
 			String childPath = "/static/htmlFile/" + DigestUtils.md5Hex(fileName) + ".html";
@@ -53,7 +54,6 @@ public class SpiderTemporaryRecordPipeline implements Pipeline {
 				logger.error("IOException:{}", e.getMessage());
 			}
 			temporaryRecord.setHtmlFilePath(filePath);
-			temporaryRecord.setLinkId(linkId);
 		}
 
 		temporaryRecordService.saveOne(temporaryRecord);
