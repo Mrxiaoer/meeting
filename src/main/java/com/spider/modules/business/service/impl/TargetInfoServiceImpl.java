@@ -158,7 +158,10 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 		try {
 			spiderPage.startSpider(linkId, analogLogin.getTargetUrl(), false, false, spiderRule, cookies,
 					spiderTemporaryRecordPipeline, driver);
-			if (!analogLogin.getTargetUrl().equals(temporaryRecordService.queryBylinkId(linkId).getUrl())) {
+			String trsUrl = temporaryRecordService.queryBylinkId(linkId).getUrl();
+			if (StrUtil.isBlank(trsUrl)) {
+				return null;
+			} else if (!analogLogin.getTargetUrl().equals(trsUrl)) {
 				try {
 					cookies = loginAnalog.login(analogLogin.getId(), driver);
 				} catch (NoSuchElementException nse) {

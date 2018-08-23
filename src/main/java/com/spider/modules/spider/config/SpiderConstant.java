@@ -30,4 +30,6 @@ public class SpiderConstant {
 
 	public static final String LINKID = "linkId";
 
+	public static final String PAGEBLANK = "about:blank";
+
 }

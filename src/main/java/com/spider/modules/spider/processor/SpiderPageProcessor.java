@@ -124,92 +124,92 @@ public class SpiderPageProcessor implements PageProcessor {
 	public void process(Page page) {
 		MyPage myPage = (MyPage) page;
 		myPage.putField(SpiderConstant.LINKID, this.linkId);
-		String htmlStr = myPage.getHtml().get();
-		//清除js
-		Pattern p =
-				Pattern.compile("<script[^>]*?src[\\s]*?=[\\s]*?(\"[\\S]*?\"|\'[\\S]*?\')></script>");
-		Pattern p1 =
-				Pattern.compile(
-						"<script[^>]*?src[\\s]*?=[\\s]*?(\"[\\S]*?(vue|element-ui/index)(.min)?.js\"|\'[\\S]*?"
-								+ "(vue|element-ui/index)(.min)?.js\')[^>]*?></script>");
-		Matcher m = p.matcher(htmlStr);
-		Matcher m1 = p1.matcher(htmlStr);
-		List<String> list = new ArrayList<>();
-		while (m1.find()) {
-			list.add(m1.group(0));
-		}
-		while (m.find()) {
-			boolean flag = true;
-			for (String aList : list) {
-				if (aList.equals(m.group(0))) {
-					flag = false;
+		if (myPage.getRawText() != null) {
+			String htmlStr = myPage.getHtml().get();
+			//清除js
+			Pattern p = Pattern.compile("<script[^>]*?src[\\s]*?=[\\s]*?(\"[\\S]*?\"|\'[\\S]*?\')></script>");
+			Pattern p1 = Pattern.compile(
+					"<script[^>]*?src[\\s]*?=[\\s]*?(\"[\\S]*?(vue|element-ui/index)(.min)?.js\"|\'[\\S]*?"
+							+ "(vue|element-ui/index)(.min)?.js\')[^>]*?></script>");
+			Matcher m = p.matcher(htmlStr);
+			Matcher m1 = p1.matcher(htmlStr);
+			List<String> list = new ArrayList<>();
+			while (m1.find()) {
+				list.add(m1.group(0));
+			}
+			while (m.find()) {
+				boolean flag = true;
+				for (String aList : list) {
+					if (aList.equals(m.group(0))) {
+						flag = false;
+					}
+				}
+				if (flag) {
+					htmlStr = htmlStr.replaceAll(m.group(0), "");
 				}
 			}
-			if (flag) {
-				htmlStr = htmlStr.replaceAll(m.group(0), "");
-			}
-		}
-		htmlStr = htmlStr.replaceAll("(<script[^>]*?>[^>]*?[^>\\s]+?[^>]*?</script>)", "");
-		//		htmlStr = htmlStr.replaceAll("(<script[\\s|\\S]*?>[\\s|\\S]*?</script>)", "");
-		htmlStr = htmlStr.replaceAll("type[\\s]*?=[\\s]*?(\"submit\"|'submit')", "");
-		//url补全
-		htmlStr = this.urlComplate(UrlUtils.getHost(myPage.getUrl().toString()), myPage.getUrlPath(), htmlStr);
-		Html html = Html.create(htmlStr);
+			htmlStr = htmlStr.replaceAll("(<script[^>]*?>[^>]*?[^>\\s]+?[^>]*?</script>)", "");
+			//		htmlStr = htmlStr.replaceAll("(<script[\\s|\\S]*?>[\\s|\\S]*?</script>)", "");
+			htmlStr = htmlStr.replaceAll("type[\\s]*?=[\\s]*?(\"submit\"|'submit')", "");
+			//url补全
+			htmlStr = this.urlComplate(UrlUtils.getHost(myPage.getUrl().toString()), myPage.getUrlPath(), htmlStr);
+			Html html = Html.create(htmlStr);
 
-		//定义如何抽取页面信息，并保存下来
-		Selectable select;
-		String xpath = this.spiderRule.getXpath();
-		//为空赋个默认值（整个HTML）
-		if (StrUtil.isEmpty(xpath)) {
-			xpath = "/html";
-		}
-		if (this.spiderRule.getIsGetText()) {
-			//获取此xpath下直接或间接的文本，并根据需要对其进行正则提取
-			select = html.xpath(xpath + "/allText()");
-			if (StrUtil.isNotEmpty(this.spiderRule.getRegex())) {
-				select = select.regex(this.spiderRule.getRegex());
+			//定义如何抽取页面信息，并保存下来
+			Selectable select;
+			String xpath = this.spiderRule.getXpath();
+			//为空赋个默认值（整个HTML）
+			if (StrUtil.isEmpty(xpath)) {
+				xpath = "/html";
 			}
-			//根据规则置换
-			Map<String, String> ruleMap = spiderRule.getReplacementMap();
-			if (ruleMap != null && ruleMap.size() > 0) {
-				for (Map.Entry<String, String> rep : ruleMap.entrySet()) {
-					select = select.replace(rep.getKey(), rep.getValue());
+			if (this.spiderRule.getIsGetText()) {
+				//获取此xpath下直接或间接的文本，并根据需要对其进行正则提取
+				select = html.xpath(xpath + "/allText()");
+				if (StrUtil.isNotEmpty(this.spiderRule.getRegex())) {
+					select = select.regex(this.spiderRule.getRegex());
 				}
-			}
-			String selectStrAll = select.get();
-			List<String> selectStrs = null;
-			if (selectStrAll.length() > 0) {
-				selectStrs = Arrays.asList(selectStrAll.split(" "));
-			}
-			myPage.putField(SpiderConstant.SELECTSTRS, selectStrs);
-		} else {
-			//获取此xpath对应的元素，并根据需要对其进行正则提取
-			select = html.xpath(xpath);
-			if (StrUtil.isNotEmpty(this.spiderRule.getRegex())) {
-				select = select.regex(this.spiderRule.getRegex());
-			}
-			//根据规则置换
-			Map<String, String> ruleMap = spiderRule.getReplacementMap();
-			if (ruleMap != null && ruleMap.size() > 0) {
-				for (Map.Entry<String, String> rep : ruleMap.entrySet()) {
-					select = select.replace(rep.getKey(), rep.getValue());
+				//根据规则置换
+				Map<String, String> ruleMap = spiderRule.getReplacementMap();
+				if (ruleMap != null && ruleMap.size() > 0) {
+					for (Map.Entry<String, String> rep : ruleMap.entrySet()) {
+						select = select.replace(rep.getKey(), rep.getValue());
+					}
 				}
+				String selectStrAll = select.get();
+				List<String> selectStrs = null;
+				if (selectStrAll.length() > 0) {
+					selectStrs = Arrays.asList(selectStrAll.split(" "));
+				}
+				myPage.putField(SpiderConstant.SELECTSTRS, selectStrs);
+			} else {
+				//获取此xpath对应的元素，并根据需要对其进行正则提取
+				select = html.xpath(xpath);
+				if (StrUtil.isNotEmpty(this.spiderRule.getRegex())) {
+					select = select.regex(this.spiderRule.getRegex());
+				}
+				//根据规则置换
+				Map<String, String> ruleMap = spiderRule.getReplacementMap();
+				if (ruleMap != null && ruleMap.size() > 0) {
+					for (Map.Entry<String, String> rep : ruleMap.entrySet()) {
+						select = select.replace(rep.getKey(), rep.getValue());
+					}
+				}
+				myPage.putField(SpiderConstant.SELECTOBJS, select.all());
 			}
-			myPage.putField(SpiderConstant.SELECTOBJS, select.all());
-		}
-		myPage.putField(SpiderConstant.HOST, UrlUtils.getHost(myPage.getUrl().toString()));
-		myPage.putField(SpiderConstant.URL, myPage.getUrl().toString());
+			myPage.putField(SpiderConstant.HOST, UrlUtils.getHost(myPage.getUrl().toString()));
+			myPage.putField(SpiderConstant.URL, myPage.getUrl().toString());
 
-		if (myPage.getResultItems().get(SpiderConstant.SELECTOBJS) == null
-				&& myPage.getResultItems().get(SpiderConstant.SELECTSTRS) == null) {
-			//skip this myPage（略过pipeline的执行）
-			myPage.setSkip(true);
-		}
+			if (myPage.getResultItems().get(SpiderConstant.SELECTOBJS) == null
+					&& myPage.getResultItems().get(SpiderConstant.SELECTSTRS) == null) {
+				//skip this myPage（略过pipeline的执行）
+				myPage.setSkip(true);
+			}
 
-		//从页面发现后续的url地址来抓取
-		if (this.allDomain) {
-			String domain = site.getDomain();
-			myPage.addTargetRequests(html.links().regex("(https?://" + domain + "/[\\w\\-\\/]*)").all());
+			//从页面发现后续的url地址来抓取
+			if (this.allDomain) {
+				String domain = site.getDomain();
+				myPage.addTargetRequests(html.links().regex("(https?://" + domain + "/[\\w\\-\\/]*)").all());
+			}
 		}
 	}
 
