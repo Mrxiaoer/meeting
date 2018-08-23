@@ -17,10 +17,11 @@
 		<result column="has_target" property="hasTarget"/>
 		<result column="rule_id" property="ruleId"/>
         <result column="fail_times" property="failTimes"/>
+		<result column="login_url" property="loginUrl"/>
 		<result column="state" property="state"/>
 	</resultMap>
 	<sql id="Base_Column_List">
-		link_id,analog_id,system,module,url,is_login,create_time,update_time,remarks,has_target,rule_id,fail_times,state
+		link_id,analog_id,system,module,url,is_login,create_time,update_time,remarks,has_target,rule_id,fail_times,login_url,state
 	</sql>
 
 	<!-- 查询所有数据 -->
@@ -147,6 +148,9 @@
             <if test="failTimes != null">
                 fail_times,
             </if>
+			<if test="loginUrl != null">
+				login_url,
+			</if>
 			<if test="state != null">
 				state,
 			</if>
@@ -188,6 +192,9 @@
             <if test="failTimes != null">
                 #{failTimes},
             </if>
+			<if test="loginUrl != null">
+				#{loginUrl},
+			</if>
 			<if test="state != null">
 				#{state},
 			</if>
@@ -226,6 +233,9 @@
             <if test="failTimes != null">
                 fail_times = #{failTimes},
             </if>
+			<if test="loginUrl != null">
+				login_url = #{loginUrl},
+			</if>
 		</set>
 		where link_id = #{linkId}
 	</update>

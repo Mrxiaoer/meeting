@@ -1,25 +1,16 @@
 package com.spider.modules.business.controller;
 
-import java.util.List;
-import java.util.Map;
-
-import com.spider.modules.business.model.TimeTaskModel;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.spider.common.utils.PageUtils;
 import com.spider.common.utils.R;
 import com.spider.modules.business.entity.LinkInfoEntity;
+import com.spider.modules.business.model.TimeTaskModel;
 import com.spider.modules.business.service.LinkInfoService;
 import com.spider.modules.spider.service.AnalogLoginService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 站点爬取链接配置
@@ -115,5 +106,12 @@ public class LinkInfoController {
     public R getModel(){
         List<TimeTaskModel> list = linkInfoService.timedTask();
         return R.ok().put("list",list);
+    }
+
+    @PostMapping("/test")
+    public R test(@RequestBody Map<String,Object> params){
+        linkInfoService.addCookies(params);
+
+        return R.ok();
     }
 }

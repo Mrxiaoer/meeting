@@ -20,7 +20,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -35,6 +38,8 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 public class LinkInfoServiceImpl extends ServiceImpl<LinkInfoDao, LinkInfoEntity>  implements LinkInfoService {
+
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     LinkInfoDao linkInfoDao;
@@ -82,12 +87,11 @@ public class LinkInfoServiceImpl extends ServiceImpl<LinkInfoDao, LinkInfoEntity
 
         //在AnalogLoginEntity表中存用户爬取的url
         analogLogin.setTargetUrl(linkInfo.getUrl());
+        analogLogin.setLoginUrl(linkInfo.getLoginUrl());
         if(analogLogin.getId() !=null) {
             analogLogin.setId(null);
         }
         analogLoginService.saveAnalogLogin(analogLogin);
-
-
 
         linkInfo.setAnalogId(analogLogin.getId());
         linkInfo.setCreateTime(new Date());
@@ -102,16 +106,19 @@ public class LinkInfoServiceImpl extends ServiceImpl<LinkInfoDao, LinkInfoEntity
     @Override
     public void update(LinkInfoEntity linkInfo) {
         linkInfo.setUpdateTime(new Date());
+        linkInfo.setHasTarget(Constant.VALUE_ZERO);
+        LinkInfoEntity oldlink = this.queryById(linkInfo.getLinkId());
         linkInfoDao.update(linkInfo);
-        if(linkInfo.getUrl() != null) {
+
+        if(!linkInfo.getUrl().equals(oldlink.getUrl()) || !linkInfo.getLoginUrl().equals(oldlink.getLoginUrl())) {
            AnalogLoginEntity rc = new AnalogLoginEntity();
-           Integer id = this.queryById(linkInfo.getLinkId()).getAnalogId();
-           rc.setId(id);
+           rc.setId(oldlink.getAnalogId());
            rc.setTargetUrl(linkInfo.getUrl());
+           rc.setLoginUrl(linkInfo.getLoginUrl());
            analogLoginDao.updateAnalogLogin(rc);
         }
+        //用户修改系统名称以及模块名称去更新采集结果表中的系统与模块名
         if(!(linkInfo.getSystem() == null || linkInfo.getModule() == null)){
-            LinkInfoEntity oldlink = linkInfoDao.queryById(linkInfo.getLinkId());
             if(!oldlink.getSystem().equals(linkInfo.getSystem()) || !oldlink.getModule().equals(linkInfo.getModule())){
                 ResultInfoEntity rs = new ResultInfoEntity();
                 rs.setLinkId(linkInfo.getLinkId());
@@ -165,4 +172,26 @@ public class LinkInfoServiceImpl extends ServiceImpl<LinkInfoDao, LinkInfoEntity
         linkInfo.setHasTarget(Constant.VALUE_ZERO);linkInfoDao.update(linkInfo);
         linkInfoDao.update(linkInfo);
     }
+
+    @Override
+    public void addCookies(Map<String, Object> params){
+        LinkInfoEntity linkInfo = new LinkInfoEntity();
+        linkInfo.setLinkId(Integer.parseInt(String.valueOf(params.get("linkId"))));
+        List<Map<String,Object>> map = (List<Map<String, Object>>)params.get("cookie");
+        //对前端传入的cookie进行组装
+        String cookies = null;
+        for (Map<String,Object> m : map){
+            String cookie = "{"+ '\"'+ "name" + '\"'+ ':'+ '\"' +  String.valueOf(m.get("name")) + '\"' + ',' + '\"'+ "value" + '\"'+ ':'+ '\"' +  String.valueOf(m.get("value")) + '\"'+'}' + ',';
+            cookies = cookie + cookies;
+            logger.info(cookie);
+        }
+        logger.info(cookies);
+        cookies.substring(6, cookies.length()-6);
+        logger.info(cookies);
+
+
+
+
+    }
+
 }

@@ -61,6 +61,10 @@ public interface LinkInfoService {
     void deletebyLinkId(Integer[] linkIds);
 
 
+    /**
+     * 级选择器数据渲染
+     * @return
+     */
     List<TimeTaskModel> timedTask();
 
     /**
@@ -68,4 +72,10 @@ public interface LinkInfoService {
      * @param linkId
      */
     void updateByTarget(Integer linkId);
+
+    /**
+     * 手动输入cookie值
+     * @param params
+     */
+    void addCookies(Map<String,Object> params);
 }

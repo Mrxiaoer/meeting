@@ -130,10 +130,10 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 				return null;
 			}
 		}catch (NoSuchMethodException nosuch){
-		   logger.info("登录信息填写有误,请重新操作!");
+		   logger.info("1、登录信息填写有误,请重新操作!");
 		   return null;
         } catch (Exception e) {
-            logger.info("登录信息填写有误,请重新操作!");
+            logger.info("2、登录信息填写有误,请重新操作!");
             return null;
 		} finally {
 			phantomJSDriverPool.returnObject(driver);

@@ -66,6 +66,11 @@ public class LinkInfoEntity implements Serializable {
      */
     private Integer failTimes;
 
+    /**
+     * 登录页的地址
+     */
+    private  String loginUrl;
+
     // 存在状态（1.存在;0.删除）
     @JsonIgnore
     private Integer state;
@@ -164,6 +169,14 @@ public class LinkInfoEntity implements Serializable {
 
     public void setFailTimes(Integer failTimes) {
         this.failTimes = failTimes;
+    }
+
+    public String getLoginUrl() {
+        return loginUrl;
+    }
+
+    public void setLoginUrl(String loginUrl) {
+        this.loginUrl = loginUrl;
     }
 
     public Integer getState() {

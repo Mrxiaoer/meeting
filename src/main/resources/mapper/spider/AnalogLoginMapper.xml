@@ -155,8 +155,8 @@
             <if test="nowUrl!=null and nowUrl!=''">
                 `now_url` = #{nowUrl},
             </if>
-            <if test="strOfIndex!=null and strOfIndex!=''">
-                `str_of_index` = #{strOfIndex},
+            <if test="loginUrl!=null and loginUrl!=''">
+                `login_url` = #{loginUrl},
             </if>
             <if test="verifycodePicXpath!=null and verifycodePicXpath!=''">
                 `verifycode_pic_xpath` = #{verifycodePicXpath},
