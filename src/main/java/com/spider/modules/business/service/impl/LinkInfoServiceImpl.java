@@ -15,6 +15,7 @@ import com.spider.modules.business.service.LinkInfoService;
 import com.spider.modules.spider.dao.AnalogLoginDao;
 import com.spider.modules.spider.entity.AnalogLoginEntity;
 import com.spider.modules.spider.service.AnalogLoginService;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -107,18 +108,18 @@ public class LinkInfoServiceImpl extends ServiceImpl<LinkInfoDao, LinkInfoEntity
     public void update(LinkInfoEntity linkInfo) {
         linkInfo.setUpdateTime(new Date());
         linkInfo.setHasTarget(Constant.VALUE_ZERO);
-        LinkInfoEntity oldlink = this.queryById(linkInfo.getLinkId());
         linkInfoDao.update(linkInfo);
 
-        if(!linkInfo.getUrl().equals(oldlink.getUrl()) || !linkInfo.getLoginUrl().equals(oldlink.getLoginUrl())) {
+        if(linkInfo.getUrl() != null || linkInfo.getLoginUrl() != null) {
            AnalogLoginEntity rc = new AnalogLoginEntity();
-           rc.setId(oldlink.getAnalogId());
+           rc.setId(this.queryById(linkInfo.getLinkId()).getAnalogId());
            rc.setTargetUrl(linkInfo.getUrl());
            rc.setLoginUrl(linkInfo.getLoginUrl());
            analogLoginDao.updateAnalogLogin(rc);
         }
         //用户修改系统名称以及模块名称去更新采集结果表中的系统与模块名
         if(!(linkInfo.getSystem() == null || linkInfo.getModule() == null)){
+            LinkInfoEntity oldlink = this.queryById(linkInfo.getLinkId());
             if(!oldlink.getSystem().equals(linkInfo.getSystem()) || !oldlink.getModule().equals(linkInfo.getModule())){
                 ResultInfoEntity rs = new ResultInfoEntity();
                 rs.setLinkId(linkInfo.getLinkId());
@@ -174,23 +175,28 @@ public class LinkInfoServiceImpl extends ServiceImpl<LinkInfoDao, LinkInfoEntity
     }
 
     @Override
+    @Transactional
     public void addCookies(Map<String, Object> params){
         LinkInfoEntity linkInfo = new LinkInfoEntity();
         linkInfo.setLinkId(Integer.parseInt(String.valueOf(params.get("linkId"))));
+        linkInfo.setHasTarget(Constant.VALUE_ONE);
         List<Map<String,Object>> map = (List<Map<String, Object>>)params.get("cookie");
         //对前端传入的cookie进行组装
-        String cookies = null;
+        String cookies = "";
         for (Map<String,Object> m : map){
             String cookie = "{"+ '\"'+ "name" + '\"'+ ':'+ '\"' +  String.valueOf(m.get("name")) + '\"' + ',' + '\"'+ "value" + '\"'+ ':'+ '\"' +  String.valueOf(m.get("value")) + '\"'+'}' + ',';
-            cookies = cookie + cookies;
-            logger.info(cookie);
+            cookies =  cookies + cookie;
         }
-        logger.info(cookies);
-        cookies.substring(6, cookies.length()-6);
-        logger.info(cookies);
+        cookies = '[' + cookies.substring(0, cookies.length()-1) + ']';
+        AnalogLoginEntity analogLogin = new AnalogLoginEntity();
+        analogLogin.setId(analogLoginDao.queryAnalogLoginByLinkId(linkInfo.getLinkId()).getId());
+        analogLogin.setHandCookie(cookies);
+        analogLoginDao.updateAnalogLogin(analogLogin);
+        linkInfoDao.update(linkInfo);
+    }
 
-
-
+    @Override
+    public void  gainCookie(Integer linkId){
 
     }
 

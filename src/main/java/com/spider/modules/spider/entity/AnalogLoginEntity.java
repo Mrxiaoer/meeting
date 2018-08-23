@@ -43,6 +43,9 @@ public class AnalogLoginEntity implements Serializable {
 	//cookie
 	@Column(columnDefinition = "text COMMENT 'cookie'")
 	private String cookie;
+	//手动输入的cookie
+	@Column(columnDefinition = "text COMMENT '用户手动填入cookie'")
+	private String handCookie;
 	//登录按钮xpath
 	@Column(columnDefinition = "varchar(127) COMMENT '登录按钮xpath'")
 	private String loginButtonXpath;
@@ -112,6 +115,14 @@ public class AnalogLoginEntity implements Serializable {
 
 	public void setCookie(String cookie) {
 		this.cookie = cookie;
+	}
+
+	public String getHandCookie() {
+		return handCookie;
+	}
+
+	public void setHandCookie(String handCookie) {
+		this.handCookie = handCookie;
 	}
 
 	public String getLoginButtonXpath() {

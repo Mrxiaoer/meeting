@@ -78,4 +78,10 @@ public interface LinkInfoService {
      * @param params
      */
     void addCookies(Map<String,Object> params);
+
+    /**
+     * 手动cookie转化成数组
+     * @param linkId
+     */
+    void  gainCookie(Integer linkId);
 }

@@ -33,7 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import javax.transaction.Transactional;
+
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
@@ -41,6 +41,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class TargetInfoServiceImpl implements TargetInfoService {
@@ -87,7 +88,7 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 		LinkInfoEntity linkInfo = linkInfoService.queryById(linkId);
 		SpiderRule spiderRule = new SpiderRule();
 		spiderRule.setIsGetText(false);
-		spiderPage.startSpider(linkId, linkInfo.getUrl(), false, false, spiderRule, null, spiderTemporaryRecordPipeline,
+		spiderPage.startSpider(linkId, linkInfo.getLoginUrl(), false, false, spiderRule, null, spiderTemporaryRecordPipeline,
 						null);
 		TemporaryRecordEntity rc = temporaryRecordService.queryBylinkId(linkId);
 		if (MyStringUtil.urlCutParam(rc.getUrl()).equals(MyStringUtil.urlCutParam(linkInfo.getUrl()))){
@@ -97,7 +98,7 @@ public class TargetInfoServiceImpl implements TargetInfoService {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            spiderPage.startSpider(linkId, linkInfo.getUrl(), false, false, spiderRule, null, spiderTemporaryRecordPipeline,
+            spiderPage.startSpider(linkId, linkInfo.getLoginUrl(), false, false, spiderRule, null, spiderTemporaryRecordPipeline,
                     driver);
             driver.quit();
             rc = temporaryRecordService.queryBylinkId(linkId);
@@ -134,6 +135,7 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 		   return null;
         } catch (Exception e) {
             logger.info("2、登录信息填写有误,请重新操作!");
+            e.printStackTrace();
             return null;
 		} finally {
 			phantomJSDriverPool.returnObject(driver);

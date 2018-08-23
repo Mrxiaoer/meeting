@@ -6,6 +6,8 @@ import com.spider.modules.business.entity.LinkInfoEntity;
 import com.spider.modules.business.model.TimeTaskModel;
 import com.spider.modules.business.service.LinkInfoService;
 import com.spider.modules.spider.service.AnalogLoginService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +18,6 @@ import java.util.Map;
  * 站点爬取链接配置
  * 链接信息表controller类
  * 前端使用json发送数据给后端
- * <p> title: LinkInfoController </p> 
  * @author yaonuan
  * @data 2018年7月9日
  * version 1.0
@@ -30,6 +31,8 @@ public class LinkInfoController {
     
     @Autowired
     AnalogLoginService analogLoginService;
+
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
      * 根据(系统名称、模块名称)条件进行查询
@@ -108,10 +111,19 @@ public class LinkInfoController {
         return R.ok().put("list",list);
     }
 
-    @PostMapping("/test")
-    public R test(@RequestBody Map<String,Object> params){
+    @PostMapping("/hand_cookie")
+    public R manualAddCookie(@RequestBody Map<String,Object> params){
         linkInfoService.addCookies(params);
-
         return R.ok();
     }
+
+    @GetMapping("/test/{linkId}")
+    public R gainCookie(@PathVariable Integer linkId){
+
+        System.out.println(linkId);
+        linkInfoService.gainCookie(linkId);
+
+        return  R.ok();
+    }
+
 }
