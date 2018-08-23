@@ -74,8 +74,10 @@ public class TargetInfoController {
 		}
 		if (linkInfo == null) {
 			return R.error("模拟登录失败~");
-		} else {
-			return R.ok().put("linkInfo", linkInfo);
+		} else if (linkInfo.getHasTarget() == 1){
+			return R.ok();
+		}else  {
+			return R.error();
 		}
 	}
 

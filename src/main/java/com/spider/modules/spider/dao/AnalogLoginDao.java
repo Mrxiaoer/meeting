@@ -28,6 +28,11 @@ public interface AnalogLoginDao {
 	int update(AnalogLoginEntity analogLogin);
 
 	/**
+	 * 更新handcookie
+	 */
+	int updateHandCookie(AnalogLoginEntity analogLogin);
+
+	/**
 	 * 查找
 	 */
 	List<AnalogLoginEntity> queryAnalogLogin(AnalogLoginEntity analogLogin);

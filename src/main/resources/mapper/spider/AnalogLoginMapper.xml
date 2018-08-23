@@ -182,6 +182,14 @@
         </trim>
     </update>
 
+
+
+    <update id="updateHandCookie">
+        UPDATE `spider_analog_login`
+        SET  `hand_cookie` = #{handCookie},
+        WHERE `id` = #{id}
+    </update>
+
     <!--4个xpath以及验证码图片链接的修改，为空即更-->
     <update id="update">
         UPDATE `spider_analog_login`

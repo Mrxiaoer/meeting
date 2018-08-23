@@ -183,20 +183,24 @@ public class LinkInfoServiceImpl extends ServiceImpl<LinkInfoDao, LinkInfoEntity
         List<Map<String,Object>> map = (List<Map<String, Object>>)params.get("cookie");
         //对前端传入的cookie进行组装
         String cookies = "";
-        for (Map<String,Object> m : map){
-            String cookie = "{"+ '\"'+ "name" + '\"'+ ':'+ '\"' +  String.valueOf(m.get("name")) + '\"' + ',' + '\"'+ "value" + '\"'+ ':'+ '\"' +  String.valueOf(m.get("value")) + '\"'+'}' + ',';
-            cookies =  cookies + cookie;
+        if (map.size() != Constant.VALUE_ZERO){
+            for (Map<String,Object> m : map){
+                String cookie = "{"+ '\"'+ "name" + '\"'+ ':'+ '\"' +  String.valueOf(m.get("name")) + '\"' + ',' + '\"'+ "value" + '\"'+ ':'+ '\"' +  String.valueOf(m.get("value")) + '\"'+'}' + ',';
+                cookies =  cookies + cookie;
+            }
+            cookies = '[' + cookies.substring(0, cookies.length()-1) + ']';
         }
-        cookies = '[' + cookies.substring(0, cookies.length()-1) + ']';
         AnalogLoginEntity analogLogin = new AnalogLoginEntity();
         analogLogin.setId(analogLoginDao.queryAnalogLoginByLinkId(linkInfo.getLinkId()).getId());
-        analogLogin.setHandCookie(cookies);
-        analogLoginDao.updateAnalogLogin(analogLogin);
+        analogLogin.setHandCookie(cookies.equals("")?null:cookies);
+        analogLoginDao.updateHandCookie(analogLogin);
         linkInfoDao.update(linkInfo);
     }
 
     @Override
     public void  gainCookie(Integer linkId){
+        AnalogLoginEntity analogLogin = analogLoginDao.queryAnalogLoginByLinkId(linkId);
+        analogLogin.getHandCookie();
 
     }
 
