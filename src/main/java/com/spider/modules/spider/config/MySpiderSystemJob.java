@@ -17,9 +17,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class MySpiderSystemJob {
 
-	private Logger logger = LoggerFactory.getLogger(this.getClass());
-
 	private final PhantomJSDriverPool phantomJSDriverPool;
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	public MySpiderSystemJob(PhantomJSDriverPool phantomJSDriverPool) {

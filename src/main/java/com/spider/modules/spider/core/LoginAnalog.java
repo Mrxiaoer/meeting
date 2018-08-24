@@ -159,7 +159,7 @@ public class LoginAnalog {
 										jtResult.get(SpiderConstant.IMAGE_PATH).toString());
 								cjyResult = JSONUtil.toBean(cjyBack, ChaoJiYingResult.class);
 								cjyTry++;
-								if ("-3001" .equals(cjyResult.getErr_no()) || "-3002" .equals(cjyResult.getErr_no())) {
+								if ("-3001".equals(cjyResult.getErr_no()) || "-3002".equals(cjyResult.getErr_no())) {
 									logger.info("==>超级鹰--请求超时！重试");
 									continue;
 								}

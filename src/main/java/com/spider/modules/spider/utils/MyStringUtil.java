@@ -5,11 +5,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spider.modules.spider.entity.MyCookie;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -102,9 +97,8 @@ public class MyStringUtil {
 
 			MyCookie myCookie = JSONUtil.toBean(j, MyCookie.class);
 			cookies.add(new Cookie.Builder(myCookie.getName(), myCookie.getValue()).domain(myCookie.getDomain())
-					.path(myCookie.getPath())
-					.expiresOn(myCookie.getExpiry()).isHttpOnly(myCookie.isHttpOnly()).isSecure(myCookie.isSecure())
-					.build());
+					.path(myCookie.getPath()).expiresOn(myCookie.getExpiry()).isHttpOnly(myCookie.isHttpOnly())
+					.isSecure(myCookie.isSecure()).build());
 		}
 		return cookies;
 	}

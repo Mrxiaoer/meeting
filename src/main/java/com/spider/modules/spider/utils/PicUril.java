@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
  * @Date : 2018-07-30
  */
 public class PicUril {
+
 	private static Logger logger = LoggerFactory.getLogger(PicUril.class);
 
 	/**
@@ -26,7 +27,7 @@ public class PicUril {
 		File destF = new File(destDir);
 		if (!destF.exists()) {
 			boolean m = destF.mkdirs();
-			if(!m){
+			if (!m) {
 				logger.error("创建文件夹失败！");
 			}
 		}
@@ -195,20 +196,20 @@ public class PicUril {
 			if (isWhite(binaryBufferedImage.getRGB(x + i, y + i)) && isWhite(binaryBufferedImage.getRGB(x - i, y - i))) {
 				lineFlag = true;
 			}
-			if (isWhite(binaryBufferedImage.getRGB(x + i, y + i)) && isWhite(binaryBufferedImage.getRGB(x - i, y + i)) &&
-					isWhite(binaryBufferedImage.getRGB(x, y - i))) {
+			if (isWhite(binaryBufferedImage.getRGB(x + i, y + i)) && isWhite(binaryBufferedImage.getRGB(x - i, y + i))
+					&& isWhite(binaryBufferedImage.getRGB(x, y - i))) {
 				lineFlag = true;
 			}
-			if (isWhite(binaryBufferedImage.getRGB(x + i, y - i)) && isWhite(binaryBufferedImage.getRGB(x - i, y - i)) &&
-					isWhite(binaryBufferedImage.getRGB(x, y + i))) {
+			if (isWhite(binaryBufferedImage.getRGB(x + i, y - i)) && isWhite(binaryBufferedImage.getRGB(x - i, y - i))
+					&& isWhite(binaryBufferedImage.getRGB(x, y + i))) {
 				lineFlag = true;
 			}
-			if (isWhite(binaryBufferedImage.getRGB(x + i, y - i)) && isWhite(binaryBufferedImage.getRGB(x + i, y + i)) &&
-					isWhite(binaryBufferedImage.getRGB(x - i, y))) {
+			if (isWhite(binaryBufferedImage.getRGB(x + i, y - i)) && isWhite(binaryBufferedImage.getRGB(x + i, y + i))
+					&& isWhite(binaryBufferedImage.getRGB(x - i, y))) {
 				lineFlag = true;
 			}
-			if (isWhite(binaryBufferedImage.getRGB(x - i, y - i)) && isWhite(binaryBufferedImage.getRGB(x - i, y + i)) &&
-					isWhite(binaryBufferedImage.getRGB(x + i, y))) {
+			if (isWhite(binaryBufferedImage.getRGB(x - i, y - i)) && isWhite(binaryBufferedImage.getRGB(x - i, y + i))
+					&& isWhite(binaryBufferedImage.getRGB(x + i, y))) {
 				lineFlag = true;
 			}
 			//去除干扰
