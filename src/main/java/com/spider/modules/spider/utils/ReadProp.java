@@ -16,17 +16,13 @@ import org.springframework.stereotype.Component;
 public class ReadProp {
 
 	@Value("${webmagic.selenuim_config}")
-	private String selenuim_config;
+	private String selenuimConfig;
 
 	public Properties readp() {
 		//new 一个Properties对象
 		Properties p = new Properties();
 		try {
-			// 加载一个文件输入流
-			//		File file = new File(Thread.currentThread().getContextClassLoader().getResource("").getPath() +
-			// selenuim_config);
-			//        FileInputStream fis = new FileInputStream(file);
-			InputStream is = this.getClass().getResourceAsStream(selenuim_config);
+			InputStream is = this.getClass().getResourceAsStream(selenuimConfig);
 			p.load(is);
 		} catch (Exception e) {
 			e.printStackTrace();

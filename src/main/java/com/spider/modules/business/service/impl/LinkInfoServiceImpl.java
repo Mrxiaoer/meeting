@@ -191,7 +191,7 @@ public class LinkInfoServiceImpl extends ServiceImpl<LinkInfoDao, LinkInfoEntity
         }
         AnalogLoginEntity analogLogin = new AnalogLoginEntity();
         analogLogin.setId(analogLoginDao.queryAnalogLoginByLinkId(linkInfo.getLinkId()).getId());
-        analogLogin.setHandCookie(cookies.equals("")?null:cookies);
+        analogLogin.setHandCookie("".equals(cookies)?null:cookies);
         analogLoginDao.updateHandCookie(analogLogin);
         linkInfoDao.update(linkInfo);
     }

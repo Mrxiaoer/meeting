@@ -73,7 +73,8 @@ public class PicUril {
 		}
 
 		int czw = w / 200 < h / 100 ? w / 200 : h / 100;
-		for (int n = 0; n < 3; n++) {
+		int cleanNum = 3;
+		for (int n = 0; n < cleanNum; n++) {
 			//去除干扰点 或 干扰线（运用八领域，即像素周围八个点判定，根据实际需要判定）
 			for (int i = czw; i >= 1; i--) {
 				for (int y = i; y < h - i; y++) {

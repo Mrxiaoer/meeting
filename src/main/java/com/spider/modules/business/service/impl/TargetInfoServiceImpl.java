@@ -238,27 +238,26 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 				PageInfoEntity pageInfo = new PageInfoEntity();
 				pageInfo.setNameCn(vaule);
 				pageInfo.setResultId(resultInfo.getId());
-				MyStringUtil myStringUtil = new MyStringUtil();
-				pageInfo.setNameEn(myStringUtil.getPinYinHeadChar(vaule));
+				pageInfo.setNameEn(MyStringUtil.getPinYinHeadChar(vaule));
 				pageInfoService.save(pageInfo);
 			}
 		}
 		//采集的结果返回给前端
 		List<PageInfoEntity> pageInfos = pageInfoService.queryByResultId(resultInfo.getId());
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 		map.put("pageInfos", pageInfos);
 		return map;
 	}
 
 	@Override
 	public void updateHead(Map<String, Object> params) {
-		String AllinformationName = (String) params.get("informationName");
+		String allinformationName = (String) params.get("informationName");
 		List<Map<String, Object>> map = (List<Map<String, Object>>) params.get("pageInfos");
 		//定义获取pageId
 		Integer id = 0;
 		for (Map<String, Object> list : map) {
 			PageInfoEntity pageInfo = new PageInfoEntity();
-			pageInfo.setInformationName(AllinformationName);
+			pageInfo.setInformationName(allinformationName);
 			pageInfo.setPageId((Integer) list.get("pageId"));
 			pageInfo.setState((Integer) list.get("state"));
 			pageInfoService.update(pageInfo);

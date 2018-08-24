@@ -44,7 +44,7 @@ public class ResultInfoServiceImpl extends ServiceImpl<ResultInfoDao, ResultInfo
         String system = (String) params.get("system");
         String module = (String) params.get("module");
         String changeState = String.valueOf(params.get("changeState"));
-        if(changeState != null && !changeState.equals("") && !changeState.equals("null")){
+        if(changeState != null && !"".equals(changeState) && !"null".equals(changeState)){
             Integer change = Integer.valueOf(changeState);
             Page<ResultInfoModel> page = this.selectPage(new Query<ResultInfoModel>(params).getPage(),
                     new EntityWrapper<ResultInfoModel>().like(StringUtils.isNotBlank(system), "system",system)

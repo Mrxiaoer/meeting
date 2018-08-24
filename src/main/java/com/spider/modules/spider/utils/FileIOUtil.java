@@ -19,7 +19,7 @@ public class FileIOUtil {
 	/**
 	 * 将字符串写入文件
 	 */
-	public static void WriteStringToFile(String filePath, String str, boolean isAppend) throws IOException {
+	public static void writeStringToFile(String filePath, String str, boolean isAppend) throws IOException {
 		File file = new File(filePath);
 		//判断目标文件所在的目录是否存在
 		if (!file.getParentFile().exists()) {

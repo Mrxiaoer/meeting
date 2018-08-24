@@ -18,7 +18,7 @@ public class FileTest {
 	public void fileWrite() throws IOException {
 		String str = "hello world!";
 		String str1 = "hello yujia!";
-		FileIOUtil.WriteStringToFile("F:\\JavaSource\\workspeace\\2018_guomai\\spider-data\\src\\main\\resources\\static"
+		FileIOUtil.writeStringToFile("F:\\JavaSource\\workspeace\\2018_guomai\\spider-data\\src\\main\\resources\\static"
 				+ "\\htmlFile\\file\\test.html", str, false);
 	}
 

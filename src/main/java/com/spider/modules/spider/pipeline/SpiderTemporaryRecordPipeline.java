@@ -48,7 +48,7 @@ public class SpiderTemporaryRecordPipeline implements Pipeline {
 			String filePath = FilePathUtil.getBasePath() + childPath;
 			System.out.println(filePath);
 			try {
-				FileIOUtil.WriteStringToFile(filePath, html, false);
+				FileIOUtil.writeStringToFile(filePath, html, false);
 			} catch (IOException e) {
 				e.printStackTrace();
 				logger.error("IOException:{}", e.getMessage());

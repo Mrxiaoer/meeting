@@ -42,45 +42,48 @@ import org.springframework.stereotype.Component;
 @Component("autoTask")
 public class AutoTask {
 
+	final TemporaryRecordService temporaryRecordService;
+	final LinkInfoService linkInfoService;
+	final SpiderRuleService spiderRuleService;
+	final HtmlProcess htmlprocess;
+	final ResultInfoService resultInfoService;
+	final PageInfoService pageInfoService;
+	final PhantomJSDriverPool phantomJSDriverPool;
 	private final AnalogLoginService analogLoginService;
 	private final LoginAnalog loginAnalog;
 	private final SpiderTemporaryRecordPipeline spiderTemporaryRecordPipeline;
 	private final SpiderPage spiderPage;
 	private final HtmlProcess htmlProcess;
-	@Autowired
-	TemporaryRecordService temporaryRecordService;
-	@Autowired
-	LinkInfoService linkInfoService;
-	@Autowired
-	SpiderRuleService spiderRuleService;
-	@Autowired
-	HtmlProcess htmlprocess;
-	@Autowired
-	ResultInfoService resultInfoService;
-	@Autowired
-	PageInfoService pageInfoService;
-	@Autowired
-	PhantomJSDriverPool phantomJSDriverPool;
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
 	public AutoTask(AnalogLoginService analogLoginService, LoginAnalog loginAnalog,
-			SpiderTemporaryRecordPipeline spiderTemporaryRecordPipeline, SpiderPage spiderPage, HtmlProcess htmlProcess) {
+			SpiderTemporaryRecordPipeline spiderTemporaryRecordPipeline, SpiderPage spiderPage, HtmlProcess htmlProcess,
+			TemporaryRecordService temporaryRecordService, LinkInfoService linkInfoService,
+			SpiderRuleService spiderRuleService, HtmlProcess htmlprocess, ResultInfoService resultInfoService,
+			PageInfoService pageInfoService, PhantomJSDriverPool phantomJSDriverPool) {
 		this.analogLoginService = analogLoginService;
 		this.loginAnalog = loginAnalog;
 		this.spiderTemporaryRecordPipeline = spiderTemporaryRecordPipeline;
 		this.spiderPage = spiderPage;
 		this.htmlProcess = htmlProcess;
+		this.temporaryRecordService = temporaryRecordService;
+		this.linkInfoService = linkInfoService;
+		this.spiderRuleService = spiderRuleService;
+		this.htmlprocess = htmlprocess;
+		this.resultInfoService = resultInfoService;
+		this.pageInfoService = pageInfoService;
+		this.phantomJSDriverPool = phantomJSDriverPool;
 	}
 
 	public void autoCrawl(String params) throws Exception {
 		logger.info("自动爬取方法autoCrawl正在被执行，站点参数为：" + params);
 
 		String isNum = "^[0-9]*$";
-		AnalogLoginEntity LoginInfo;
+		AnalogLoginEntity loginInfo;
 		//根据linkId(params)查询analog_login表对应的信息
 		if (params.matches(isNum)) {
-			LoginInfo = analogLoginService.getOneByLinkId(Integer.parseInt(params));
+			loginInfo = analogLoginService.getOneByLinkId(Integer.parseInt(params));
 		} else {
 			throw new Exception("定时任务参数异常！");
 		}
@@ -93,13 +96,13 @@ public class AutoTask {
 		//模拟登录，获取cookie
 		PhantomJSDriver driver = phantomJSDriverPool.borrowPhantomJSDriver();
 		try {
-			cookies = loginAnalog.login(LoginInfo.getId(), driver);
+			cookies = loginAnalog.login(loginInfo.getId(), driver);
 			//获取目标页
-			spiderPage.startSpider(linkId, LoginInfo.getTargetUrl(), false, false, spiderRule, cookies,
+			spiderPage.startSpider(linkId, loginInfo.getTargetUrl(), false, false, spiderRule, cookies,
 					spiderTemporaryRecordPipeline, driver);
 		} catch (Exception e) {
 			e.printStackTrace();
-		}finally {
+		} finally {
 			phantomJSDriverPool.returnObject(driver);
 		}
 		//取得目标页
@@ -128,18 +131,9 @@ public class AutoTask {
 			pageInfo.setNameCn(vaule);
 			pageInfo.setResultId(resultInfo.getId());
 			pageInfo.setInformationName(informationName);
-			MyStringUtil myStringUtil = new MyStringUtil();
-			pageInfo.setNameEn(myStringUtil.getPinYinHeadChar(vaule));
+			pageInfo.setNameEn(MyStringUtil.getPinYinHeadChar(vaule));
 			pageInfoService.save(pageInfo);
 		}
-
-		//		//@todo
-		//		SpiderRule spiderRule2 = new SpiderRule();
-		//		//修改了htmlProcess.process(LoginInfo.getTargetUrl(), spiderRule2);  yaonuan0725
-		//		TemporaryRecordEntity temporaryRecord = new TemporaryRecordEntity();
-		//		temporaryRecord.setUrl(LoginInfo.getTargetUrl());
-		//		temporaryRecord.setLinkId(Integer.parseInt(params));
-		//		htmlProcess.process(temporaryRecord, spiderRule2);
 
 	}
 }
