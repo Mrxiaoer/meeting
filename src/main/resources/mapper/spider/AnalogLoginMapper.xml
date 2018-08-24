@@ -186,7 +186,7 @@
 
     <update id="updateHandCookie">
         UPDATE `spider_analog_login`
-        SET  `hand_cookie` = #{handCookie},
+        SET  `hand_cookie` = #{handCookie}
         WHERE `id` = #{id}
     </update>
 

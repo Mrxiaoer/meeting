@@ -15,13 +15,7 @@ import com.spider.modules.business.service.LinkInfoService;
 import com.spider.modules.spider.dao.AnalogLoginDao;
 import com.spider.modules.spider.entity.AnalogLoginEntity;
 import com.spider.modules.spider.service.AnalogLoginService;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.spider.modules.spider.utils.MyStringUtil;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +23,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.*;
 
 /**
  *
@@ -178,7 +174,6 @@ public class LinkInfoServiceImpl extends ServiceImpl<LinkInfoDao, LinkInfoEntity
     public void addCookies(Map<String, Object> params){
         LinkInfoEntity linkInfo = new LinkInfoEntity();
         linkInfo.setLinkId(Integer.parseInt(String.valueOf(params.get("linkId"))));
-        linkInfo.setHasTarget(Constant.VALUE_ONE);
         List<Map<String,Object>> map = (List<Map<String, Object>>)params.get("cookie");
         //对前端传入的cookie进行组装
         String cookies = "";
@@ -193,13 +188,32 @@ public class LinkInfoServiceImpl extends ServiceImpl<LinkInfoDao, LinkInfoEntity
         analogLogin.setId(analogLoginDao.queryAnalogLoginByLinkId(linkInfo.getLinkId()).getId());
         analogLogin.setHandCookie("".equals(cookies)?null:cookies);
         analogLoginDao.updateHandCookie(analogLogin);
+        linkInfo.setHasTarget("".equals(cookies)?Constant.VALUE_ZERO:Constant.VALUE_ONE);
         linkInfoDao.update(linkInfo);
     }
 
     @Override
-    public void  gainCookie(Integer linkId){
+    public List<Map<String,String>>  gainCookie(Integer linkId){
         AnalogLoginEntity analogLogin = analogLoginDao.queryAnalogLoginByLinkId(linkId);
-        analogLogin.getHandCookie();
+        String gaincookie = analogLogin.getHandCookie().replace("[","").replaceAll("]", "");;
+        String[] line = gaincookie.split("},");
+        ArrayList<String> endline = new ArrayList<String>();
+        for (String value:line){
+            if (!value.endsWith("}")){
+                value = value + "}";
+                endline.add(value);
+            }else{
+                endline.add(value);
+            }
+        }
+        List<Map<String,String>> list = new ArrayList<>();
+        for (String startline: endline){
+            Map<String,String>  map = MyStringUtil.json2map(startline);
+            list.add(map);
+
+        }
+        return list;
+
 
     }
 

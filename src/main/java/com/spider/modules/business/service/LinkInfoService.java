@@ -83,5 +83,5 @@ public interface LinkInfoService {
      * 手动cookie转化成数组
      * @param linkId
      */
-    void  gainCookie(Integer linkId);
+    List<Map<String,String>>  gainCookie(Integer linkId);
 }
