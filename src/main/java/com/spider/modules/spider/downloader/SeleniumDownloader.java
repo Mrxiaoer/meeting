@@ -37,7 +37,7 @@ public class SeleniumDownloader implements Downloader, Closeable {
 	@Autowired
 	private PhantomJSDriverPool phantomJSDriverPool;
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
-	private int sleepTime = 1000;
+	private int sleepTime = 2000;
 
 	public SeleniumDownloader(String chromeDriverPath) {
 		System.getProperties().setProperty("webdriver.chrome.driver", chromeDriverPath);

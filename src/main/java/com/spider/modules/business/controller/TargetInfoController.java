@@ -93,7 +93,7 @@ public class TargetInfoController {
 			e.printStackTrace();
 		}
 		if (temporary == null) {
-			return R.error();
+			return R.error("无法获取此页面，请查证后再拨！");
 		}
 		try {
 			String contents = FileIOUtil.readStringFromFile(temporary.getHtmlFilePath());

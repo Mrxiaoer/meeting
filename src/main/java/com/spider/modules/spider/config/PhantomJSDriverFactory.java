@@ -28,7 +28,7 @@ public class PhantomJSDriverFactory extends BasePooledObjectFactory<PhantomJSDri
 	private ReadProp readProp;
 
 	@Override
-	public PhantomJSDriver create() throws Exception {
+	public PhantomJSDriver create() {
 		Properties prop = readProp.readp();
 		DesiredCapabilities dcaps = new DesiredCapabilities();
 		//ssl证书支持
@@ -47,8 +47,8 @@ public class PhantomJSDriverFactory extends BasePooledObjectFactory<PhantomJSDri
 		// 本地缓存
 		cliArgsCap.add("--disk-cache=false");
 		dcaps.setCapability(PhantomJSDriverService.PHANTOMJS_CLI_ARGS, cliArgsCap);
-		dcaps.setCapability(PhantomJSDriverService.PHANTOMJS_GHOSTDRIVER_CLI_ARGS,
-				new String[]{"--logLevel=" + (prop.getProperty("phantomjs_driver_loglevel") != null ? prop
+		dcaps.setCapability(PhantomJSDriverService.PHANTOMJS_GHOSTDRIVER_CLI_ARGS, new String[]{
+				"--logLevel=" + (prop.getProperty("phantomjs_driver_loglevel") != null ? prop
 						.getProperty("phantomjs_driver_loglevel") : "INFO")});
 		//驱动支持
 		dcaps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY,
@@ -64,7 +64,7 @@ public class PhantomJSDriverFactory extends BasePooledObjectFactory<PhantomJSDri
 
 	@Override
 	public PooledObject<PhantomJSDriver> wrap(PhantomJSDriver phantomJSDriver) {
-		return new DefaultPooledObject<PhantomJSDriver>(phantomJSDriver);
+		return new DefaultPooledObject<>(phantomJSDriver);
 	}
 
 }

@@ -76,7 +76,7 @@ public class PicUril {
 					}
 				}
 				for (int y = h - i; y > i; y--) {
-					for (int x = w - i; x < i; x--) {
+					for (int x = w - i; x > i; x--) {
 						removeInterfere(binaryBufferedImage, x, y, i);
 					}
 				}
