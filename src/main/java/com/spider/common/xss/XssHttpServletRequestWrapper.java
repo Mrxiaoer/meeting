@@ -1,5 +1,6 @@
 package com.spider.common.xss;
 
+import java.nio.charset.StandardCharsets;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.http.HttpHeaders;
@@ -45,7 +46,7 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
 
 		// xss过滤
 		json = xssEncode(json);
-		final ByteArrayInputStream bis = new ByteArrayInputStream(json.getBytes("utf-8"));
+		final ByteArrayInputStream bis = new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8));
 		return new ServletInputStream() {
 			@Override
 			public boolean isFinished() {

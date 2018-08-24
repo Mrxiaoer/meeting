@@ -65,7 +65,7 @@ public class TargetInfoController {
 		LinkInfoEntity linkInfoone = linkInfoService.queryById(targetInfo.getLinkId());
 		Integer analogId = linkInfoone.getAnalogId();
 		targetInfo.setUrl(linkInfoone.getUrl());
-		LinkInfoEntity linkInfo = null;
+		LinkInfoEntity linkInfo;
 		try {
 			linkInfo = targetInfoService.update(targetInfo, analogId);
 		} catch (Exception e) {
@@ -113,7 +113,7 @@ public class TargetInfoController {
 	 */
 	@PostMapping("/spider_head")
 	public R getxpath(@RequestBody Map<String, Object> params) {
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map;
 		map = targetInfoService.getXpath(params);
 		return R.ok().put("pageInfos", map.get("pageInfos"));
 

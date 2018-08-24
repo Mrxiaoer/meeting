@@ -24,10 +24,10 @@ public class RunTimeout {
 			int timeout)
 			throws ExecutionException, InterruptedException {
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
-		String result = null;
+		String result;
 		//		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		FutureTask<String> futureTask = new FutureTask<>(() -> {
-			String value = null;
+			String value;
 			try {
 				Method method = obj.getClass().getMethod(methodName, parameterTypes);
 				Object returnValue = method.invoke(obj, params);

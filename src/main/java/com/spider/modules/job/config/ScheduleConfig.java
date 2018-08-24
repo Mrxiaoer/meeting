@@ -1,20 +1,16 @@
 package com.spider.modules.job.config;
 
+import java.util.Properties;
+import javax.sql.DataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
-import javax.sql.DataSource;
-import java.util.Properties;
-
 /**
  * 定时任务配置，配置任务调度器 使用项目数据源作为quartz数据源
  *
  * @author maoxinmin
- * 
- * @param dataSource
- *            数据源实例
  */
 @Configuration
 @EnableScheduling

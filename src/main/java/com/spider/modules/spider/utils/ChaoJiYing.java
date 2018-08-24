@@ -59,7 +59,7 @@ public class ChaoJiYing {
 	public static String httpRequestData(String url, String param)
 			throws IOException {
 		URL u;
-		HttpURLConnection con = null;
+		HttpURLConnection con;
 		OutputStreamWriter osw;
 		StringBuilder buffer = new StringBuilder();
 
@@ -171,11 +171,11 @@ public class ChaoJiYing {
 	 */
 	public static String httpPostImage(String param, byte[] data) throws IOException {
 		long time = (new Date()).getTime();
-		URL u = null;
-		HttpURLConnection con = null;
+		URL u;
+		HttpURLConnection con;
 		String boundary = "----------" + MD5(String.valueOf(time));
 		String boundarybytesString = "\r\n--" + boundary + "\r\n";
-		OutputStream out = null;
+		OutputStream out;
 
 		u = new URL("http://upload.chaojiying.net/Upload/Processing.php");
 
@@ -267,7 +267,7 @@ public class ChaoJiYing {
 	 */
 	public static String PostPic(String username, String password, String softid, String codetype, String len_min,
 			byte[] byteArr) {
-		String result = "";
+		String result;
 		String param = String
 				.format("user=%s&pass=%s&softid=%s&codetype=%s&len_min=%s", username, password, softid, codetype, len_min);
 		try {

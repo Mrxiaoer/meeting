@@ -293,15 +293,15 @@ public final class HTMLFilter {
         }
         m.appendTail(buf);
 
-        s = buf.toString();
-
         // these get tallied in processTag
         // (remember to reset before subsequent calls to filter method)
+        StringBuilder sBuilder = new StringBuilder(buf.toString());
         for (String key : vTagCounts.keySet()) {
             for (int ii = 0; ii < vTagCounts.get(key); ii++) {
-                s += "</" + key + ">";
+                sBuilder.append("</").append(key).append(">");
             }
         }
+        s = sBuilder.toString();
 
         return s;
     }
@@ -351,7 +351,7 @@ public final class HTMLFilter {
 
             //debug( "in a starting tag, name='" + name + "'; body='" + body + "'; ending='" + ending + "'" );
             if (allowed(name)) {
-                String params = "";
+                StringBuilder params = new StringBuilder();
 
                 final Matcher m2 = P_QUOTED_ATTRIBUTES.matcher(body);
                 final Matcher m3 = P_UNQUOTED_ATTRIBUTES.matcher(body);
@@ -379,7 +379,7 @@ public final class HTMLFilter {
                         if (inArray(paramName, vProtocolAtts)) {
                             paramValue = processParamProtocol(paramValue);
                         }
-                        params += " " + paramName + "=\"" + paramValue + "\"";
+                        params.append(" ").append(paramName).append("=\"").append(paramValue).append("\"");
                     }
                 }
 
@@ -422,9 +422,9 @@ public final class HTMLFilter {
             final String protocol = m.group(1);
             if (!inArray(protocol, vAllowedProtocols)) {
                 // bad protocol, turn into local anchor link instead
-                s = "#" + s.substring(protocol.length() + 1, s.length());
+                s = "#" + s.substring(protocol.length() + 1);
                 if (s.startsWith("#//")) {
-                    s = "#" + s.substring(3, s.length());
+                    s = "#" + s.substring(3);
                 }
             }
         }

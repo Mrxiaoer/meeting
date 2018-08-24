@@ -87,7 +87,7 @@ public class SeleniumDownloader implements Downloader, Closeable {
 			if (site.getAllCookies() != null) {
 				Set<Map.Entry<String, Map<String, String>>> allCookieSet = site.getAllCookies().entrySet();
 
-				boolean canSet = true;
+				boolean canSet;
 				canSet = setCookies(manage, allCookieSet);
 				if (!canSet) {
 					driver.get(request.getUrl());

@@ -114,7 +114,7 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 		BeanUtil.copyProperties(targetInfo, analogLogin);
 		analogLogin.setId(analogId);
 		analogLoginDao.update(analogLogin);
-		java.util.Set<Cookie> cookies = null;
+		java.util.Set<Cookie> cookies;
 		//模拟浏览器创建连接，发起请求
 
 		PhantomJSDriver driver = phantomJSDriverPool.borrowPhantomJSDriver();
@@ -166,8 +166,6 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 					cookies = loginAnalog.login(analogLogin.getId(), driver);
 				} catch (NoSuchElementException nse) {
 					throw nse;
-				} catch (Exception e) {
-					throw e;
 				}
 				spiderPage.startSpider(linkId, analogLogin.getTargetUrl(), false, false, spiderRule, cookies,
 						spiderTemporaryRecordPipeline, driver);
@@ -175,9 +173,8 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 		} finally {
 			phantomJSDriverPool.returnObject(driver);
 		}
-		/**
-		 * 判断目标页是否采集成功
-		 */
+
+		//判断目标页是否采集成功
 		TemporaryRecordEntity temporaryRecord =  temporaryRecordService.queryBylinkId(linkId);
 		if( !MyStringUtil.urlCutParam(linkInfo.getUrl()).equals(MyStringUtil.urlCutParam(temporaryRecord.getUrl()))){
 			linkInfo.setFailTimes(linkInfo.getFailTimes() +  1);

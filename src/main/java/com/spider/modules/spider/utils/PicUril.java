@@ -5,6 +5,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 图片工具
@@ -14,6 +16,7 @@ import javax.imageio.ImageIO;
  * @Date : 2018-07-30
  */
 public class PicUril {
+	private static Logger logger = LoggerFactory.getLogger(PicUril.class);
 
 	/**
 	 * @param sfile   需要去噪的图像
@@ -22,7 +25,10 @@ public class PicUril {
 	public static File cleanLinesInImage(File sfile, String destDir) throws IOException {
 		File destF = new File(destDir);
 		if (!destF.exists()) {
-			destF.mkdirs();
+			boolean m = destF.mkdirs();
+			if(!m){
+				logger.error("创建文件夹失败！");
+			}
 		}
 
 		BufferedImage bufferedImage = ImageIO.read(sfile);
@@ -37,7 +43,7 @@ public class PicUril {
 				// 图像加亮（调整亮度识别率非常高）
 				int r = (int) (((argb >> 16) & 0xFF) * 1.1 + 30);
 				int g = (int) (((argb >> 8) & 0xFF) * 1.1 + 30);
-				int b = (int) (((argb >> 0) & 0xFF) * 1.1 + 30);
+				int b = (int) (((argb) & 0xFF) * 1.1 + 30);
 				if (r >= 255) {
 					r = 255;
 				}
@@ -130,7 +136,7 @@ public class PicUril {
 
 		float sumB = 0;
 		int wB = 0;
-		int wF = 0;
+		int wF;
 
 		float varMax = 0;
 		int threshold = 0;
@@ -206,9 +212,6 @@ public class PicUril {
 			}
 			//去除干扰
 			if (lineFlag) {
-				binaryBufferedImage.setRGB(x, y, -i);
-			}
-			if (pointflagNum > 7) {
 				binaryBufferedImage.setRGB(x, y, -i);
 			}
 		}

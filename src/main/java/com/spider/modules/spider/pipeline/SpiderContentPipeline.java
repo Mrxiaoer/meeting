@@ -27,7 +27,7 @@ public class SpiderContentPipeline implements Pipeline {
 		} else if (null != resultItems.get(SpiderConstant.SELECTOBJS)) {
 			st = StringUtils.join((List) resultItems.get(SpiderConstant.SELECTOBJS), SpiderConstant.SEPARATOR);
 		}
-
+		System.out.println(st);
 	}
 
 }

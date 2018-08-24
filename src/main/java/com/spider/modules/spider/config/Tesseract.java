@@ -22,7 +22,6 @@ import javax.imageio.stream.ImageInputStream;
 import net.sourceforge.lept4j.Box;
 import net.sourceforge.lept4j.Boxa;
 import net.sourceforge.lept4j.Leptonica;
-import net.sourceforge.tess4j.ITessAPI.ETEXT_DESC;
 import net.sourceforge.tess4j.ITessAPI.TessBaseAPI;
 import net.sourceforge.tess4j.ITessAPI.TessPageIterator;
 import net.sourceforge.tess4j.ITessAPI.TessResultIterator;
@@ -123,7 +122,7 @@ public class Tesseract implements ITesseract {
 
 	@Override
 	public String doOCR(File var1) throws TesseractException {
-		return this.doOCR((File) var1, (Rectangle) null);
+		return this.doOCR(var1, null);
 	}
 
 	@Override
@@ -156,11 +155,11 @@ public class Tesseract implements ITesseract {
 						}
 
 						if (this.renderedFormat == RenderedFormat.HOCR) {
-							var7.insert(0,
-									"<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3"
-											+ ".org/TR/html4/loose.dtd\">\n<html>\n<head>\n<title></title>\n<meta "
-											+ "http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\" />\n<meta "
-											+ "name='ocr-system' content='tesseract'/>\n</head>\n<body>\n")
+							var7.insert(0, "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www"
+									+ ".w3"
+									+ ".org/TR/html4/loose.dtd\">\n<html>\n<head>\n<title></title>\n<meta "
+									+ "http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\" />\n<meta "
+									+ "name='ocr-system' content='tesseract'/>\n</head>\n<body>\n")
 									.append("</body>\n</html>\n");
 						}
 					} catch (Throwable var29) {
@@ -194,7 +193,7 @@ public class Tesseract implements ITesseract {
 
 	@Override
 	public String doOCR(BufferedImage var1) throws TesseractException {
-		return this.doOCR((BufferedImage) var1, (Rectangle) null);
+		return this.doOCR(var1, null);
 	}
 
 	@Override
@@ -209,7 +208,7 @@ public class Tesseract implements ITesseract {
 
 	@Override
 	public String doOCR(List<IIOImage> var1, Rectangle var2) throws TesseractException {
-		return this.doOCR(var1, (String) null, var2);
+		return this.doOCR(var1, null, var2);
 	}
 
 	@Override
@@ -235,16 +234,13 @@ public class Tesseract implements ITesseract {
 			}
 
 			if (this.renderedFormat == RenderedFormat.HOCR) {
-				var4.insert(0,
-						"<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3"
-								+ ".org/TR/html4/loose.dtd\">\n<html>\n<head>\n<title></title>\n<meta "
-								+ "http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\" />\n<meta "
-								+ "name='ocr-system' content='tesseract'/>\n</head>\n<body>\n")
-						.append("</body>\n</html>\n");
+				var4.insert(0, "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3"
+						+ ".org/TR/html4/loose.dtd\">\n<html>\n<head>\n<title></title>\n<meta "
+						+ "http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\" />\n<meta "
+						+ "name='ocr-system' content='tesseract'/>\n</head>\n<body>\n").append("</body>\n</html>\n");
 			}
 
-			String var14 = var4.toString();
-			return var14;
+			return var4.toString();
 		} finally {
 			this.dispose();
 		}
@@ -265,7 +261,7 @@ public class Tesseract implements ITesseract {
 
 	@Override
 	public String doOCR(int var1, int var2, ByteBuffer var3, Rectangle var4, int var5) throws TesseractException {
-		return this.doOCR(var1, var2, var3, (String) null, var4, var5);
+		return this.doOCR(var1, var2, var3, null, var4, var5);
 	}
 
 	@Override
@@ -291,7 +287,7 @@ public class Tesseract implements ITesseract {
 	protected void init() {
 		this.api = TessAPI.INSTANCE;
 		this.handle = this.api.TessBaseAPICreate();
-		StringArray var1 = new StringArray((String[]) this.configList.toArray(new String[0]));
+		StringArray var1 = new StringArray(this.configList.toArray(new String[0]));
 		PointerByReference var2 = new PointerByReference();
 		var2.setPointer(var1);
 		this.api.TessBaseAPIInit1(this.handle, this.datapath, this.language, this.ocrEngineMode, var2,
@@ -332,8 +328,8 @@ public class Tesseract implements ITesseract {
 			this.api.TessBaseAPISetInputName(this.handle, var1);
 		}
 
-		Pointer var3 = this.renderedFormat == RenderedFormat.HOCR ? this.api.TessBaseAPIGetHOCRText(this.handle, var2 - 1) :
-				this.api.TessBaseAPIGetUTF8Text(this.handle);
+		Pointer var3 = this.renderedFormat == RenderedFormat.HOCR ? this.api.TessBaseAPIGetHOCRText(this.handle, var2 - 1)
+				: this.api.TessBaseAPIGetUTF8Text(this.handle);
 		String var4 = var3.getString(0L);
 		this.api.TessDeleteText(var3);
 		return var4;
@@ -414,8 +410,8 @@ public class Tesseract implements ITesseract {
 					} catch (Exception var16) {
 						logger.warn(var16.getMessage(), var16);
 					} finally {
-						if (var6 != null && var6.exists() && var6 != var5 && var6.getName().startsWith("multipage") &&
-								var6.getName().endsWith(".tif")) {
+						if (var6 != null && var6.exists() && var6 != var5 && var6.getName().startsWith("multipage") && var6
+								.getName().endsWith(".tif")) {
 							var6.delete();
 						}
 
@@ -430,7 +426,7 @@ public class Tesseract implements ITesseract {
 
 	private int createDocuments(String var1, TessResultRenderer var2) throws TesseractException {
 		this.api.TessBaseAPISetInputName(this.handle, var1);
-		int var3 = this.api.TessBaseAPIProcessPages(this.handle, var1, (String) null, 0, var2);
+		int var3 = this.api.TessBaseAPIProcessPages(this.handle, var1, null, 0, var2);
 		if (var3 == 0) {
 			throw new TesseractException("Error during processing page.");
 		} else {
@@ -446,9 +442,8 @@ public class Tesseract implements ITesseract {
 		ArrayList var16;
 		try {
 			ArrayList var3 = new ArrayList();
-			this.setImage(var1, (Rectangle) null);
-			Boxa var4 = this.api.TessBaseAPIGetComponentImages(this.handle, var2, 1, (PointerByReference) null,
-					(PointerByReference) null);
+			this.setImage(var1, null);
+			Boxa var4 = this.api.TessBaseAPIGetComponentImages(this.handle, var2, 1, null, null);
 			Leptonica var5 = Leptonica.INSTANCE;
 			int var6 = var5.boxaGetCount(var4);
 
@@ -483,8 +478,8 @@ public class Tesseract implements ITesseract {
 		ArrayList var3 = new ArrayList();
 
 		try {
-			this.setImage(var1, (Rectangle) null);
-			this.api.TessBaseAPIRecognize(this.handle, (ETEXT_DESC) null);
+			this.setImage(var1, null);
+			this.api.TessBaseAPIRecognize(this.handle, null);
 			TessResultIterator var4 = this.api.TessBaseAPIGetIterator(this.handle);
 			TessPageIterator var5 = this.api.TessResultIteratorGetPageIterator(var4);
 			this.api.TessPageIteratorBegin(var5);
@@ -540,8 +535,8 @@ public class Tesseract implements ITesseract {
 					} catch (Exception var20) {
 						logger.warn(var20.getMessage(), var20);
 					} finally {
-						if (var8 != null && var8.exists() && var8 != var7 && var8.getName().startsWith("multipage") &&
-								var8.getName().endsWith(".tif")) {
+						if (var8 != null && var8.exists() && var8 != var7 && var8.getName().startsWith("multipage") && var8
+								.getName().endsWith(".tif")) {
 							var8.delete();
 						}
 

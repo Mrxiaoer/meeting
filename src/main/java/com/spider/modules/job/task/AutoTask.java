@@ -89,7 +89,7 @@ public class AutoTask {
 		SpiderRule spiderRule = new SpiderRule();
 		spiderRule.setIsGetText(false);
 		//模拟登录
-		Set<Cookie> cookies = null;
+		Set<Cookie> cookies;
 		//模拟登录，获取cookie
 		PhantomJSDriver driver = phantomJSDriverPool.borrowPhantomJSDriver();
 		try {

@@ -1,19 +1,17 @@
 package com.spider.modules.spider.utils;
 
+import com.spider.modules.spider.config.Tesseract;
+import java.io.File;
+import net.sourceforge.tess4j.ITesseract;
+import net.sourceforge.tess4j.TesseractException;
+
 /**
- * ------------------------------
+ * ocr工具
  *
  * @Author : lolilijve
  * @Email : 1042703214@qq.com
  * @Date : 2018-07-30
  */
-
-import com.spider.modules.spider.config.Tesseract;
-import net.sourceforge.tess4j.ITesseract;
-import net.sourceforge.tess4j.TesseractException;
-
-import java.io.File;
-
 public class OCRUtil {
 
 	public static String identifyCode(File imgFile) throws TesseractException {
