@@ -155,11 +155,11 @@ public class Tesseract implements ITesseract {
 						}
 
 						if (this.renderedFormat == RenderedFormat.HOCR) {
-							var7.insert(0, "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www"
-									+ ".w3"
-									+ ".org/TR/html4/loose.dtd\">\n<html>\n<head>\n<title></title>\n<meta "
-									+ "http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\" />\n<meta "
-									+ "name='ocr-system' content='tesseract'/>\n</head>\n<body>\n")
+							var7.insert(0,
+									"<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www" + ".w3"
+											+ ".org/TR/html4/loose.dtd\">\n<html>\n<head>\n<title></title>\n<meta "
+											+ "http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\" />\n<meta "
+											+ "name='ocr-system' content='tesseract'/>\n</head>\n<body>\n")
 									.append("</body>\n</html>\n");
 						}
 					} catch (Throwable var29) {

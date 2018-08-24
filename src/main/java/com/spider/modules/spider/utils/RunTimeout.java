@@ -21,8 +21,7 @@ public class RunTimeout {
 	 * 超时处理
 	 */
 	public static String timeoutMethod(Object obj, String methodName, Class<?>[] parameterTypes, Object[] params,
-			int timeout)
-			throws ExecutionException, InterruptedException {
+			int timeout) throws ExecutionException, InterruptedException {
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		String result;
 		//		ExecutorService executorService = Executors.newSingleThreadExecutor();

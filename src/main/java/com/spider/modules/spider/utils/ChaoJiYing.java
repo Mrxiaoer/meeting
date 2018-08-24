@@ -56,8 +56,7 @@ public class ChaoJiYing {
 	 * @param param 请求参数，如：username=test&password=1
 	 * @return response
 	 */
-	public static String httpRequestData(String url, String param)
-			throws IOException {
+	public static String httpRequestData(String url, String param) throws IOException {
 		URL u;
 		HttpURLConnection con;
 		OutputStreamWriter osw;
