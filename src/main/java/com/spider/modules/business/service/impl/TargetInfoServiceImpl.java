@@ -28,11 +28,6 @@ import com.spider.modules.spider.pipeline.SpiderTemporaryRecordPipeline;
 import com.spider.modules.spider.service.AnalogLoginService;
 import com.spider.modules.spider.service.TemporaryRecordService;
 import com.spider.modules.spider.utils.MyStringUtil;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
@@ -41,6 +36,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.*;
 
 @Service
 public class TargetInfoServiceImpl implements TargetInfoService {
@@ -147,54 +144,80 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 	public TemporaryRecordEntity tothirdspider(Integer linkId,int sleepTime) throws Exception {
 		LinkInfoEntity linkInfo = linkInfoService.queryById(linkId);
 		AnalogLoginEntity analogLogin = analogLoginService.getOneById(linkInfo.getAnalogId());
-		String cookie = analogLogin.getCookie();
-		Set<Cookie> cookies = null;
-		if (cookie != null) {
-			cookies = MyStringUtil.json2cookie(cookie);
-		}
+
+		//采集目标页先采用手动输入的cookie进行登录
 		SpiderRule spiderRule = new SpiderRule();
 		spiderRule.setIsGetText(false);
 		PhantomJSDriver driver = phantomJSDriverPool.borrowPhantomJSDriver();
-		try {
-			SpiderClaim spiderClaim = new SpiderClaim();
-			spiderClaim.setPhantomJSDriver(driver);
-			spiderClaim.setPipeline(spiderTemporaryRecordPipeline);
-			spiderClaim.setCookieSet(cookies);
-			spiderClaim.setSleepTime(sleepTime);
-			spiderPage.startSpider(linkId, analogLogin.getTargetUrl(), spiderClaim, spiderRule);
-			String trsUrl = temporaryRecordService.queryBylinkId(linkId).getUrl();
-			if (StrUtil.isBlank(trsUrl)) {
-				return null;
-			} else if (!analogLogin.getTargetUrl().equals(trsUrl)) {
-				try {
-					spiderClaim.setCookieSet(loginAnalog.login(analogLogin.getId(), driver));
-				} catch (NoSuchElementException nse) {
-					throw nse;
+		if (analogLogin.getHandCookie() != null) {
+			Set<Cookie> handcookies = MyStringUtil.json2cookie(analogLogin.getHandCookie());
+			try {
+				SpiderClaim spiderClaim = new SpiderClaim();
+				spiderClaim.setPhantomJSDriver(driver);
+				spiderClaim.setPipeline(spiderTemporaryRecordPipeline);
+				spiderClaim.setCookieSet(handcookies);
+				spiderClaim.setSleepTime(sleepTime);
+				spiderPage.startSpider(linkId, analogLogin.getTargetUrl(), spiderClaim, spiderRule );
+				TemporaryRecordEntity handtem = temporaryRecordService.queryBylinkId(linkId);
+				if (StrUtil.isBlank(handtem.getUrl())){
+					return new TemporaryRecordEntity();
+				}else if (!analogLogin.getTargetUrl().equals(handtem.getUrl())){
+					return new TemporaryRecordEntity();
+				}else {
+					return handtem;
 				}
-				spiderPage.startSpider(linkId, analogLogin.getTargetUrl(), spiderClaim, spiderRule);
+			}finally {
+				phantomJSDriverPool.returnObject(driver);
 			}
-		} finally {
-			phantomJSDriverPool.returnObject(driver);
+		}else{
+
+			String cookie = analogLogin.getCookie();
+			Set<Cookie> cookies = null;
+			if (cookie != null) {
+				cookies = MyStringUtil.json2cookie(cookie);
+			}
+			try {
+				SpiderClaim spiderClaim = new SpiderClaim();
+				spiderClaim.setPhantomJSDriver(driver);
+				spiderClaim.setPipeline(spiderTemporaryRecordPipeline);
+				spiderClaim.setCookieSet(cookies);
+				spiderClaim.setSleepTime(sleepTime);
+				spiderPage.startSpider(linkId, analogLogin.getTargetUrl(), spiderClaim, spiderRule);
+				String trsUrl = temporaryRecordService.queryBylinkId(linkId).getUrl();
+				if (StrUtil.isBlank(trsUrl)) {
+					return null;
+				} else if (!analogLogin.getTargetUrl().equals(trsUrl)) {
+					try {
+						spiderClaim.setCookieSet(loginAnalog.login(analogLogin.getId(), driver));
+					} catch (NoSuchElementException nse) {
+						throw nse;
+					}
+					spiderPage.startSpider(linkId, analogLogin.getTargetUrl(), spiderClaim, spiderRule);
+				}
+			} finally {
+				phantomJSDriverPool.returnObject(driver);
+			}
+
+			//判断目标页是否采集成功
+			TemporaryRecordEntity temporaryRecord = temporaryRecordService.queryBylinkId(linkId);
+			if (!MyStringUtil.urlCutParam(linkInfo.getUrl()).equals(MyStringUtil.urlCutParam(temporaryRecord.getUrl()))) {
+				linkInfo.setFailTimes(linkInfo.getFailTimes() + 1);
+				linkInfoService.update(linkInfo);
+				if (linkInfo.getFailTimes() % 3 == 0) {
+					linkInfo.setHasTarget(Constant.VALUE_ZERO);
+					linkInfo.setFailTimes(Constant.VALUE_ZERO);
+					linkInfoService.update(linkInfo);
+				}
+				return null;
+			} else {
+				if (linkInfo.getFailTimes() != 0) {
+					linkInfo.setFailTimes(Constant.VALUE_ZERO);
+					linkInfoService.update(linkInfo);
+				}
+				return temporaryRecord;
+			}
 		}
 
-		//判断目标页是否采集成功
-		TemporaryRecordEntity temporaryRecord = temporaryRecordService.queryBylinkId(linkId);
-		if (!MyStringUtil.urlCutParam(linkInfo.getUrl()).equals(MyStringUtil.urlCutParam(temporaryRecord.getUrl()))) {
-			linkInfo.setFailTimes(linkInfo.getFailTimes() + 1);
-			linkInfoService.update(linkInfo);
-			if (linkInfo.getFailTimes() % 3 == 0) {
-				linkInfo.setHasTarget(Constant.VALUE_ZERO);
-				linkInfo.setFailTimes(Constant.VALUE_ZERO);
-				linkInfoService.update(linkInfo);
-			}
-			return null;
-		} else {
-			if (linkInfo.getFailTimes() != 0) {
-				linkInfo.setFailTimes(Constant.VALUE_ZERO);
-				linkInfoService.update(linkInfo);
-			}
-			return temporaryRecord;
-		}
 	}
 
 	@Override

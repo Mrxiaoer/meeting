@@ -9,16 +9,11 @@ import com.spider.modules.spider.entity.TemporaryRecordEntity;
 import com.spider.modules.spider.service.AnalogLoginService;
 import com.spider.modules.spider.service.TemporaryRecordService;
 import com.spider.modules.spider.utils.FileIOUtil;
-import java.util.HashMap;
-import java.util.Map;
 import org.openqa.selenium.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 /**
  * 采集页
@@ -87,8 +82,9 @@ public class TargetInfoController {
 	@GetMapping("/spdier_point")
 	public R getOneById(@RequestParam Integer linkId) {
 		TemporaryRecordEntity temporary = null;
+		int sleep = 2000;
 		try {
-			temporary = targetInfoService.tothirdspider(linkId);
+			temporary = targetInfoService.tothirdspider(linkId,sleep);
 		}catch(NoSuchElementException nse){
 			return R.error(1404, "某些页面元素未找到，可能页面被改动，请重新模拟登陆！");
 		}catch (Exception e) {
