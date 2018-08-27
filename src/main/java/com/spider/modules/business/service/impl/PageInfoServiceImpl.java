@@ -45,8 +45,7 @@ public class PageInfoServiceImpl extends ServiceImpl<PageInfoDao, PageInfoEntity
 
     @Override
     public PageInfoEntity queryById(Integer pageId) {
-        PageInfoEntity pageInfo = pageInfoDao.queryById(pageId);
-        return pageInfo;
+        return pageInfoDao.queryById(pageId);
     }
 
     @Override
@@ -85,7 +84,7 @@ public class PageInfoServiceImpl extends ServiceImpl<PageInfoDao, PageInfoEntity
         //在结果表中判断是否已经转化完成
         ResultInfoEntity rs = new ResultInfoEntity();
         rs.setId(provisional.getResultId());
-        if(pageInfos.size() == 0){
+        if(pageInfos.size() == Constant.VALUE_ZERO){
             rs.setChangeState(Constant.VALUE_TWO);
             resultInfoDao.update(rs);
         }else {

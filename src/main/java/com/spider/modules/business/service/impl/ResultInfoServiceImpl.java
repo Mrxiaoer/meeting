@@ -76,8 +76,7 @@ public class ResultInfoServiceImpl extends ServiceImpl<ResultInfoDao, ResultInfo
 
     @Override
     public  List<ResultInfoEntity> conversionByInformation(Integer linkId){
-        List<ResultInfoEntity> resultIns = resultInfoDao.conversionByInformation(linkId);
-        return  resultIns;
+        return  resultInfoDao.conversionByInformation(linkId);
     }
 
     @Override
@@ -95,7 +94,6 @@ public class ResultInfoServiceImpl extends ServiceImpl<ResultInfoDao, ResultInfo
         ResultInfoEntity rs = resultInfoDao.queryById(id);
         ResultInfoEntity qs = new ResultInfoEntity();
         qs.setId(id);
-        System.out.println(rs.getIsModel());
         if(rs.getIsModel() == Constant.VALUE_ZERO){
             qs.setIsModel(Constant.SUPER_ADMIN);
         }else{
@@ -106,13 +104,11 @@ public class ResultInfoServiceImpl extends ServiceImpl<ResultInfoDao, ResultInfo
     
     @Override
     public List<PageInfoEntity> comparison(Integer id) {
-        List<PageInfoEntity> pageInfos = pageInfoService.listByResultId(id);
-        return pageInfos;
+        return pageInfoService.listByResultId(id);
     }
 
     @Override
     public  List<ResultInfoEntity> resultByPageInfo(Map<String,Object> map){
-        List<ResultInfoEntity> resultInfos = resultInfoDao.listByResultId(map);
-        return  resultInfos;
+        return  resultInfoDao.listByResultId(map);
     }
 }

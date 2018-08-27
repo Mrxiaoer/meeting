@@ -64,7 +64,6 @@ public class TargetInfoController {
 		try {
 			linkInfo = targetInfoService.update(targetInfo, analogId);
 		} catch (Exception e) {
-			e.printStackTrace();
 			return R.error("模拟登录失败~");
 		}
 		if (linkInfo == null) {

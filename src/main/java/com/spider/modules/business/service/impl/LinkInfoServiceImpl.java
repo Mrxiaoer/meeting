@@ -139,15 +139,15 @@ public class LinkInfoServiceImpl extends ServiceImpl<LinkInfoDao, LinkInfoEntity
     public List<TimeTaskModel> timedTask(){
         List<LinkInfoEntity> infoEntities = linkInfoDao.selectAll();
 
-        List<TimeTaskModel> timeTaskModels = new ArrayList<TimeTaskModel>();
-        Map<String,Integer> flagMap = new HashMap<String,Integer>();
+        List<TimeTaskModel> timeTaskModels = new ArrayList<>();
+        Map<String,Integer> flagMap = new HashMap<>();
 
         for(LinkInfoEntity entity : infoEntities){
             if(!flagMap.containsKey(entity.getSystem())){
                 TimeTaskModel parent = new TimeTaskModel();
                 parent.setValue(entity.getSystem());
                 parent.setLabel(entity.getSystem());
-                List<TimeTaskModel> children = new ArrayList<TimeTaskModel>();
+                List<TimeTaskModel> children = new ArrayList<>();
                 parent.setChildren(children);
                 flagMap.put(entity.getSystem(),timeTaskModels.size());
                 timeTaskModels.add(parent);
@@ -195,9 +195,9 @@ public class LinkInfoServiceImpl extends ServiceImpl<LinkInfoDao, LinkInfoEntity
     @Override
     public List<Map<String,String>>  gainCookie(Integer linkId){
         AnalogLoginEntity analogLogin = analogLoginDao.queryAnalogLoginByLinkId(linkId);
-        String gaincookie = analogLogin.getHandCookie().replace("[","").replaceAll("]", "");;
+        String gaincookie = analogLogin.getHandCookie().replace("[","").replaceAll("]", "");
         String[] line = gaincookie.split("},");
-        ArrayList<String> endline = new ArrayList<String>();
+        ArrayList<String> endline = new ArrayList<>();
         for (String value:line){
             if (!value.endsWith("}")){
                 value = value + "}";

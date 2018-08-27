@@ -41,7 +41,7 @@ public class HomePageServiceImpl implements HomePageService {
     @Override
     public List<PageCountModel> getInfoCount(){
         Map<String,Object> map = linkInfoDao.countSystemAndModule();
-        List<PageCountModel> count = new ArrayList<PageCountModel>();
+        List<PageCountModel> count = new ArrayList<>();
         PageCountModel one = new PageCountModel();
         PageCountModel two = new PageCountModel();
         one.setId(1);
@@ -71,19 +71,19 @@ public class HomePageServiceImpl implements HomePageService {
 
     @Override
     public Map<String,Object> getTrendData(){
-        Map<String,Object> map = new HashMap<String, Object>();
+        Map<String,Object> map = new HashMap<>();
         List<String> xAxisData = new ArrayList<>();
         for (Integer  i= 1 ; i<13 ;i++){
             xAxisData.add(String.valueOf(i) + "月");
         }
         map.put("xAxisData", xAxisData);
 
-        List<HomePageChart> seriesData = new  ArrayList<HomePageChart>();
+        List<HomePageChart> seriesData = new  ArrayList<>();
 
-        List<Integer> systemcount = new ArrayList<Integer>();
-        List<Integer> modulecount = new ArrayList<Integer>();
-        List<Integer> resultcount = new ArrayList<Integer>();
-        List<Integer> pagecount = new ArrayList<Integer>();
+        List<Integer> systemcount = new ArrayList<>();
+        List<Integer> modulecount = new ArrayList<>();
+        List<Integer> resultcount = new ArrayList<>();
+        List<Integer> pagecount = new ArrayList<>();
         //初始list数据
         for(Integer i=0;i<12;i++){
             systemcount.add(0);

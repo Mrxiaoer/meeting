@@ -53,7 +53,7 @@ public class PageAndResultJob {
         List<ResultInfoEntity> resultInfos = resultInfoDao.queryAll();
         ResultInfoEntity rs = new ResultInfoEntity();
         for (ResultInfoEntity resultInfo : resultInfos){
-            if(pageInfoDao.listByResultId(resultInfo.getId()).size() == 0){
+            if(pageInfoDao.listByResultId(resultInfo.getId()).size() == Constant.VALUE_ZERO){
                 rs.setId(resultInfo.getId());
                 rs.setState(Constant.VALUE_ZERO);
                 resultInfoDao.update(rs);

@@ -122,8 +122,7 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 				linkInfo.setHasTarget(Constant.VALUE_ONE);
 				linkInfo.setLinkId(targetInfo.getLinkId());
 				linkInfoService.update(linkInfo);
-				LinkInfoEntity link = linkInfoService.queryById(targetInfo.getLinkId());
-				return link;
+				return linkInfoService.queryById(targetInfo.getLinkId());
 			} else {
 				return null;
 			}

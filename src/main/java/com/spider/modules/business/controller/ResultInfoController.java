@@ -132,7 +132,6 @@ public class ResultInfoController {
 	 */
 	@GetMapping("/conversion/{id}")
 	public R conversionByInformation(@PathVariable Integer id) {
-		System.out.println(id);
 		List<ResultInfoEntity> results = resultInfoService.conversionByInformation(id);
 		return R.ok().put("results", results);
 	}
