@@ -2,7 +2,7 @@
 <configuration>
     <!--<include resource="org/springframework/boot/logging/logback/base.xml"/>-->
 
-    <property name="LOG_HOME" value="/spider/logs"/>
+    <property name="LOG_HOME" value="/test/spider/logs"/>
     <property name="myAppName" value="spider"/>
 
     <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径-->

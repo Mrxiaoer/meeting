@@ -1,10 +1,7 @@
 package com.spider.modules.spider.core;
 
+import com.spider.modules.spider.entity.SpiderClaim;
 import com.spider.modules.spider.entity.SpiderRule;
-import java.util.Set;
-import org.openqa.selenium.Cookie;
-import org.openqa.selenium.phantomjs.PhantomJSDriver;
-import us.codecraft.webmagic.pipeline.Pipeline;
 
 /**
  * spider抽象类
@@ -31,7 +28,6 @@ public abstract class AbstractSpider {
 	/**
 	 * 启动爬虫
 	 */
-	public abstract void startSpider(int linkId, String url, boolean allDomain, boolean isStaticPage, SpiderRule spiderRule,
-			Set<Cookie> cookieSet, Pipeline pipeline, PhantomJSDriver phantomJSDriver);
+	public abstract void startSpider(int linkId, String url, SpiderClaim spiderClaim, SpiderRule spiderRule);
 
 }

@@ -44,8 +44,8 @@ public class SpiderTemporaryRecordPipeline implements Pipeline {
 			//html写入文件
 			String fileName = linkId + temporaryRecord.getUrl();
 			String childPath = "/static/htmlFile/" + DigestUtils.md5Hex(fileName) + ".html";
-			logger.info("写入文件:{}", childPath);
 			String filePath = FilePathUtil.getBasePath() + childPath;
+			logger.info("写入文件:{}", filePath);
 			System.out.println(filePath);
 			try {
 				FileIOUtil.writeStringToFile(filePath, html, false);

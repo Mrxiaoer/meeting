@@ -11,6 +11,7 @@ import com.spider.modules.spider.core.HtmlProcess;
 import com.spider.modules.spider.core.LoginAnalog;
 import com.spider.modules.spider.core.SpiderPage;
 import com.spider.modules.spider.entity.AnalogLoginEntity;
+import com.spider.modules.spider.entity.SpiderClaim;
 import com.spider.modules.spider.entity.SpiderRule;
 import com.spider.modules.spider.entity.TemporaryRecordEntity;
 import com.spider.modules.spider.pipeline.SpiderTemporaryRecordPipeline;
@@ -98,8 +99,11 @@ public class AutoTask {
 		try {
 			cookies = loginAnalog.login(loginInfo.getId(), driver);
 			//获取目标页
-			spiderPage.startSpider(linkId, loginInfo.getTargetUrl(), false, false, spiderRule, cookies,
-					spiderTemporaryRecordPipeline, driver);
+			SpiderClaim spiderClaim = new SpiderClaim();
+			spiderClaim.setCookieSet(cookies);
+			spiderClaim.setPhantomJSDriver(driver);
+			spiderClaim.setPipeline(spiderTemporaryRecordPipeline);
+			spiderPage.startSpider(linkId, loginInfo.getTargetUrl(), spiderClaim, spiderRule);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

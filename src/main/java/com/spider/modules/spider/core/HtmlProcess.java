@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import us.codecraft.webmagic.selector.Html;
@@ -78,6 +80,12 @@ public class HtmlProcess {
 			}
 			return select.all();
 		}
+	}
+
+	//执行点击操作，在此之前请先获取目标页面
+	public void doclick(PhantomJSDriver driver, String xpath) {
+		WebElement ele = driver.findElementByXPath(xpath);
+		ele.click();
 	}
 
 }

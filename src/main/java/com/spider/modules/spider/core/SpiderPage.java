@@ -3,6 +3,7 @@ package com.spider.modules.spider.core;
 import cn.hutool.core.lang.Assert;
 import com.spider.modules.spider.downloader.HttpClientDownloader;
 import com.spider.modules.spider.downloader.SeleniumDownloader;
+import com.spider.modules.spider.entity.SpiderClaim;
 import com.spider.modules.spider.entity.SpiderRule;
 import com.spider.modules.spider.pipeline.SpiderContentPipeline;
 import com.spider.modules.spider.processor.SpiderPageProcessor;
@@ -39,21 +40,20 @@ public class SpiderPage extends AbstractSpider {
 	}
 
 	@Override
-	public void startSpider(int linkId, String url, boolean allDomain, boolean isStaticPage, SpiderRule spiderRule,
-			Set<Cookie> cookieSet, Pipeline pipeline, PhantomJSDriver phantomJSDriver) {
+	public void startSpider(int linkId, String url, SpiderClaim spiderClaim, SpiderRule spiderRule) {
 
 		Assert.notEmpty(url, "爬取页面URL不能为空");
 
-		if (pipeline == null) {
-			pipeline = spiderContentPipeline;
+		if (spiderClaim.getPipeline() == null) {
+			spiderClaim.setPipeline(spiderContentPipeline);
 		}
 
-		SpiderPageProcessor processor = new SpiderPageProcessor(allDomain, spiderRule);
+		SpiderPageProcessor processor = new SpiderPageProcessor(spiderClaim.isAllDomain(), spiderRule);
 		processor.setLinkId(linkId);
-		processor.setCookies(cookieSet);
-		processor.setPhantomJSDriver(phantomJSDriver);
-		Spider spider = Spider.create(processor).addUrl(url).addPipeline(pipeline);
-		if (!isStaticPage) {
+		processor.setCookies(spiderClaim.getCookieSet());
+		processor.setPhantomJSDriver(spiderClaim.getPhantomJSDriver());
+		Spider spider = Spider.create(processor).addUrl(url).addPipeline(spiderClaim.getPipeline());
+		if (!spiderClaim.isStaticPage()) {
 			spider.setDownloader(seleniumDownloader);
 		} else {
 			spider.setDownloader(new HttpClientDownloader());

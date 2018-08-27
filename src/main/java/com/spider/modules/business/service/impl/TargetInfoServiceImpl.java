@@ -21,19 +21,18 @@ import com.spider.modules.spider.dao.AnalogLoginDao;
 import com.spider.modules.spider.dao.SpiderRuleDao;
 import com.spider.modules.spider.dao.TemporaryRecordDao;
 import com.spider.modules.spider.entity.AnalogLoginEntity;
+import com.spider.modules.spider.entity.SpiderClaim;
 import com.spider.modules.spider.entity.SpiderRule;
 import com.spider.modules.spider.entity.TemporaryRecordEntity;
 import com.spider.modules.spider.pipeline.SpiderTemporaryRecordPipeline;
 import com.spider.modules.spider.service.AnalogLoginService;
 import com.spider.modules.spider.service.TemporaryRecordService;
 import com.spider.modules.spider.utils.MyStringUtil;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
@@ -71,13 +70,13 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 	@Autowired
 	HtmlProcess htmlprocess;
 	@Autowired
+	PhantomJSDriverFactory phantomJSDriverFactory;
+	@Autowired
 	private LoginAnalog loginAnalog;
 	@Autowired
 	private SpiderPage spiderPage;
 	@Autowired
 	private PhantomJSDriverPool phantomJSDriverPool;
-	@Autowired
-    PhantomJSDriverFactory phantomJSDriverFactory;
 
 	/**
 	 * 模拟登录返回登录页
@@ -88,21 +87,22 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 		LinkInfoEntity linkInfo = linkInfoService.queryById(linkId);
 		SpiderRule spiderRule = new SpiderRule();
 		spiderRule.setIsGetText(false);
-		spiderPage.startSpider(linkId, linkInfo.getLoginUrl(), false, false, spiderRule, null, spiderTemporaryRecordPipeline,
-						null);
+		SpiderClaim spiderClaim = new SpiderClaim();
+		spiderClaim.setPipeline(spiderTemporaryRecordPipeline);
+		spiderPage.startSpider(linkId, linkInfo.getLoginUrl(), spiderClaim, spiderRule);
 		TemporaryRecordEntity rc = temporaryRecordService.queryBylinkId(linkId);
-		if (MyStringUtil.urlCutParam(rc.getUrl()).equals(MyStringUtil.urlCutParam(linkInfo.getUrl()))){
-            PhantomJSDriver driver = null;
-            try {
-                driver = phantomJSDriverFactory.create();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            spiderPage.startSpider(linkId, linkInfo.getLoginUrl(), false, false, spiderRule, null, spiderTemporaryRecordPipeline,
-                    driver);
-            driver.quit();
-            rc = temporaryRecordService.queryBylinkId(linkId);
-        }
+		if (MyStringUtil.urlCutParam(rc.getUrl()).equals(MyStringUtil.urlCutParam(linkInfo.getUrl()))) {
+			PhantomJSDriver driver = null;
+			try {
+				driver = phantomJSDriverFactory.create();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			spiderClaim.setPhantomJSDriver(driver);
+			spiderPage.startSpider(linkId, linkInfo.getLoginUrl(), spiderClaim, spiderRule);
+			driver.quit();
+			rc = temporaryRecordService.queryBylinkId(linkId);
+		}
 
 		return rc.getHtmlFilePath();
 	}
@@ -120,7 +120,7 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 		PhantomJSDriver driver = phantomJSDriverPool.borrowPhantomJSDriver();
 		try {
 			cookies = loginAnalog.login(analogLogin.getId(), driver);
- 			if (cookies != null) {
+			if (cookies != null) {
 				LinkInfoEntity linkInfo = new LinkInfoEntity();
 				linkInfo.setHasTarget(Constant.VALUE_ONE);
 				linkInfo.setLinkId(targetInfo.getLinkId());
@@ -130,13 +130,13 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 			} else {
 				return null;
 			}
-		}catch (NoSuchMethodException nosuch){
-		   logger.info("1、登录信息填写有误,请重新操作!");
-		   return null;
-        } catch (Exception e) {
-            logger.info("2、登录信息填写有误,请重新操作!");
-            e.printStackTrace();
-            return null;
+		} catch (NoSuchMethodException nosuch) {
+			logger.info("1、登录信息填写有误,请重新操作!");
+			return null;
+		} catch (Exception e) {
+			logger.info("2、登录信息填写有误,请重新操作!");
+			e.printStackTrace();
+			return null;
 		} finally {
 			phantomJSDriverPool.returnObject(driver);
 		}
@@ -148,45 +148,47 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 		LinkInfoEntity linkInfo = linkInfoService.queryById(linkId);
 		AnalogLoginEntity analogLogin = analogLoginService.getOneById(linkInfo.getAnalogId());
 		String cookie = analogLogin.getCookie();
-		Set<Cookie> cookies = null ;
-		if (cookie != null){
-		    cookies = MyStringUtil.json2cookie(cookie);
-        }
+		Set<Cookie> cookies = null;
+		if (cookie != null) {
+			cookies = MyStringUtil.json2cookie(cookie);
+		}
 		SpiderRule spiderRule = new SpiderRule();
 		spiderRule.setIsGetText(false);
 		PhantomJSDriver driver = phantomJSDriverPool.borrowPhantomJSDriver();
 		try {
-			spiderPage.startSpider(linkId, analogLogin.getTargetUrl(), false, false, spiderRule, cookies,
-					spiderTemporaryRecordPipeline, driver);
+			SpiderClaim spiderClaim = new SpiderClaim();
+			spiderClaim.setPhantomJSDriver(driver);
+			spiderClaim.setPipeline(spiderTemporaryRecordPipeline);
+			spiderClaim.setCookieSet(cookies);
+			spiderPage.startSpider(linkId, analogLogin.getTargetUrl(), spiderClaim, spiderRule);
 			String trsUrl = temporaryRecordService.queryBylinkId(linkId).getUrl();
 			if (StrUtil.isBlank(trsUrl)) {
 				return null;
 			} else if (!analogLogin.getTargetUrl().equals(trsUrl)) {
 				try {
-					cookies = loginAnalog.login(analogLogin.getId(), driver);
+					spiderClaim.setCookieSet(loginAnalog.login(analogLogin.getId(), driver));
 				} catch (NoSuchElementException nse) {
 					throw nse;
 				}
-				spiderPage.startSpider(linkId, analogLogin.getTargetUrl(), false, false, spiderRule, cookies,
-						spiderTemporaryRecordPipeline, driver);
+				spiderPage.startSpider(linkId, analogLogin.getTargetUrl(), spiderClaim, spiderRule);
 			}
 		} finally {
 			phantomJSDriverPool.returnObject(driver);
 		}
 
 		//判断目标页是否采集成功
-		TemporaryRecordEntity temporaryRecord =  temporaryRecordService.queryBylinkId(linkId);
-		if( !MyStringUtil.urlCutParam(linkInfo.getUrl()).equals(MyStringUtil.urlCutParam(temporaryRecord.getUrl()))){
-			linkInfo.setFailTimes(linkInfo.getFailTimes() +  1);
+		TemporaryRecordEntity temporaryRecord = temporaryRecordService.queryBylinkId(linkId);
+		if (!MyStringUtil.urlCutParam(linkInfo.getUrl()).equals(MyStringUtil.urlCutParam(temporaryRecord.getUrl()))) {
+			linkInfo.setFailTimes(linkInfo.getFailTimes() + 1);
 			linkInfoService.update(linkInfo);
-			if(linkInfo.getFailTimes() % 3 == 0){
+			if (linkInfo.getFailTimes() % 3 == 0) {
 				linkInfo.setHasTarget(Constant.VALUE_ZERO);
 				linkInfo.setFailTimes(Constant.VALUE_ZERO);
 				linkInfoService.update(linkInfo);
 			}
 			return null;
-		}else{
-			if (linkInfo.getFailTimes() != 0){
+		} else {
+			if (linkInfo.getFailTimes() != 0) {
 				linkInfo.setFailTimes(Constant.VALUE_ZERO);
 				linkInfoService.update(linkInfo);
 			}
@@ -233,8 +235,8 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 
 		//采集到的表头插入数据库中
 		for (String vaule : spiderHead) {
-			if (StrUtil.isNotBlank(vaule) ) {
-			    logger.info(vaule);
+			if (StrUtil.isNotBlank(vaule)) {
+				logger.info(vaule);
 				PageInfoEntity pageInfo = new PageInfoEntity();
 				pageInfo.setNameCn(vaule);
 				pageInfo.setResultId(resultInfo.getId());

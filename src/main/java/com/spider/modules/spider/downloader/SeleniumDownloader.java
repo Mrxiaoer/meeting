@@ -42,7 +42,7 @@ public class SeleniumDownloader implements Downloader, Closeable {
 	@Autowired
 	private PhantomJSDriverFactory phantomJSDriverFactory;
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
-	private int sleepTime = 2000;
+	private int sleepTime = 1500;
 
 	public SeleniumDownloader(String chromeDriverPath) {
 		System.getProperties().setProperty("webdriver.chrome.driver", chromeDriverPath);
@@ -110,7 +110,7 @@ public class SeleniumDownloader implements Downloader, Closeable {
 			//			driver.get(request.getUrl());
 			Class[] paramClzs = {String.class};
 			Object[] paramObjs = {request.getUrl()};
-			int timeOut = 9000;
+			int timeOut = 7500;
 			try {
 				RunTimeout.timeoutMethod(driver, "get", paramClzs, paramObjs, timeOut);
 			} catch (ExecutionException | InterruptedException e) {
@@ -122,9 +122,9 @@ public class SeleniumDownloader implements Downloader, Closeable {
 				oldDriver = driver;
 				driver = phantomJSDriverFactory.create();
 			}
+			//sleep
 			try {
-				Thread.sleep((long) this.sleepTime);
-				//				Thread.sleep(task.getSite().getSleepTime());
+				Thread.sleep(task.getSite().getSleepTime());
 			} catch (InterruptedException var9) {
 				var9.printStackTrace();
 			}
@@ -153,6 +153,7 @@ public class SeleniumDownloader implements Downloader, Closeable {
 			page.setRequest(request);
 
 		} finally {
+			//对驱动的处理
 			if(needChange){
 				driver.quit();
 				driver = oldDriver;

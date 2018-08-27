@@ -127,6 +127,17 @@ public class SpiderPageProcessor implements PageProcessor {
 		if (myPage.getRawText() != null) {
 			long startTime = System.currentTimeMillis();
 			String htmlStr = myPage.getHtml().get();
+			//清除a标签操作
+			Pattern pa = Pattern.compile("<a[\\s]+?[^>]*?(href[\\s]*?=[\\s]*?\"[^>]*?\"|href[\\s]*?=[\\s]*?'[^>]*?')");
+			Matcher ma = pa.matcher(htmlStr);
+			while (ma.find()) {
+				htmlStr = htmlStr.replaceAll(ma.group(1), "");
+			}
+			pa = Pattern.compile("<a[\\s]+?[^>]*?(onclick[\\s]*?=[\\s]*?\"[^>]*?\"|onclick[\\s]*?=[\\s]*?'[^>]*?')");
+			ma = pa.matcher(htmlStr);
+			while (ma.find()) {
+				htmlStr = htmlStr.replaceAll(ma.group(1), "");
+			}
 			//清除js
 			Pattern p = Pattern.compile("<script[^>]*?src[\\s]*?=[\\s]*?(\"[\\S]*?\"|\'[\\S]*?\')></script>");
 			Pattern p1 = Pattern.compile(

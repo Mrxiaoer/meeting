@@ -2,6 +2,7 @@ package com.spider.modules.spider.core;
 
 import com.spider.modules.spider.downloader.HttpClientDownloader;
 import com.spider.modules.spider.downloader.SeleniumDownloader;
+import com.spider.modules.spider.entity.SpiderClaim;
 import com.spider.modules.spider.entity.SpiderRule;
 import com.spider.modules.spider.pipeline.SpiderContentPipeline;
 import com.spider.modules.spider.processor.SpiderLinkProcessor;
@@ -34,11 +35,10 @@ public class SpiderLink extends AbstractSpider {
 	}
 
 	@Override
-	public void startSpider(int linkId, String url, boolean allDomain, boolean isStaticPage, SpiderRule spiderRule,
-			Set<Cookie> cookieSet, Pipeline pipeline, PhantomJSDriver phantomJSDriver) {
-		Spider spider = Spider.create(new SpiderLinkProcessor(allDomain)).addUrl(url)
+	public void startSpider(int linkId, String url, SpiderClaim spiderClaim, SpiderRule spiderRule) {
+		Spider spider = Spider.create(new SpiderLinkProcessor(spiderClaim.isAllDomain())).addUrl(url)
 				.addPipeline(new SpiderContentPipeline());
-		if (!isStaticPage) {
+		if (!spiderClaim.isStaticPage()) {
 			spider.setDownloader(seleniumDownloader);
 		} else {
 			spider.setDownloader(new HttpClientDownloader());
