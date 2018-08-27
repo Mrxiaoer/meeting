@@ -144,7 +144,7 @@ public class JieTu {
 				logger.info("创建验证码图片文件目录完成！");
 			}
 		}
-		ImageUtil.scale(bufferedImage, destFile, 0.5F);
+		ImageUtil.write(ImageUtil.scale(bufferedImage, 450, 300), destFile);
 		return imageLocalPath;
 	}
 

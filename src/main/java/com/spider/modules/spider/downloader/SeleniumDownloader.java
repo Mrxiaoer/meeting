@@ -1,13 +1,16 @@
 package com.spider.modules.spider.downloader;
 
+import com.spider.modules.spider.config.PhantomJSDriverFactory;
 import com.spider.modules.spider.config.PhantomJSDriverPool;
 import com.spider.modules.spider.entity.MyPage;
 import com.spider.modules.spider.entity.MySite;
 import com.spider.modules.spider.utils.MyStringUtil;
+import com.spider.modules.spider.utils.RunTimeout;
 import java.io.Closeable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
@@ -36,6 +39,8 @@ public class SeleniumDownloader implements Downloader, Closeable {
 	private static final String DRIVER_PHANTOMJS = "phantomjs";
 	@Autowired
 	private PhantomJSDriverPool phantomJSDriverPool;
+	@Autowired
+	private PhantomJSDriverFactory phantomJSDriverFactory;
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	private int sleepTime = 2000;
 
@@ -69,6 +74,8 @@ public class SeleniumDownloader implements Downloader, Closeable {
 				e.printStackTrace();
 			}
 		}
+		boolean needChange = false;
+		PhantomJSDriver oldDriver = null;
 		try {
 			assert (driver != null);
 
@@ -76,8 +83,9 @@ public class SeleniumDownloader implements Downloader, Closeable {
 			WebDriver.Options manage = driver.manage();
 			//			manage.deleteAllCookies();
 
+			logger.info("开始设置cookie");
+			long setCookieStartTime = System.currentTimeMillis();
 			if (site.getCookies() != null) {
-
 				for (Object o : site.getCookies().entrySet()) {
 					Map.Entry<String, String> cookieEntry = (Map.Entry) o;
 					Cookie cookie = new Cookie(cookieEntry.getKey(), cookieEntry.getValue());
@@ -95,16 +103,33 @@ public class SeleniumDownloader implements Downloader, Closeable {
 					canSet = setCookies(manage, allCookieSet);
 				}
 			}
+			logger.info("设置cookie用时{}毫秒", System.currentTimeMillis() - setCookieStartTime);
 
-			this.logger.info("downloading page " + request.getUrl());
-			driver.get(request.getUrl());
+			logger.info("开始下载页面 -- {}", request.getUrl());
+			long downloadStartTime = System.currentTimeMillis();
+			//			driver.get(request.getUrl());
+			Class[] paramClzs = {String.class};
+			Object[] paramObjs = {request.getUrl()};
+			int timeOut = 9000;
+			try {
+				RunTimeout.timeoutMethod(driver, "get", paramClzs, paramObjs, timeOut);
+			} catch (ExecutionException | InterruptedException e) {
+				e.printStackTrace();
+			}
+			logger.info("当前页 -- {}", driver.getCurrentUrl());
+			if (!MyStringUtil.urlCutParam(request.getUrl()).equals(MyStringUtil.urlCutParam(driver.getCurrentUrl()))) {
+				needChange = true;
+				oldDriver = driver;
+				driver = phantomJSDriverFactory.create();
+			}
 			try {
 				Thread.sleep((long) this.sleepTime);
+				//				Thread.sleep(task.getSite().getSleepTime());
 			} catch (InterruptedException var9) {
 				var9.printStackTrace();
 			}
 
-			//获取页面与期待页面不符的情况
+			//获取页面与期待页面url对比，处理
 			if (MyStringUtil.urlCutParam(driver.getCurrentUrl()).equals(MyStringUtil.urlCutParam(request.getUrl()))) {
 				WebElement webElement = driver.findElement(By.xpath("/html"));
 				String content = webElement.getAttribute("outerHTML");
@@ -121,10 +146,18 @@ public class SeleniumDownloader implements Downloader, Closeable {
 					}
 				}
 				page.setUrlPath(urlPath);
+				logger.info("下载页面耗时{}毫秒", System.currentTimeMillis() - downloadStartTime);
+			} else {
+				logger.info("未获取到指定页面，耗时{}毫秒", System.currentTimeMillis() - downloadStartTime);
 			}
 			page.setRequest(request);
 
 		} finally {
+			if(needChange){
+				driver.quit();
+				driver = oldDriver;
+			}
+
 			if (needReturn) {
 				try {
 					this.phantomJSDriverPool.returnObject(driver);
@@ -168,6 +201,7 @@ public class SeleniumDownloader implements Downloader, Closeable {
 						}
 					} catch (Exception ex) {
 						canSet = false;
+						return canSet;
 					}
 				}
 			}

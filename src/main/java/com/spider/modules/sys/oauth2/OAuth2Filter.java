@@ -25,7 +25,7 @@ import java.io.IOException;
 public class OAuth2Filter extends AuthenticatingFilter {
 
 	@Override
-	protected AuthenticationToken createToken(ServletRequest request, ServletResponse response) throws Exception {
+	protected AuthenticationToken createToken(ServletRequest request, ServletResponse response) {
 		// 获取请求token
 		String token = getRequestToken((HttpServletRequest) request);
 

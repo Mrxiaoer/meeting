@@ -28,7 +28,7 @@ public class ScheduleJob extends QuartzJobBean {
 	private ExecutorService service = Executors.newSingleThreadExecutor();
 
 	@Override
-	protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
+	protected void executeInternal(JobExecutionContext context) {
 		Object scheduleJobObj = context.getMergedJobDataMap().get(ScheduleJobEntity.JOB_PARAM_KEY);
 		
 		Gson gs = new Gson();

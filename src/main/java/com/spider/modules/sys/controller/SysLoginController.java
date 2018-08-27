@@ -41,7 +41,7 @@ public class SysLoginController extends AbstractController {
 	 * 验证码
 	 */
 	@GetMapping("captcha.jpg")
-	public void captcha(HttpServletResponse response, String uuid) throws ServletException, IOException {
+	public void captcha(HttpServletResponse response, String uuid) throws IOException {
 		response.setHeader("Cache-Control", "no-store, no-cache");
 		response.setContentType("image/jpeg");
 
@@ -57,7 +57,7 @@ public class SysLoginController extends AbstractController {
 	 * 登录
 	 */
 	@PostMapping("/sys/login")
-	public Map<String, Object> login(@RequestBody SysLoginForm form) throws IOException {
+	public Map<String, Object> login(@RequestBody SysLoginForm form) {
 		boolean captcha = sysCaptchaService.validate(form.getUuid(), form.getCaptcha());
 		if (!captcha) {
 			return R.error("验证码不正确");

@@ -60,10 +60,12 @@ public class SpiderPage extends AbstractSpider {
 		}
 		//开启n个线程抓取
 		this.setThreadCount(5);
+
+		long startTime = System.currentTimeMillis();
 		spider.thread(this.getThreadCount())
 				//启动爬虫
 				.run();
-		LOGGER.info("爬取页面内容完成：url = " + url);
+		LOGGER.info("爬取页面内容完成：url = {}，耗时{}毫秒", url, System.currentTimeMillis() - startTime);
 
 	}
 

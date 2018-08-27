@@ -125,6 +125,7 @@ public class SpiderPageProcessor implements PageProcessor {
 		MyPage myPage = (MyPage) page;
 		myPage.putField(SpiderConstant.LINKID, this.linkId);
 		if (myPage.getRawText() != null) {
+			long startTime = System.currentTimeMillis();
 			String htmlStr = myPage.getHtml().get();
 			//清除js
 			Pattern p = Pattern.compile("<script[^>]*?src[\\s]*?=[\\s]*?(\"[\\S]*?\"|\'[\\S]*?\')></script>");
@@ -198,6 +199,7 @@ public class SpiderPageProcessor implements PageProcessor {
 			}
 			myPage.putField(SpiderConstant.HOST, UrlUtils.getHost(myPage.getUrl().toString()));
 			myPage.putField(SpiderConstant.URL, myPage.getUrl().toString());
+			logger.info("处理页面耗时{}毫秒", System.currentTimeMillis() - startTime);
 
 			if (myPage.getResultItems().get(SpiderConstant.SELECTOBJS) == null
 					&& myPage.getResultItems().get(SpiderConstant.SELECTSTRS) == null) {
