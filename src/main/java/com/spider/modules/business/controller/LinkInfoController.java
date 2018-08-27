@@ -123,9 +123,9 @@ public class LinkInfoController {
     public R gainCookie(@PathVariable Integer linkId){
 
         System.out.println(linkId);
-        linkInfoService.gainCookie(linkId);
+        List<Map<String,String>> cookie = linkInfoService.gainCookie(linkId);
 
-        return  R.ok();
+        return  R.ok().put("cookie", cookie).put("length", cookie.size());
     }
 
 }
