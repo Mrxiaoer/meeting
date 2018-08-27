@@ -19,7 +19,7 @@ public class SpiderClaim {
 	private Set<Cookie> cookieSet;
 	private Pipeline pipeline;
 	private PhantomJSDriver phantomJSDriver;
-	private long sleepTime = 1500;
+	private int sleepTime = 1500;
 
 	public boolean isAllDomain() {
 		return allDomain;
@@ -61,11 +61,11 @@ public class SpiderClaim {
 		this.phantomJSDriver = phantomJSDriver;
 	}
 
-	public long getSleepTime() {
+	public int getSleepTime() {
 		return sleepTime;
 	}
 
-	public void setSleepTime(long sleepTime) {
+	public void setSleepTime(int sleepTime) {
 		this.sleepTime = sleepTime;
 	}
 }

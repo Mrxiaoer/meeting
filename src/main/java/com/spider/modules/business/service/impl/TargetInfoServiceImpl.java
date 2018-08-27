@@ -144,7 +144,7 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 
 	/*单点采集第一步*/
 	@Override
-	public TemporaryRecordEntity tothirdspider(Integer linkId) throws Exception {
+	public TemporaryRecordEntity tothirdspider(Integer linkId,int sleepTime) throws Exception {
 		LinkInfoEntity linkInfo = linkInfoService.queryById(linkId);
 		AnalogLoginEntity analogLogin = analogLoginService.getOneById(linkInfo.getAnalogId());
 		String cookie = analogLogin.getCookie();
@@ -160,6 +160,7 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 			spiderClaim.setPhantomJSDriver(driver);
 			spiderClaim.setPipeline(spiderTemporaryRecordPipeline);
 			spiderClaim.setCookieSet(cookies);
+			spiderClaim.setSleepTime(sleepTime);
 			spiderPage.startSpider(linkId, analogLogin.getTargetUrl(), spiderClaim, spiderRule);
 			String trsUrl = temporaryRecordService.queryBylinkId(linkId).getUrl();
 			if (StrUtil.isBlank(trsUrl)) {

@@ -124,6 +124,7 @@ public class SeleniumDownloader implements Downloader, Closeable {
 			}
 			//sleep
 			try {
+				logger.info("sleep{}毫秒",task.getSite().getSleepTime());
 				Thread.sleep(task.getSite().getSleepTime());
 			} catch (InterruptedException var9) {
 				var9.printStackTrace();

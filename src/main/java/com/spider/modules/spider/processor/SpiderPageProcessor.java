@@ -60,6 +60,10 @@ public class SpiderPageProcessor implements PageProcessor {
 	 */
 	private boolean allDomain;
 	/**
+	 * 等待时间
+	 */
+	private int sleepTime;
+	/**
 	 * 爬取规则
 	 */
 	private SpiderRule spiderRule;
@@ -107,6 +111,14 @@ public class SpiderPageProcessor implements PageProcessor {
 
 	public void setAllDomain(boolean allDomain) {
 		this.allDomain = allDomain;
+	}
+
+	public int getSleepTime() {
+		return sleepTime;
+	}
+
+	public void setSleepTime(int sleepTime) {
+		this.sleepTime = sleepTime;
 	}
 
 	public SpiderRule getSpiderRule() {
@@ -235,7 +247,7 @@ public class SpiderPageProcessor implements PageProcessor {
 				site.addCookie(cookie.getDomain(), cookie.getName(), cookie.getValue());
 			}
 		}
-
+		site.setSleepTime(this.sleepTime);
 		site.setPhantomJSDriver(phantomJSDriver);
 
 		return site;
