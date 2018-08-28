@@ -52,19 +52,17 @@ public interface LinkInfoDao extends BaseMapper<LinkInfoEntity>{
     int update(LinkInfoEntity linkInfo);
 
     /**
-     * 定时任务联动一级
-     * @return
-     */
-    List<String> querySum();
-
-    /**
      * 自定义精准查询
      * @param linkInfo
      * @return
      */
     List<LinkInfoEntity> queryTerm(LinkInfoEntity linkInfo);
 
-    List<LinkInfoEntity> selectAll();
+    /**
+     * 自动采集 tree-structured
+     * @return
+     */
+    List<LinkInfoEntity> selectByHasTarget();
 
     /**
      * 首页统计系统名称与模块名称
