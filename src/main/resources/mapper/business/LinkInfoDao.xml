@@ -23,23 +23,20 @@
 	<sql id="Base_Column_List">
 		link_id,analog_id,system,module,url,is_login,create_time,update_time,remarks,has_target,rule_id,fail_times,login_url,state
 	</sql>
-	<sql id="Base_Column_HasTraget">
-		link.link_id,link.analog_id,link.system,link.module,link.url,link.is_login,link.create_time,link.update_time,link.remarks,link.has_target,link.rule_id,link.fail_times,link.login_url,link.state
-	</sql>
 
-	<!-- 查询所有数据 -->
+	<!-- 树结构数据查询 -->
 	<select id="selectByHasTarget"
 		resultType="com.spider.modules.business.entity.LinkInfoEntity">
 		SELECT
-		<include refid="Base_Column_HasTraget"/>
+		<include refid="Base_Column_List"/>
 		FROM
-		spider_link_info AS link
-		LEFT JOIN spider_analog_login AS analog ON link.analog_id = analog.id
+			spider_link_info
 		WHERE
-		link.state = 1
-		AND link.has_target = 1
-		AND analog.hand_cookie IS NULL
-		ORDER BY link.link_id DESC
+			state = 1
+		AND has_target = 1
+
+		ORDER BY
+			link_id DESC
 	</select>
 
 	<!-- 根据主键id查询数据 -->

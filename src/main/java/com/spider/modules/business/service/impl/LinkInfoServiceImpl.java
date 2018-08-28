@@ -96,6 +96,9 @@ public class LinkInfoServiceImpl extends ServiceImpl<LinkInfoDao, LinkInfoEntity
         if(linkInfo.getLinkId() != null) {
             linkInfo.setLinkId(null);
         }
+        if (linkInfo.getIsLogin() == 0){
+            linkInfo.setHasTarget(Constant.VALUE_ONE);
+        }
         linkInfoDao.insert(linkInfo);
     }
 
