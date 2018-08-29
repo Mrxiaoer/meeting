@@ -34,7 +34,7 @@
 		WHERE
 			state = 1
 		AND has_target = 1
-
+        AND rule_id IS NOT NULL
 		ORDER BY
 			link_id DESC
 	</select>
