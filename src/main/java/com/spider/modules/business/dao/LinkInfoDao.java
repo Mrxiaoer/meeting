@@ -18,12 +18,6 @@ import com.spider.modules.business.entity.LinkInfoEntity;
 public interface LinkInfoDao extends BaseMapper<LinkInfoEntity>{
     
     /**
-     * 查询所有数据
-     * @return
-     */
-    List<LinkInfoEntity> queryList();
-    
-    /**
      * 查询根据id
      * @param linkId
      * @return

@@ -33,6 +33,7 @@ public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobDao, Schedule
     implements ScheduleJobService {
   @Autowired LinkInfoDao linkInfoDao;
   @Autowired private Scheduler scheduler;
+  @Autowired ScheduleJobDao scheduleJobDao;
 
   /** 项目启动时，初始化定时器 */
   @PostConstruct
@@ -88,7 +89,8 @@ public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobDao, Schedule
     }
 
     // 删除数据
-    this.deleteBatchIds(Arrays.asList(jobIds));
+//    this.deleteBatchIds(Arrays.asList(jobIds));
+    scheduleJobDao.deleteJobIds(jobIds);
   }
 
   @Override
