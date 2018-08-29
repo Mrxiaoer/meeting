@@ -51,5 +51,15 @@ public interface ScheduleJobService extends IService<ScheduleJobEntity> {
 	 */
 	void resume(Long[] jobIds);
 
+	/**
+	 * params int to list
+	 */
 	ScheduleJobModel challenge(ScheduleJobEntity scheduleJob);
+
+	/**
+	 * params to system and module
+	 * @param pageUtils
+	 * @return
+	 */
+	PageUtils challengePage(PageUtils pageUtils);
 }

@@ -43,7 +43,7 @@
 	<select id="queryById" parameterType="java.lang.Integer"
 		resultType="com.spider.modules.business.entity.LinkInfoEntity">
 		SELECT
-		*
+		<include refid="Base_Column_List"/>
 		FROM
 		spider_link_info
 		WHERE
@@ -51,12 +51,26 @@
 		#{linkId}
 	</select>
 
+	<!-- 自动化采集显示专用 -->
+	<select id="selectById" parameterType="java.lang.Integer"
+			resultType="com.spider.modules.business.entity.LinkInfoEntity">
+		SELECT
+		<include refid="Base_Column_List"/>
+		FROM
+			spider_link_info
+		WHERE
+			state = 1
+		AND has_target = 1
+		AND rule_id IS NOT NULL
+		AND link_id = #{linkId}
+	</select>
+
 	<!-- 根据自定义条件查询数据 -->
 	<select id="queryTerm"
 		parameterType="com.spider.modules.business.entity.LinkInfoEntity"
 		resultMap="resultMap">
 		SELECT
-		*
+		<include refid="Base_Column_List"/>
 		FROM
 		spider_link_info
 		<where>

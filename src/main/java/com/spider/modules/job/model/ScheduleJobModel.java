@@ -30,24 +30,21 @@ public class ScheduleJobModel implements Serializable {
     /**
      * spring bean名称
      */
-    @NotBlank(message = "bean名称不能为空")
     private String beanName;
 
     /**
      * 方法名
      */
-    @NotBlank(message = "方法名称不能为空")
     private String methodName;
 
     /**
      * 参数
      */
-    private List<String> params;
+    private List<String> param;
 
     /**
      * cron表达式
      */
-    @NotBlank(message = "cron表达式不能为空")
     private String cronExpression;
 
     /**
@@ -65,11 +62,11 @@ public class ScheduleJobModel implements Serializable {
      */
     private Date createTime;
 
+    private String paramsName;
     /**
      * 设置：任务id
-     *
      * @param jobId
-     *            任务id
+     * 任务id
      */
     public void setJobId(Long jobId) {
         this.jobId = jobId;
@@ -77,7 +74,6 @@ public class ScheduleJobModel implements Serializable {
 
     /**
      * 获取：任务id
-     *
      * @return Long
      */
     public Long getJobId() {
@@ -100,12 +96,12 @@ public class ScheduleJobModel implements Serializable {
         this.methodName = methodName;
     }
 
-    public List<String> getParams() {
-        return params;
+    public List<String> getParam() {
+        return param;
     }
 
-    public void setParams(List<String> params) {
-        this.params = params;
+    public void setParam(List<String> param) {
+        this.param = param;
     }
 
     public String getRemark() {
@@ -116,60 +112,35 @@ public class ScheduleJobModel implements Serializable {
         this.remark = remark;
     }
 
-    /**
-     * 设置：任务状态
-     *
-     * @param status
-     *            任务状态
-     */
     public void setStatus(Integer status) {
         this.status = status;
     }
 
-    /**
-     * 获取：任务状态
-     *
-     * @return String
-     */
     public Integer getStatus() {
         return status;
     }
 
-    /**
-     * 设置：cron表达式
-     *
-     * @param cronExpression
-     *            cron表达式
-     */
     public void setCronExpression(String cronExpression) {
         this.cronExpression = cronExpression;
     }
 
-    /**
-     * 获取：cron表达式
-     *
-     * @return String
-     */
     public String getCronExpression() {
         return cronExpression;
     }
 
-    /**
-     * 设置：创建时间
-     *
-     * @param createTime
-     *            创建时间
-     */
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
-    /**
-     * 获取：创建时间
-     *
-     * @return Date
-     */
     public Date getCreateTime() {
         return createTime;
+    }
+
+    public String getParamsName() {
+        return paramsName;
+    }
+
+    public void setParamsName(String paramsName) {
+        this.paramsName = paramsName;
     }
 }

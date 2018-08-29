@@ -31,6 +31,13 @@ public interface LinkInfoDao extends BaseMapper<LinkInfoEntity>{
     LinkInfoEntity queryById(Integer linkId);
 
     /**
+     * 自动化采集显示专用
+     * @param linkId
+     * @return
+     */
+    LinkInfoEntity selectById(Integer linkId);
+
+    /**
      * 根据ids删除链接表信息
      * @param linkIds
      * @return
