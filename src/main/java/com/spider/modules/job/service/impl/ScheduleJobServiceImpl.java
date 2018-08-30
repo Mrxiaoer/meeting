@@ -15,7 +15,6 @@ import com.spider.modules.job.model.ScheduleJobModel;
 import com.spider.modules.job.service.ScheduleJobService;
 import com.spider.modules.job.utils.ScheduleUtils;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;

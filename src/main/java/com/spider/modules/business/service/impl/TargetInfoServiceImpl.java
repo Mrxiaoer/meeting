@@ -88,7 +88,7 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 		spiderClaim.setPipeline(spiderTemporaryRecordPipeline);
 		spiderPage.startSpider(linkId, linkInfo.getLoginUrl(), spiderClaim, spiderRule);
 		TemporaryRecordEntity rc = temporaryRecordService.queryBylinkId(linkId);
-		if (MyStringUtil.urlCutParam(rc.getUrl()).equals(MyStringUtil.urlCutParam(linkInfo.getUrl()))) {
+		if (MyStringUtil.urlCutParam(rc.getUrl()).equals(MyStringUtil.urlCutParam(linkInfo.getLoginUrl()))) {
 			PhantomJSDriver driver = null;
 			try {
 				driver = phantomJSDriverFactory.create();

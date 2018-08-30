@@ -9,6 +9,8 @@ import com.spider.common.utils.R;
 import com.spider.modules.business.model.ProvisionalEntity;
 import com.spider.modules.business.service.PageInfoService;
 
+import java.util.List;
+
 /**
  * 采集结果表
  * @author yaonuan
@@ -25,6 +27,12 @@ public class PageInfoController {
     public R queryById(@PathVariable Integer id){
         PageInfoEntity pageInfo = pageInfoService.queryById(id);
         return R.ok().put("list",pageInfo);
+    }
+
+    @GetMapping("template_details/{id}")
+    public R listByResultId(@PathVariable("id") Integer resultId){
+        List<PageInfoEntity> pageInfos = pageInfoService.listByResultId(resultId);
+        return R.ok().put("list", pageInfos);
     }
 
     /**
