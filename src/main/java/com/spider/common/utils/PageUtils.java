@@ -10,7 +10,7 @@ import java.util.List;
  * 
  * @author maoxinmin
  */
-public class PageUtils implements Serializable {
+public class PageUtils<E> implements Serializable {
 	private static final long serialVersionUID = 1L;
 	// 总记录数
 	private int totalCount;
@@ -21,7 +21,7 @@ public class PageUtils implements Serializable {
 	// 当前页数
 	private int currPage;
 	// 列表数据
-	private List<?> list;
+	private List<E> list;
 
 	/**
 	 * 分页
@@ -35,7 +35,7 @@ public class PageUtils implements Serializable {
 	 * @param currPage
 	 *            当前页数
 	 */
-	public PageUtils(List<?> list, int totalCount, int pageSize, int currPage) {
+	public PageUtils(List<E> list, int totalCount, int pageSize, int currPage) {
 		this.list = list;
 		this.totalCount = totalCount;
 		this.pageSize = pageSize;
@@ -46,7 +46,7 @@ public class PageUtils implements Serializable {
 	/**
 	 * 分页
 	 */
-	public PageUtils(Page<?> page) {
+	public PageUtils(Page<E> page) {
 		this.list = page.getRecords();
 		this.totalCount = page.getTotal();
 		this.pageSize = page.getSize();
@@ -86,11 +86,11 @@ public class PageUtils implements Serializable {
 		this.currPage = currPage;
 	}
 
-	public List<?> getList() {
+	public List<E> getList() {
 		return list;
 	}
 
-	public void setList(List<?> list) {
+	public void setList(List<E> list) {
 		this.list = list;
 	}
 

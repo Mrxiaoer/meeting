@@ -1,5 +1,6 @@
 package com.spider.modules.job.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -14,7 +15,6 @@ import com.spider.modules.job.model.ScheduleJobModel;
 import com.spider.modules.job.service.ScheduleJobService;
 import com.spider.modules.job.utils.ScheduleUtils;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +32,7 @@ public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobDao, Schedule
     implements ScheduleJobService {
   @Autowired LinkInfoDao linkInfoDao;
   @Autowired private Scheduler scheduler;
+  @Autowired ScheduleJobDao scheduleJobDao;
 
   /** 项目启动时，初始化定时器 */
   @PostConstruct
@@ -56,7 +57,7 @@ public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobDao, Schedule
         this.selectPage(
             new Query<ScheduleJobEntity>(params).getPage(),
             new EntityWrapper<ScheduleJobEntity>()
-                .like(StringUtils.isNotBlank(beanName), "bean_name", beanName));
+                .like(StringUtils.isNotBlank(beanName), "bean_name", beanName).eq("del_state", Constant.VALUE_ONE));
 
     return new PageUtils(page);
   }
@@ -87,7 +88,8 @@ public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobDao, Schedule
     }
 
     // 删除数据
-    this.deleteBatchIds(Arrays.asList(jobIds));
+//    this.deleteBatchIds(Arrays.asList(jobIds));
+    scheduleJobDao.deleteJobIds(jobIds);
   }
 
   @Override
@@ -143,8 +145,30 @@ public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobDao, Schedule
       List<String> params = new ArrayList<>();
       params.add(linkInfo.getSystem());
       params.add(String.valueOf(linkInfo.getLinkId()));
-      model.setParams(params);
+      model.setParam(params);
     }
     return model;
+  }
+
+  @Override
+  public PageUtils challengePage(PageUtils pageUtils){
+    @SuppressWarnings("unchecked")
+    List<ScheduleJobEntity> scheduleJobs = pageUtils.getList();
+    List<ScheduleJobModel> list = new ArrayList<>();
+    for (ScheduleJobEntity value:scheduleJobs){
+      ScheduleJobModel scheduleJobModel = new ScheduleJobModel();
+      BeanUtil.copyProperties(value, scheduleJobModel);
+      LinkInfoEntity link = linkInfoDao.selectById(Integer.parseInt(value.getParams()));
+      if (link != null){
+        scheduleJobModel.setParamsName(link.getSystem() + '/' + link.getModule());
+        list.add(scheduleJobModel);
+      }
+      LinkInfoEntity linkInfo = linkInfoDao.queryById(Integer.parseInt(value.getParams()));
+
+    }
+    pageUtils.getList().clear();
+    pageUtils.setList(list);
+    pageUtils.setTotalCount(pageUtils.getList().size());
+    return pageUtils;
   }
 }

@@ -2,6 +2,7 @@ package com.spider.modules.job.entity;
 
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.NotBlank;
 
 import java.io.Serializable;
@@ -67,10 +68,16 @@ public class ScheduleJobEntity implements Serializable {
 	private Date createTime;
 
 	/**
+	 * 存在状态(1、存在 0、删除）
+	 */
+	@JsonIgnore
+	private Integer delState;
+
+	/**
 	 * 设置：任务id
 	 * 
 	 * @param jobId
-	 *            任务id
+	 * 任务id
 	 */
 	public void setJobId(Long jobId) {
 		this.jobId = jobId;
@@ -172,5 +179,13 @@ public class ScheduleJobEntity implements Serializable {
 	 */
 	public Date getCreateTime() {
 		return createTime;
+	}
+
+	public Integer getDelState() {
+		return delState;
+	}
+
+	public void setDelState(Integer delState) {
+		this.delState = delState;
 	}
 }

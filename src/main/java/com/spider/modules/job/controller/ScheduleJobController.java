@@ -32,8 +32,9 @@ public class ScheduleJobController {
 	@RequiresPermissions("sys:schedule:list")
 	public R list(@RequestParam Map<String, Object> params) {
 		PageUtils page = scheduleJobService.queryPage(params);
+		PageUtils changePage = scheduleJobService.challengePage(page);
 
-		return R.ok().put("page", page).put("list",page.getList());
+		return R.ok().put("page", changePage).put("list",changePage.getList());
 	}
 
 	/**

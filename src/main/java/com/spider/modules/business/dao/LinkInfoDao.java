@@ -18,17 +18,18 @@ import com.spider.modules.business.entity.LinkInfoEntity;
 public interface LinkInfoDao extends BaseMapper<LinkInfoEntity>{
     
     /**
-     * 查询所有数据
-     * @return
-     */
-    List<LinkInfoEntity> queryList();
-    
-    /**
      * 查询根据id
      * @param linkId
      * @return
      */
     LinkInfoEntity queryById(Integer linkId);
+
+    /**
+     * 自动化采集显示专用
+     * @param linkId
+     * @return
+     */
+    LinkInfoEntity selectById(Integer linkId);
 
     /**
      * 根据ids删除链接表信息
@@ -52,19 +53,17 @@ public interface LinkInfoDao extends BaseMapper<LinkInfoEntity>{
     int update(LinkInfoEntity linkInfo);
 
     /**
-     * 定时任务联动一级
-     * @return
-     */
-    List<String> querySum();
-
-    /**
      * 自定义精准查询
      * @param linkInfo
      * @return
      */
     List<LinkInfoEntity> queryTerm(LinkInfoEntity linkInfo);
 
-    List<LinkInfoEntity> selectAll();
+    /**
+     * 自动采集 tree-structured
+     * @return
+     */
+    List<LinkInfoEntity> selectByHasTarget();
 
     /**
      * 首页统计系统名称与模块名称

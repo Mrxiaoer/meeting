@@ -96,6 +96,9 @@ public class LinkInfoServiceImpl extends ServiceImpl<LinkInfoDao, LinkInfoEntity
         if(linkInfo.getLinkId() != null) {
             linkInfo.setLinkId(null);
         }
+        if (linkInfo.getIsLogin() == 0){
+            linkInfo.setHasTarget(Constant.VALUE_ONE);
+        }
         linkInfoDao.insert(linkInfo);
     }
 
@@ -137,7 +140,7 @@ public class LinkInfoServiceImpl extends ServiceImpl<LinkInfoDao, LinkInfoEntity
 
     @Override
     public List<TimeTaskModel> timedTask(){
-        List<LinkInfoEntity> infoEntities = linkInfoDao.selectAll();
+        List<LinkInfoEntity> infoEntities = linkInfoDao.selectByHasTarget();
 
         List<TimeTaskModel> timeTaskModels = new ArrayList<>();
         Map<String,Integer> flagMap = new HashMap<>();
@@ -188,7 +191,7 @@ public class LinkInfoServiceImpl extends ServiceImpl<LinkInfoDao, LinkInfoEntity
         analogLogin.setId(analogLoginDao.queryAnalogLoginByLinkId(linkInfo.getLinkId()).getId());
         analogLogin.setHandCookie("".equals(cookies)?null:cookies);
         analogLoginDao.updateHandCookie(analogLogin);
-        linkInfo.setHasTarget("".equals(cookies)?Constant.VALUE_ZERO:Constant.VALUE_ONE);
+        linkInfo.setHasTarget("".equals(cookies)?Constant.VALUE_ZERO:Constant.VALUE_TWO);
         linkInfoDao.update(linkInfo);
     }
 

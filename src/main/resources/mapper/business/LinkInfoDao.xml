@@ -24,22 +24,26 @@
 		link_id,analog_id,system,module,url,is_login,create_time,update_time,remarks,has_target,rule_id,fail_times,login_url,state
 	</sql>
 
-	<!-- 查询所有数据 -->
-	<select id="selectAll"
+	<!-- 树结构数据查询 -->
+	<select id="selectByHasTarget"
 		resultType="com.spider.modules.business.entity.LinkInfoEntity">
-		select
-		<include refid="Base_Column_List" />
-		from
-        spider_link_info
-        where state = 1
-        ORDER BY link_id DESC
+		SELECT
+		<include refid="Base_Column_List"/>
+		FROM
+			spider_link_info
+		WHERE
+			state = 1
+		AND has_target = 1
+        AND rule_id IS NOT NULL
+		ORDER BY
+			link_id DESC
 	</select>
 
 	<!-- 根据主键id查询数据 -->
 	<select id="queryById" parameterType="java.lang.Integer"
 		resultType="com.spider.modules.business.entity.LinkInfoEntity">
 		SELECT
-		*
+		<include refid="Base_Column_List"/>
 		FROM
 		spider_link_info
 		WHERE
@@ -47,16 +51,18 @@
 		#{linkId}
 	</select>
 
-	<!--定时任务联动一级-->
-	<select id="querySum" resultType="java.lang.String">
+	<!-- 自动化采集显示专用 -->
+	<select id="selectById" parameterType="java.lang.Integer"
+			resultType="com.spider.modules.business.entity.LinkInfoEntity">
 		SELECT
-			system
+		<include refid="Base_Column_List"/>
 		FROM
 			spider_link_info
 		WHERE
 			state = 1
-		GROUP BY
-			system
+		AND has_target = 1
+		AND rule_id IS NOT NULL
+		AND link_id = #{linkId}
 	</select>
 
 	<!-- 根据自定义条件查询数据 -->
@@ -64,7 +70,7 @@
 		parameterType="com.spider.modules.business.entity.LinkInfoEntity"
 		resultMap="resultMap">
 		SELECT
-		*
+		<include refid="Base_Column_List"/>
 		FROM
 		spider_link_info
 		<where>

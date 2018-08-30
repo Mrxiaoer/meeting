@@ -37,7 +37,6 @@ public class LinkInfoController {
 
     /**
      * 根据(系统名称、模块名称)条件进行查询
-     * 默认空属性时，查询所有
      * @param params
      * @return
      */
@@ -87,7 +86,11 @@ public class LinkInfoController {
      */
     @PostMapping("/update")
     public R update(@RequestBody LinkInfoEntity linkInfo){
-        linkInfo.setHasTarget(Constant.VALUE_ZERO);
+        if (linkInfo.getIsLogin() == Constant.VALUE_ONE){
+            linkInfo.setHasTarget(Constant.VALUE_ZERO);
+        }else{
+            linkInfo.setHasTarget(Constant.VALUE_ONE);
+        }
         linkInfoService.update(linkInfo);
         return R.ok();
     }

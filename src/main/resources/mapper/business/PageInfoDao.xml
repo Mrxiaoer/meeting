@@ -39,6 +39,7 @@
          <include refid="Base_Column_List"/>
          FROM spider_page_info WHERE state = 1
     </select>
+
 	<!-- 根据page_id查询数据 -->
 	<select id="queryById" parameterType="java.lang.Integer"
 		resultMap="resultMap">

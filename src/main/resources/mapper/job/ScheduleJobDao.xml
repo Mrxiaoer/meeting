@@ -11,4 +11,17 @@
 		</foreach>
 	</update>
 
+	<!--逻辑删除-->
+	<update id="deleteJobIds">
+		update schedule_job
+		<set>
+			del_state = 0
+		</set>
+		where job_id in
+		<foreach item="jobId" collection="jobIds" open="("
+				 separator="," close=")">
+			#{jobId}
+		</foreach>
+	</update>
+
 </mapper>
