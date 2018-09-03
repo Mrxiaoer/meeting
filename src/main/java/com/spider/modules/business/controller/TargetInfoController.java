@@ -79,9 +79,8 @@ public class TargetInfoController {
 	 * 单点采集采集页面，返回
 	 */
 	@GetMapping("/spdier_point")
-	public R getOneById(@RequestParam Integer linkId) {
+	public R getOneById(@RequestParam Integer linkId,@RequestParam(name = "waite" ,required = false,defaultValue = "2000") Integer sleep) {
 		TemporaryRecordEntity temporary = null;
-		int sleep = 2000;
 		try {
 			temporary = targetInfoService.tothirdspider(linkId,sleep);
 		}catch(NoSuchElementException nse){
