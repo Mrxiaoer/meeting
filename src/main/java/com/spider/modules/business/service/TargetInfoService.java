@@ -26,9 +26,9 @@ public interface TargetInfoService {
     /**
      * 单点采集，采集表头
      * 返回给前，选择要爬取得部分
-     * @param linkId
+     * @param params
      */
-    TemporaryRecordEntity tothirdspider(Integer linkId,int sleepTime) throws Exception;
+    TemporaryRecordEntity tothirdspider(Map<String,Object> params) throws Exception;
     
     /**
      * 获取xpath给前端返回采集的表头

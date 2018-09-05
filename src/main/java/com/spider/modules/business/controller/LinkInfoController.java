@@ -122,7 +122,7 @@ public class LinkInfoController {
         return R.ok();
     }
 
-    @GetMapping("/test/{linkId}")
+    @GetMapping("/gain_cookie/{linkId}")
     public R gainCookie(@PathVariable Integer linkId){
         List<Map<String,String>> cookie = linkInfoService.gainCookie(linkId);
         return  R.ok().put("cookie", cookie).put("length", cookie.size());

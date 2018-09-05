@@ -140,8 +140,22 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 
 	/*单点采集第一步*/
 	@Override
-	public TemporaryRecordEntity tothirdspider(Integer linkId,int sleepTime) throws Exception {
-		LinkInfoEntity linkInfo = linkInfoService.queryById(linkId);
+	public TemporaryRecordEntity tothirdspider(Map<String,Object> params) throws Exception {
+	    Integer linkId = Integer.parseInt(String.valueOf(params.get("linkId")));
+	    logger.info(String.valueOf(params.get("waite")));
+        Integer sleepTime = 2000;
+	    if (params.get("waite") != ""){
+            sleepTime = Integer.parseInt(String.valueOf(params.get("waite")));
+        }
+        String xpath = "";
+	    if (params.containsKey("xpath")){
+            if (params.get("xpath") != ""){
+                xpath = String.valueOf(params.get("xpath"));
+            }
+        }
+
+//		logger.info(xpath);
+	    LinkInfoEntity linkInfo = linkInfoService.queryById(linkId);
 		AnalogLoginEntity analogLogin = analogLoginService.getOneById(linkInfo.getAnalogId());
 
 		//采集目标页先采用手动输入的cookie进行登录
@@ -192,7 +206,10 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 						throw nse;
 					}
 					spiderPage.startSpider(linkId, analogLogin.getTargetUrl(), spiderClaim, spiderRule);
-				}
+				}else if ( xpath != ""){
+				    logger.info("进入开始！");
+				    htmlprocess.doclick(driver, xpath);
+                }
 			} finally {
 				phantomJSDriverPool.returnObject(driver);
 			}

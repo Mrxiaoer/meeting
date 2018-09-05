@@ -78,11 +78,11 @@ public class TargetInfoController {
 	/**
 	 * 单点采集采集页面，返回
 	 */
-	@GetMapping("/spdier_point")
-	public R getOneById(@RequestParam Integer linkId,@RequestParam(name = "waite" ,required = false,defaultValue = "2000") Integer sleep) {
+	@PostMapping("/spdier_point")
+	public R getOneById(@RequestBody Map<String,Object> params) {
 		TemporaryRecordEntity temporary = null;
 		try {
-			temporary = targetInfoService.tothirdspider(linkId,sleep);
+			temporary = targetInfoService.tothirdspider(params);
 		}catch(NoSuchElementException nse){
 			return R.error(1404, "某些页面元素未找到，可能页面被改动，请重新模拟登陆！");
 		}catch (Exception e) {
@@ -124,4 +124,9 @@ public class TargetInfoController {
 		return R.ok();
 	}
 
+	@PostMapping("/test")
+    public R test(@RequestBody Map<String,Object> params){
+	    System.out.println(params);
+	    return R.ok();
+    }
 }
