@@ -53,6 +53,7 @@ public class SpiderPage extends AbstractSpider {
 		processor.setCookies(spiderClaim.getCookieSet());
 		processor.setPhantomJSDriver(spiderClaim.getPhantomJSDriver());
 		processor.setSleepTime(spiderClaim.getSleepTime());
+		processor.setClickXpathList(spiderClaim.getClickXpathList());
 		Spider spider = Spider.create(processor).addUrl(url).addPipeline(spiderClaim.getPipeline());
 		if (!spiderClaim.isStaticPage()) {
 			spider.setDownloader(seleniumDownloader);

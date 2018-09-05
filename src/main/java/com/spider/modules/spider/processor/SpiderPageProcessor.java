@@ -64,6 +64,10 @@ public class SpiderPageProcessor implements PageProcessor {
 	 */
 	private int sleepTime;
 	/**
+	 * 预定操作
+	 */
+	private List<String> clickXpathList;
+	/**
 	 * 爬取规则
 	 */
 	private SpiderRule spiderRule;
@@ -129,6 +133,14 @@ public class SpiderPageProcessor implements PageProcessor {
 		this.spiderRule = spiderRule;
 	}
 
+	public List<String> getClickXpathList() {
+		return clickXpathList;
+	}
+
+	public void setClickXpathList(List<String> clickXpathList) {
+		this.clickXpathList = clickXpathList;
+	}
+
 	/**
 	 * process是定制爬虫逻辑的核心接口，在这里编写抽取逻辑
 	 */
@@ -165,7 +177,7 @@ public class SpiderPageProcessor implements PageProcessor {
 			//		htmlStr = htmlStr.replaceAll("(<script[\\s|\\S]*?>[\\s|\\S]*?</script>)", "");
 			htmlStr = htmlStr.replaceAll("type[\\s]*?=[\\s]*?(\"submit\"|'submit')", "");
 
-			htmlStr = htmlStr.replaceAll("\"([^\"<>]*?<[^\"]*?>[^\"<>]*?)\"","\"\"");
+			htmlStr = htmlStr.replaceAll("\"([^\"<>]*?<[^\"]*?>[^\"<>]*?)\"", "\"\"");
 			//清除a标签操作
 			Pattern pa = Pattern.compile("<a[\\s]+?[^>]*?(href[\\s]*?=[\\s]*?\"[^>]*?\"|href[\\s]*?=[\\s]*?'[^>]*?')");
 			Matcher ma = pa.matcher(htmlStr);
@@ -248,6 +260,9 @@ public class SpiderPageProcessor implements PageProcessor {
 			for (Cookie cookie : cookies) {
 				site.addCookie(cookie.getDomain(), cookie.getName(), cookie.getValue());
 			}
+		}
+		if (clickXpathList != null && clickXpathList.size() > 0) {
+			site.setClickXpathList(clickXpathList);
 		}
 		site.setSleepTime(this.sleepTime);
 		site.setPhantomJSDriver(phantomJSDriver);

@@ -1,5 +1,6 @@
 package com.spider.modules.spider.entity;
 
+import java.util.List;
 import java.util.Set;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
@@ -20,6 +21,7 @@ public class SpiderClaim {
 	private Pipeline pipeline;
 	private PhantomJSDriver phantomJSDriver;
 	private int sleepTime = 1500;
+	private List<String> clickXpathList;
 
 	public boolean isAllDomain() {
 		return allDomain;
@@ -67,5 +69,13 @@ public class SpiderClaim {
 
 	public void setSleepTime(int sleepTime) {
 		this.sleepTime = sleepTime;
+	}
+
+	public List<String> getClickXpathList() {
+		return clickXpathList;
+	}
+
+	public void setClickXpathList(List<String> clickXpathList) {
+		this.clickXpathList = clickXpathList;
 	}
 }

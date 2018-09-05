@@ -8,6 +8,7 @@ import com.spider.modules.spider.utils.MyStringUtil;
 import com.spider.modules.spider.utils.RunTimeout;
 import java.io.Closeable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
@@ -116,6 +117,21 @@ public class SeleniumDownloader implements Downloader, Closeable {
 			} catch (ExecutionException | InterruptedException e) {
 				e.printStackTrace();
 			}
+
+			//执行预定操作（暂时只支持点击事件）
+			List<String> clickXpathList = site.getClickXpathList();
+			if (clickXpathList != null && clickXpathList.size() > 0) {
+				WebElement clickElement;
+				for (String clickXpath : clickXpathList) {
+					try {
+						clickElement = driver.findElementByXPath(clickXpath);
+						RunTimeout.timeoutMethod(clickElement, "click", paramClzs, paramObjs, timeOut);
+					} catch (ExecutionException | InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+
 			logger.info("当前页 -- {}", driver.getCurrentUrl());
 			if (!MyStringUtil.urlCutParam(request.getUrl()).equals(MyStringUtil.urlCutParam(driver.getCurrentUrl()))) {
 				needChange = true;
@@ -124,7 +140,7 @@ public class SeleniumDownloader implements Downloader, Closeable {
 			}
 			//sleep
 			try {
-				logger.info("sleep{}毫秒",task.getSite().getSleepTime());
+				logger.info("sleep{}毫秒", task.getSite().getSleepTime());
 				Thread.sleep(task.getSite().getSleepTime());
 			} catch (InterruptedException var9) {
 				var9.printStackTrace();
@@ -155,7 +171,7 @@ public class SeleniumDownloader implements Downloader, Closeable {
 
 		} finally {
 			//对驱动的处理
-			if(needChange){
+			if (needChange) {
 				driver.quit();
 				driver = oldDriver;
 			}

@@ -3,6 +3,7 @@ package com.spider.modules.spider.entity;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -39,6 +40,7 @@ public class MySite extends Site {
 	private Map<String, String> headers = new HashMap<>();
 	private boolean useGzip = true;
 	private boolean disableCookieManagement = false;
+	private List<String> clickXpathList;
 
 	/**
 	 * new a MySite
@@ -355,6 +357,14 @@ public class MySite extends Site {
 	public MySite setDisableCookieManagement(boolean disableCookieManagement) {
 		this.disableCookieManagement = disableCookieManagement;
 		return this;
+	}
+
+	public List<String> getClickXpathList() {
+		return clickXpathList;
+	}
+
+	public void setClickXpathList(List<String> clickXpathList) {
+		this.clickXpathList = clickXpathList;
 	}
 
 	@Override
