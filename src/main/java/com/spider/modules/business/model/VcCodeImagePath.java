@@ -17,17 +17,17 @@ import org.springframework.stereotype.Component;
 public class VcCodeImagePath {
 
     @Value("${VcCode.image.path}")
-    private String newpath;
+    private String newPath;
 
     @Value("${VcCode.image.p-path}")
     private String oldPath;
 
-    public String getNewpath() {
-        return newpath;
+    public String getNewPath() {
+        return newPath;
     }
 
-    public void setNewpath(String newpath) {
-        this.newpath = newpath;
+    public void setNewPath(String newPath) {
+        this.newPath = newPath;
     }
 
     public String getOldPath() {

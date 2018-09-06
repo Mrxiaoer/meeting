@@ -62,7 +62,7 @@ public class PageAndResultJob {
     }
 
 
-    @Scheduled(cron = "0 0 0/12 * * *")
+    @Scheduled(cron = "0 0 0 0/1 * *")
     public void deleteByPictures(){
         //定于时间删除2天前的文件夹
         DateFormat dateFormat = new SimpleDateFormat("y-M-d");
@@ -71,7 +71,7 @@ public class PageAndResultJob {
         calendar.add(Calendar.DAY_OF_MONTH, -2);
         String data =dateFormat.format(calendar.getTime());
 
-        String filename = vcCodeImagePath.getNewpath() + data;
+        String filename = vcCodeImagePath.getNewPath() + data;
         //删除文件夹操作
         this.deleteDirectory(filename);
         String oldfilename = vcCodeImagePath.getOldPath() + data;
