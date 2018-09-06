@@ -195,11 +195,11 @@ public class SpiderPageProcessor implements PageProcessor {
 
 			//定义如何抽取页面信息，并保存下来
 			Selectable select;
-			List<String> xpathList = this.spiderRule.getXpath();
+			List<String> xpathList = this.spiderRule.getXpathList();
 			//为空赋个默认值（整个HTML）
-			if (spiderRule.getXpath().size() == 0) {
+			if (spiderRule.getXpathList().size() == 0) {
 				xpathList.add("/html");
-				spiderRule.setXpath(xpathList);
+				spiderRule.setXpathList(xpathList);
 			}
 
 			if (this.spiderRule.getIsGetText()) {

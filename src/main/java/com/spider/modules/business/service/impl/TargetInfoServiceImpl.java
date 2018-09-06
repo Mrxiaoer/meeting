@@ -254,7 +254,7 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 
 		//xpath插入规则表
 		SpiderRule rule = new SpiderRule();
-		rule.setXpath(xpath);
+		rule.setXpathList(xpath);
 		if (rule.getId() != null) {
 			rule.setId(null);
 		}
@@ -268,7 +268,7 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 
 		//组装解析表头信息
 		SpiderRule spiderRule = new SpiderRule();
-		spiderRule.setXpath(xpath);
+		spiderRule.setXpathList(xpath);
 		TemporaryRecordEntity te = new TemporaryRecordEntity();
 		te.setLinkId(linkId);
 		te.setUrl(linkInfo.getUrl());

@@ -62,11 +62,19 @@ public class SpiderRule {
 		this.id = id;
 	}
 
-	public List<String> getXpath() {
+//	public String getXpath() {
+//		return xpath;
+//	}
+//
+//	public void setXpath(String xpath) {
+//		this.xpath = xpath;
+//	}
+
+	public List<String> getXpathList() {
 		return Arrays.asList(xpath.split(","));
 	}
 
-	public void setXpath(List<String> xpathList) {
+	public void setXpathList(List<String> xpathList) {
 		StringBuilder xpathStr = null;
 		for (String xpath : xpathList) {
 			xpathStr.append(xpath);

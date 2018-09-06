@@ -43,17 +43,17 @@ public class HtmlProcess {
 		//转化成html
 		Html html = Html.create(htmlStr);
 
-		if (spiderRule.getXpath().size() == 0) {
+		if (spiderRule.getXpathList().size() == 0) {
 			List<String> xpathList = new ArrayList<>();
 			xpathList.add("/html");
-			spiderRule.setXpath(xpathList);
+			spiderRule.setXpathList(xpathList);
 		}
 		Selectable select;
 		List<String> allStrs = null;
 		if (spiderRule.getIsGetText()) {
-			for (String xpath : spiderRule.getXpath()) {
+			for (String xpath : spiderRule.getXpathList()) {
 				//获取此xpath下直接或间接的文本，并根据需要对其进行正则提取
-				select = html.xpath(spiderRule.getXpath() + "/allText()");
+				select = html.xpath(spiderRule.getXpathList() + "/allText()");
 				if (StrUtil.isNotEmpty(spiderRule.getRegex())) {
 					select = select.regex(spiderRule.getRegex());
 				}
@@ -72,7 +72,7 @@ public class HtmlProcess {
 				allStrs.addAll(selectStrs);
 			}
 		} else {
-			for (String xpath : spiderRule.getXpath()) {
+			for (String xpath : spiderRule.getXpathList()) {
 				//获取此xpath对应的元素，并根据需要对其进行正则提取
 				select = html.xpath(xpath);
 				if (StrUtil.isNotEmpty(spiderRule.getRegex())) {
