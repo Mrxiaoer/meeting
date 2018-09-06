@@ -20,7 +20,7 @@ public class analogyTest {
     @Test
     public void tt(){
         SpiderRule rule = new SpiderRule();
-        rule.setXpath("123");
+//        rule.setXpath("123");
 //        rule.setId(null);
         spiderRuleDao.insertOne(rule);
         System.out.println(rule.getId());
