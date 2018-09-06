@@ -195,45 +195,56 @@ public class SpiderPageProcessor implements PageProcessor {
 
 			//定义如何抽取页面信息，并保存下来
 			Selectable select;
-			String xpath = this.spiderRule.getXpath();
+			List<String> xpathList = this.spiderRule.getXpath();
 			//为空赋个默认值（整个HTML）
-			if (StrUtil.isEmpty(xpath)) {
-				xpath = "/html";
+			if (spiderRule.getXpath().size() == 0) {
+				xpathList.add("/html");
+				spiderRule.setXpath(xpathList);
 			}
+
 			if (this.spiderRule.getIsGetText()) {
-				//获取此xpath下直接或间接的文本，并根据需要对其进行正则提取
-				select = html.xpath(xpath + "/allText()");
-				if (StrUtil.isNotEmpty(this.spiderRule.getRegex())) {
-					select = select.regex(this.spiderRule.getRegex());
-				}
-				//根据规则置换
-				Map<String, String> ruleMap = spiderRule.getReplacementMap();
-				if (ruleMap != null && ruleMap.size() > 0) {
-					for (Map.Entry<String, String> rep : ruleMap.entrySet()) {
-						select = select.replace(rep.getKey(), rep.getValue());
+				List<String> allStrs = null;
+				for (String xpath : xpathList) {
+					//获取此xpath下直接或间接的文本，并根据需要对其进行正则提取
+					select = html.xpath(xpath + "/allText()");
+					if (StrUtil.isNotEmpty(this.spiderRule.getRegex())) {
+						select = select.regex(this.spiderRule.getRegex());
 					}
+					//根据规则置换
+					Map<String, String> ruleMap = spiderRule.getReplacementMap();
+					if (ruleMap != null && ruleMap.size() > 0) {
+						for (Map.Entry<String, String> rep : ruleMap.entrySet()) {
+							select = select.replace(rep.getKey(), rep.getValue());
+						}
+					}
+					String selectStrAll = select.get();
+					List<String> selectStrs = null;
+					if (selectStrAll.length() > 0) {
+						selectStrs = Arrays.asList(selectStrAll.split(" "));
+					}
+					allStrs.addAll(selectStrs);
 				}
-				String selectStrAll = select.get();
-				List<String> selectStrs = null;
-				if (selectStrAll.length() > 0) {
-					selectStrs = Arrays.asList(selectStrAll.split(" "));
-				}
-				myPage.putField(SpiderConstant.SELECTSTRS, selectStrs);
+				myPage.putField(SpiderConstant.SELECTSTRS, allStrs);
 			} else {
-				//获取此xpath对应的元素，并根据需要对其进行正则提取
-				select = html.xpath(xpath);
-				if (StrUtil.isNotEmpty(this.spiderRule.getRegex())) {
-					select = select.regex(this.spiderRule.getRegex());
-				}
-				//根据规则置换
-				Map<String, String> ruleMap = spiderRule.getReplacementMap();
-				if (ruleMap != null && ruleMap.size() > 0) {
-					for (Map.Entry<String, String> rep : ruleMap.entrySet()) {
-						select = select.replace(rep.getKey(), rep.getValue());
+				List<String> allObjs = null;
+				for (String xpath : xpathList) {
+					//获取此xpath对应的元素，并根据需要对其进行正则提取
+					select = html.xpath(xpath);
+					if (StrUtil.isNotEmpty(this.spiderRule.getRegex())) {
+						select = select.regex(this.spiderRule.getRegex());
 					}
+					//根据规则置换
+					Map<String, String> ruleMap = spiderRule.getReplacementMap();
+					if (ruleMap != null && ruleMap.size() > 0) {
+						for (Map.Entry<String, String> rep : ruleMap.entrySet()) {
+							select = select.replace(rep.getKey(), rep.getValue());
+						}
+					}
+					allObjs.addAll(select.all());
 				}
-				myPage.putField(SpiderConstant.SELECTOBJS, select.all());
+				myPage.putField(SpiderConstant.SELECTOBJS, allObjs);
 			}
+
 			myPage.putField(SpiderConstant.HOST, UrlUtils.getHost(myPage.getUrl().toString()));
 			myPage.putField(SpiderConstant.URL, myPage.getUrl().toString());
 			logger.info("处理页面耗时{}毫秒", System.currentTimeMillis() - startTime);

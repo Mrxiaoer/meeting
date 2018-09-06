@@ -2,6 +2,7 @@ package com.spider.modules.spider.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.spider.modules.spider.utils.MyStringUtil;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.Column;
@@ -33,7 +34,7 @@ public class SpiderRule {
 	 * xpath选择器
 	 */
 	@Column(columnDefinition = "text COMMENT 'xpath选择器'")
-	private List<String> xpath;
+	private String xpath;
 
 	/**
 	 * 正则表达式
@@ -62,11 +63,15 @@ public class SpiderRule {
 	}
 
 	public List<String> getXpath() {
-		return xpath;
+		return Arrays.asList(xpath.split(","));
 	}
 
-	public void setXpath(List<String> xpath) {
-		this.xpath = xpath;
+	public void setXpath(List<String> xpathList) {
+		StringBuilder xpathStr = null;
+		for (String xpath : xpathList) {
+			xpathStr.append(xpath);
+		}
+		this.xpath = xpathStr.toString();
 	}
 
 	public String getRegex() {
