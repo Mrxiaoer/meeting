@@ -203,7 +203,7 @@ public class SpiderPageProcessor implements PageProcessor {
 			}
 
 			if (this.spiderRule.getIsGetText()) {
-				List<String> allStrs = null;
+				List<String> allStrs = new ArrayList<>();
 				for (String xpath : xpathList) {
 					//获取此xpath下直接或间接的文本，并根据需要对其进行正则提取
 					select = html.xpath(xpath + "/allText()");
@@ -226,7 +226,7 @@ public class SpiderPageProcessor implements PageProcessor {
 				}
 				myPage.putField(SpiderConstant.SELECTSTRS, allStrs);
 			} else {
-				List<String> allObjs = null;
+				List<String> allObjs = new ArrayList<>();
 				for (String xpath : xpathList) {
 					//获取此xpath对应的元素，并根据需要对其进行正则提取
 					select = html.xpath(xpath);

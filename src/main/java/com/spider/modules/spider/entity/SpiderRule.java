@@ -1,17 +1,15 @@
 package com.spider.modules.spider.entity;
 
+import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.spider.modules.spider.utils.MyStringUtil;
+import org.apache.ibatis.type.Alias;
+
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import org.apache.ibatis.type.Alias;
 
 /**
  * 爬取规则
@@ -71,15 +69,24 @@ public class SpiderRule {
 //	}
 
 	public List<String> getXpathList() {
-		return Arrays.asList(xpath.split(","));
+		List<String> xpathList;
+		if(StrUtil.isNotBlank(this.xpath)){
+			xpathList = Arrays.asList(xpath.split(","));
+		}else {
+			xpathList = new ArrayList<>();
+		}
+		return xpathList;
 	}
 
 	public void setXpathList(List<String> xpathList) {
-		StringBuilder xpathStr = null;
-		for (String xpath : xpathList) {
-			xpathStr.append(xpath);
+		StringBuilder xpathStr = new StringBuilder();
+		if(xpathList!=null){
+			for (String xpath : xpathList) {
+				xpathStr.append(xpath).append(",");
+			}
+			xpathStr.substring(0, xpathStr.length()-2);
+			this.xpath = xpathStr.toString();
 		}
-		this.xpath = xpathStr.toString();
 	}
 
 	public String getRegex() {

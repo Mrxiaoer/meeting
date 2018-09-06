@@ -170,7 +170,7 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 				spiderClaim.setPipeline(spiderTemporaryRecordPipeline);
 				spiderClaim.setCookieSet(handcookies);
 				spiderClaim.setSleepTime(sleepTime);
-                if(xpath != ""){
+                if(!"".equals(xpath)){
                     List<String> list = new ArrayList<>();
                     list.add(xpath);
                     spiderClaim.setClickXpathList(list);
@@ -200,7 +200,7 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 				spiderClaim.setPipeline(spiderTemporaryRecordPipeline);
 				spiderClaim.setCookieSet(cookies);
 				spiderClaim.setSleepTime(sleepTime);
-				if(xpath != ""){
+				if(!"".equals(xpath)){
                     List<String> list = new ArrayList<>();
                     list.add(xpath);
                     spiderClaim.setClickXpathList(list);
