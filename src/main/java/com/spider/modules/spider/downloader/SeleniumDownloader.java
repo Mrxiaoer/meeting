@@ -122,10 +122,12 @@ public class SeleniumDownloader implements Downloader, Closeable {
 			List<String> clickXpathList = site.getClickXpathList();
 			if (clickXpathList != null && clickXpathList.size() > 0) {
 				WebElement clickElement;
+				Class[] paramClzs1 = {};
+				Object[] paramObjs1 = {};
 				for (String clickXpath : clickXpathList) {
 					try {
 						clickElement = driver.findElementByXPath(clickXpath);
-						RunTimeout.timeoutMethod(clickElement, "click", paramClzs, paramObjs, timeOut);
+						RunTimeout.timeoutMethod(clickElement, "click", paramClzs1, paramObjs1, timeOut);
 					} catch (ExecutionException | InterruptedException e) {
 						e.printStackTrace();
 					}

@@ -170,6 +170,11 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 				spiderClaim.setPipeline(spiderTemporaryRecordPipeline);
 				spiderClaim.setCookieSet(handcookies);
 				spiderClaim.setSleepTime(sleepTime);
+                if(xpath != ""){
+                    List<String> list = new ArrayList<>();
+                    list.add(xpath);
+                    spiderClaim.setClickXpathList(list);
+                }
 				spiderPage.startSpider(linkId, analogLogin.getTargetUrl(), spiderClaim, spiderRule );
 				TemporaryRecordEntity handtem = temporaryRecordService.queryBylinkId(linkId);
 				if (StrUtil.isBlank(handtem.getUrl())){
@@ -177,8 +182,8 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 				}else if (!analogLogin.getTargetUrl().equals(handtem.getUrl())){
 					return new TemporaryRecordEntity();
 				}else {
-					return handtem;
-				}
+                    return handtem;
+                }
 			}finally {
 				phantomJSDriverPool.returnObject(driver);
 			}
@@ -195,6 +200,11 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 				spiderClaim.setPipeline(spiderTemporaryRecordPipeline);
 				spiderClaim.setCookieSet(cookies);
 				spiderClaim.setSleepTime(sleepTime);
+				if(xpath != ""){
+                    List<String> list = new ArrayList<>();
+                    list.add(xpath);
+                    spiderClaim.setClickXpathList(list);
+                }
 				spiderPage.startSpider(linkId, analogLogin.getTargetUrl(), spiderClaim, spiderRule);
 				String trsUrl = temporaryRecordService.queryBylinkId(linkId).getUrl();
 				if (StrUtil.isBlank(trsUrl)) {
@@ -206,10 +216,7 @@ public class TargetInfoServiceImpl implements TargetInfoService {
 						throw nse;
 					}
 					spiderPage.startSpider(linkId, analogLogin.getTargetUrl(), spiderClaim, spiderRule);
-				}else if ( xpath != ""){
-				    logger.info("进入开始！");
-				    htmlprocess.doclick(driver, xpath);
-                }
+				}
 			} finally {
 				phantomJSDriverPool.returnObject(driver);
 			}
