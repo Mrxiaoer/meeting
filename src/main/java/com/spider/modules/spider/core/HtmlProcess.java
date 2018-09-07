@@ -49,11 +49,11 @@ public class HtmlProcess {
 			spiderRule.setXpathList(xpathList);
 		}
 		Selectable select;
-		List<String> allStrs = null;
+		List<String> allStrs = new ArrayList<>();
 		if (spiderRule.getIsGetText()) {
 			for (String xpath : spiderRule.getXpathList()) {
 				//获取此xpath下直接或间接的文本，并根据需要对其进行正则提取
-				select = html.xpath(spiderRule.getXpathList() + "/allText()");
+				select = html.xpath(xpath + "/allText()");
 				if (StrUtil.isNotEmpty(spiderRule.getRegex())) {
 					select = select.regex(spiderRule.getRegex());
 				}
