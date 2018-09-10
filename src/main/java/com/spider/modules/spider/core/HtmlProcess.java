@@ -34,7 +34,7 @@ public class HtmlProcess {
 		//读取html文件内容
 		temporaryRecord = temporaryRecordDao.selectOne(temporaryRecord);
 		String filePath = temporaryRecord.getHtmlFilePath();
-		String htmlStr = null;
+		String htmlStr = new String();
 		try {
 			htmlStr = FileIOUtil.readStringFromFile(filePath);
 		} catch (IOException e) {
@@ -65,7 +65,7 @@ public class HtmlProcess {
 					}
 				}
 				String selectStrAll = select.get();
-				List<String> selectStrs = null;
+				List<String> selectStrs = new ArrayList<>();
 				if (selectStrAll.length() > 0) {
 					selectStrs = Arrays.asList(selectStrAll.split(" "));
 				}
