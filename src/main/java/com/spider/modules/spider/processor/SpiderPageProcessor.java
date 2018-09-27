@@ -152,7 +152,7 @@ public class SpiderPageProcessor implements PageProcessor {
 			long startTime = System.currentTimeMillis();
 			String htmlStr = myPage.getHtml().get();
 			//清除js
-			Pattern p = Pattern.compile("<script[^>]*?src[\\s]*?=[\\s]*?(\"[\\S]*?\"|\'[\\S]*?\')></script>");
+			Pattern p = Pattern.compile("<script[^>]*?src[\\s]*?=[\\s]*?(\"[\\S]*?\"|'[\\S]*?')[^>]*?>[^<>]*?</script>");
 			Pattern p1 = Pattern.compile(
 					"<script[^>]*?src[\\s]*?=[\\s]*?(\"[\\S]*?(vue|element-ui/index)(.min)?.js\"|\'[\\S]*?"
 							+ "(vue|element-ui/index)(.min)?.js\')[^>]*?></script>");

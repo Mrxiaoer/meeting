@@ -1,9 +1,11 @@
 package com.spider.modules.business.service;
 
-import java.util.List;
-
+import com.spider.common.utils.PageUtils;
 import com.spider.modules.business.entity.PageInfoEntity;
 import com.spider.modules.business.model.ProvisionalEntity;
+
+import java.util.List;
+import java.util.Map;
 
 public interface PageInfoService {
 
@@ -40,6 +42,13 @@ public interface PageInfoService {
      * @param pageInfo
      */
     void update(PageInfoEntity pageInfo);
+
+    /**
+     * 根据自定义条件查询
+     * @param params
+     * @return
+     */
+    PageUtils queryTerm(Map<String,Object> params);
 
     /**
      * 插入数据

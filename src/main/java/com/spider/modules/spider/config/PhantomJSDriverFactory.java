@@ -58,7 +58,7 @@ public class PhantomJSDriverFactory extends BasePooledObjectFactory<PhantomJSDri
 		driver.manage().timeouts().setScriptTimeout(120, TimeUnit.SECONDS);
 		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 		driver.manage().deleteAllCookies();
-		driver.manage().window().setSize(new Dimension(1920, 1080));
+		driver.manage().window().setSize(new Dimension(1169, 582));
 		return driver;
 	}
 

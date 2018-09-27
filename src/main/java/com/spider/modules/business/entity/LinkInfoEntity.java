@@ -13,9 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 链接信息表
- * <p>
- * title: LinkInfo
- * </p>
  *
  * @author yaonuan
  * @data 2018年7月9日 version 1.0
@@ -25,39 +22,60 @@ public class LinkInfoEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    // 编号
+    /**
+     * 编号(主键）
+     */
     @TableId
     private Integer linkId;
 
-    //模拟登录表主键
+    /**
+     * 模拟登录表主键
+     */
     private Integer analogId;
 
-    // 所属站点系统
+    /**
+     * 所属站点系统
+     */
     private String system;
 
-    // 所属系统模块
+    /**
+     * 所属系统模块
+     */
     private String module;
 
-    // 此系统待采集模块url
+    /**
+     * 此系统待采集模块url
+     */
     private String url;
 
     private Integer isLogin;
 
-    // 创建时间
+    /**
+     * 创建时间
+     */
     @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss", locale = "zh", timezone = "GMT+8")
     private Date createTime;
 
-    // 修改时间
+    /**
+     * 修改时间
+     */
     @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss", locale = "zh", timezone = "GMT+8")
     private Date updateTime;
 
-    // 描述
+    /**
+     * 描述
+     */
     private String remarks;
 
-    //目标页是否可达（1可达，0不可达）
+    /**
+     * 目标页是否可达
+     * 1可达，0不可达,2、手动输入cookie
+     */
     private Integer hasTarget;
 
-    //关联规则表Id
+    /**
+     * 关联规则表Id
+     */
     @JsonIgnore
     private Integer ruleId;
 
@@ -71,7 +89,9 @@ public class LinkInfoEntity implements Serializable {
      */
     private  String loginUrl;
 
-    // 存在状态（1.存在;0.删除）
+    /**
+     * 存在状态（1.存在;0.删除）
+     */
     @JsonIgnore
     private Integer state;
 

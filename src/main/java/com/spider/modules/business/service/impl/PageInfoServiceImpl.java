@@ -1,25 +1,29 @@
 package com.spider.modules.business.service.impl;
 
-import java.util.Date;
-import java.util.List;
-
+import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.spider.common.utils.Constant;
+import com.spider.common.utils.PageUtils;
+import com.spider.common.utils.Query;
+import com.spider.modules.business.dao.PageInfoDao;
 import com.spider.modules.business.dao.ResultInfoDao;
+import com.spider.modules.business.entity.ElementInfoEntity;
+import com.spider.modules.business.entity.PageInfoEntity;
 import com.spider.modules.business.entity.ResultInfoEntity;
+import com.spider.modules.business.model.ProvisionalEntity;
+import com.spider.modules.business.service.ElementInfoService;
+import com.spider.modules.business.service.PageInfoService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.spider.common.utils.Constant;
-import com.spider.modules.business.dao.PageInfoDao;
-import com.spider.modules.business.entity.ElementInfoEntity;
-import com.spider.modules.business.entity.PageInfoEntity;
-import com.spider.modules.business.model.ProvisionalEntity;
-import com.spider.modules.business.service.ElementInfoService;
-import com.spider.modules.business.service.PageInfoService;
-
-import cn.hutool.core.bean.BeanUtil;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class PageInfoServiceImpl extends ServiceImpl<PageInfoDao, PageInfoEntity> implements PageInfoService {
@@ -36,6 +40,17 @@ public class PageInfoServiceImpl extends ServiceImpl<PageInfoDao, PageInfoEntity
     @Override
     public List<PageInfoEntity> queryByResultId(Integer resultId) {
         return pageInfoDao.queryByResultId(resultId);
+    }
+
+    @Override
+    public PageUtils queryTerm(Map<String,Object> params){
+        String state = Constant.TRUE_STATE;
+        String nameCn = (String) params.get("nameCn");
+        Integer resultId = Integer.parseInt(String.valueOf(params.get("resultId")));
+        Page<PageInfoEntity> page = this.selectPage(new Query<PageInfoEntity>(params).getPage(),
+                new EntityWrapper<PageInfoEntity>().like(StringUtils.isNotBlank(nameCn), "name_cn", nameCn)
+                        .eq("state", state).and().eq("result_id", resultId));
+        return new PageUtils(page);
     }
 
     @Override

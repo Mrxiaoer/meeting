@@ -84,20 +84,20 @@ public class TargetInfoController {
 		try {
 			temporary = targetInfoService.tothirdspider(params);
 		}catch(NoSuchElementException nse){
-			return R.error(1404, "某些页面元素未找到，可能页面被改动，请重新模拟登陆！");
+			return R.error(1404, "某些页面元素未找到，可能页面被改动，请重新模拟登陆!");
 		}catch (Exception e) {
-			return R.error("获取页面异常，请重试或联系管理员！");
+			return R.error("获取页面异常，请重试或联系管理员!");
 		}
 		if (temporary == null) {
-			return R.error("无法获取此页面，请查证后再拨！");
+			return R.error("无法获取此页面，请查证后再拨!");
 		}
 		try {
 			String contents = FileIOUtil.readStringFromFile(temporary.getHtmlFilePath());
 			return R.ok().put("contents", contents);
 		} catch (NoSuchElementException nse) {
-			return R.error(1404, "某些页面元素未找到，可能页面被改动，请重新模拟登陆！");
+			return R.error(1404, "某些页面元素未找到，可能页面被改动，请重新模拟登陆!");
 		} catch (Exception e) {
-			return R.error();
+			return R.error("无法获取此页面，请查看输入的cookie或用户名密码是否正确!");
 		}
 
 	}

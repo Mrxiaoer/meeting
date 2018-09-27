@@ -1,15 +1,16 @@
 package com.spider.modules.business.controller;
 
 
+import com.spider.common.utils.PageUtils;
+import com.spider.common.utils.R;
 import com.spider.modules.business.entity.PageInfoEntity;
+import com.spider.modules.business.model.ProvisionalEntity;
+import com.spider.modules.business.service.PageInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.spider.common.utils.R;
-import com.spider.modules.business.model.ProvisionalEntity;
-import com.spider.modules.business.service.PageInfoService;
-
 import java.util.List;
+import java.util.Map;
 
 /**
  * 采集结果表
@@ -27,6 +28,13 @@ public class PageInfoController {
     public R queryById(@PathVariable Integer id){
         PageInfoEntity pageInfo = pageInfoService.queryById(id);
         return R.ok().put("list",pageInfo);
+    }
+
+    //想渲染前端比对的查看，未更换
+    @GetMapping("/list")
+    public R queryTerm(@RequestParam Map<String,Object> params){
+        PageUtils pager = pageInfoService.queryTerm(params);
+        return R.ok();
     }
 
     @GetMapping("template_details/{id}")

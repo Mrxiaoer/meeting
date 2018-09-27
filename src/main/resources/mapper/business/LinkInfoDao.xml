@@ -81,6 +81,9 @@
 			<if test="module != null and module.trim() != ''">
 				AND module LIKE CONCAT('%',#{ module },'%')
 			</if>
+			<if test="hasTarget != null">
+				has_target = #{hasTarget}
+			</if>
 			AND state = 1
 		</where>
 		ORDER BY link_id DESC

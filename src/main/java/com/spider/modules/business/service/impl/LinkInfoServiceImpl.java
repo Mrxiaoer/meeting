@@ -168,7 +168,7 @@ public class LinkInfoServiceImpl extends ServiceImpl<LinkInfoDao, LinkInfoEntity
     public void  updateByTarget(Integer linkId){
         LinkInfoEntity linkInfo = new LinkInfoEntity();
         linkInfo.setLinkId(linkId);
-        linkInfo.setHasTarget(Constant.VALUE_ZERO);linkInfoDao.update(linkInfo);
+        linkInfo.setHasTarget(Constant.VALUE_ZERO);
         linkInfoDao.update(linkInfo);
     }
 
