@@ -5,233 +5,224 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.spider.common.validator.group.AddGroup;
 import com.spider.common.validator.group.UpdateGroup;
-
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotBlank;
-
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 
 /**
  * 系统用户
- * 
+ *
  * @author maoxinmin
  */
 @SuppressWarnings("deprecation")
 @TableName("sys_user")
 public class SysUserEntity implements Serializable {
-	private static final long serialVersionUID = 1L;
 
-	/**
-	 * 用户ID
-	 */
-	@TableId
-	private Long userId;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * 用户名
-	 */
-	@NotBlank(message = "用户名不能为空", groups = { AddGroup.class, UpdateGroup.class })
-	private String username;
+    /**
+     * 用户ID
+     */
+    @TableId
+    private Long userId;
 
-	/**
-	 * 密码
-	 */
-	@NotBlank(message = "密码不能为空", groups = AddGroup.class)
-	private String password;
+    /**
+     * 用户名
+     */
+    @NotBlank(message = "用户名不能为空", groups = {AddGroup.class, UpdateGroup.class})
+    private String username;
 
-	/**
-	 * 盐
-	 */
-	private String salt;
+    /**
+     * 密码
+     */
+    @NotBlank(message = "密码不能为空", groups = AddGroup.class)
+    private String password;
 
-	/**
-	 * 邮箱
-	 */
-	@NotBlank(message = "邮箱不能为空", groups = { AddGroup.class, UpdateGroup.class })
-	@Email(message = "邮箱格式不正确", groups = { AddGroup.class, UpdateGroup.class })
-	private String email;
+    /**
+     * 盐
+     */
+    private String salt;
 
-	/**
-	 * 手机号
-	 */
-	private String mobile;
+    /**
+     * 邮箱
+     */
+    @NotBlank(message = "邮箱不能为空", groups = {AddGroup.class, UpdateGroup.class})
+    @Email(message = "邮箱格式不正确", groups = {AddGroup.class, UpdateGroup.class})
+    private String email;
 
-	/**
-	 * 状态 0：禁用 1：正常
-	 */
-	private Integer status;
+    /**
+     * 手机号
+     */
+    private String mobile;
 
-	/**
-	 * 角色ID列表
-	 */
-	@TableField(exist = false)
-	private List<Long> roleIdList;
+    /**
+     * 状态 0：禁用 1：正常
+     */
+    private Integer status;
 
-	/**
-	 * 创建者ID
-	 */
-	private Long createUserId;
+    /**
+     * 角色ID列表
+     */
+    @TableField(exist = false)
+    private List<Long> roleIdList;
 
-	/**
-	 * 创建时间
-	 */
-	private Date createTime;
+    /**
+     * 创建者ID
+     */
+    private Long createUserId;
 
-	/**
-	 * 设置：
-	 * 
-	 * @param userId
-	 */
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
+    /**
+     * 创建时间
+     */
+    private Date createTime;
 
-	/**
-	 * 获取：
-	 * 
-	 * @return Long
-	 */
-	public Long getUserId() {
-		return userId;
-	}
+    /**
+     * 获取：
+     *
+     * @return Long
+     */
+    public Long getUserId() {
+        return userId;
+    }
 
-	/**
-	 * 设置：用户名
-	 * 
-	 * @param username
-	 *            用户名
-	 */
-	public void setUsername(String username) {
-		this.username = username;
-	}
+    /**
+     * 设置：
+     */
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
 
-	/**
-	 * 获取：用户名
-	 * 
-	 * @return String
-	 */
-	public String getUsername() {
-		return username;
-	}
+    /**
+     * 获取：用户名
+     *
+     * @return String
+     */
+    public String getUsername() {
+        return username;
+    }
 
-	/**
-	 * 设置：密码
-	 * 
-	 * @param password
-	 *            密码
-	 */
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    /**
+     * 设置：用户名
+     *
+     * @param username 用户名
+     */
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-	/**
-	 * 获取：密码
-	 * 
-	 * @return String
-	 */
-	public String getPassword() {
-		return password;
-	}
+    /**
+     * 获取：密码
+     *
+     * @return String
+     */
+    public String getPassword() {
+        return password;
+    }
 
-	/**
-	 * 设置：邮箱
-	 * 
-	 * @param email
-	 *            邮箱
-	 */
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    /**
+     * 设置：密码
+     *
+     * @param password 密码
+     */
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	/**
-	 * 获取：邮箱
-	 * 
-	 * @return String
-	 */
-	public String getEmail() {
-		return email;
-	}
+    /**
+     * 获取：邮箱
+     *
+     * @return String
+     */
+    public String getEmail() {
+        return email;
+    }
 
-	/**
-	 * 设置：手机号
-	 * 
-	 * @param mobile
-	 *            手机号
-	 */
-	public void setMobile(String mobile) {
-		this.mobile = mobile;
-	}
+    /**
+     * 设置：邮箱
+     *
+     * @param email 邮箱
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	/**
-	 * 获取：手机号
-	 * 
-	 * @return String
-	 */
-	public String getMobile() {
-		return mobile;
-	}
+    /**
+     * 获取：手机号
+     *
+     * @return String
+     */
+    public String getMobile() {
+        return mobile;
+    }
 
-	/**
-	 * 设置：状态 0：禁用 1：正常
-	 * 
-	 * @param status
-	 *            状态 0：禁用 1：正常
-	 */
-	public void setStatus(Integer status) {
-		this.status = status;
-	}
+    /**
+     * 设置：手机号
+     *
+     * @param mobile 手机号
+     */
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
 
-	/**
-	 * 获取：状态 0：禁用 1：正常
-	 * 
-	 * @return Integer
-	 */
-	public Integer getStatus() {
-		return status;
-	}
+    /**
+     * 获取：状态 0：禁用 1：正常
+     *
+     * @return Integer
+     */
+    public Integer getStatus() {
+        return status;
+    }
 
-	/**
-	 * 设置：创建时间
-	 * 
-	 * @param createTime
-	 *            创建时间
-	 */
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
+    /**
+     * 设置：状态 0：禁用 1：正常
+     *
+     * @param status 状态 0：禁用 1：正常
+     */
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
 
-	/**
-	 * 获取：创建时间
-	 * 
-	 * @return Date
-	 */
-	public Date getCreateTime() {
-		return createTime;
-	}
+    /**
+     * 获取：创建时间
+     *
+     * @return Date
+     */
+    public Date getCreateTime() {
+        return createTime;
+    }
 
-	public List<Long> getRoleIdList() {
-		return roleIdList;
-	}
+    /**
+     * 设置：创建时间
+     *
+     * @param createTime 创建时间
+     */
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
 
-	public void setRoleIdList(List<Long> roleIdList) {
-		this.roleIdList = roleIdList;
-	}
+    public List<Long> getRoleIdList() {
+        return roleIdList;
+    }
 
-	public Long getCreateUserId() {
-		return createUserId;
-	}
+    public void setRoleIdList(List<Long> roleIdList) {
+        this.roleIdList = roleIdList;
+    }
 
-	public void setCreateUserId(Long createUserId) {
-		this.createUserId = createUserId;
-	}
+    public Long getCreateUserId() {
+        return createUserId;
+    }
 
-	public String getSalt() {
-		return salt;
-	}
+    public void setCreateUserId(Long createUserId) {
+        this.createUserId = createUserId;
+    }
 
-	public void setSalt(String salt) {
-		this.salt = salt;
-	}
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
 }

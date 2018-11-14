@@ -1,26 +1,21 @@
 package com.spider.modules.job.model;
 
 import com.baomidou.mybatisplus.annotations.TableId;
-import com.spider.modules.business.model.TimeTaskModel;
-import org.hibernate.validator.constraints.NotBlank;
-
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @Author: yaonuan
  * @Date: 2018/8/6 0006 下午 3:26
  */
 public class ScheduleJobModel implements Serializable {
-    private static final long serialVersionUID = 1L;
 
     /**
      * 任务调度参数key
      */
     public static final String JOB_PARAM_KEY = "JOB_PARAM_KEY";
-
+    private static final long serialVersionUID = 1L;
     /**
      * 任务id
      */
@@ -63,21 +58,23 @@ public class ScheduleJobModel implements Serializable {
     private Date createTime;
 
     private String paramsName;
-    /**
-     * 设置：任务id
-     * @param jobId
-     * 任务id
-     */
-    public void setJobId(Long jobId) {
-        this.jobId = jobId;
-    }
 
     /**
      * 获取：任务id
+     *
      * @return Long
      */
     public Long getJobId() {
         return jobId;
+    }
+
+    /**
+     * 设置：任务id
+     *
+     * @param jobId 任务id
+     */
+    public void setJobId(Long jobId) {
+        this.jobId = jobId;
     }
 
     public String getBeanName() {
@@ -112,28 +109,28 @@ public class ScheduleJobModel implements Serializable {
         this.remark = remark;
     }
 
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
     public Integer getStatus() {
         return status;
     }
 
-    public void setCronExpression(String cronExpression) {
-        this.cronExpression = cronExpression;
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public String getCronExpression() {
         return cronExpression;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCronExpression(String cronExpression) {
+        this.cronExpression = cronExpression;
     }
 
     public Date getCreateTime() {
         return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     public String getParamsName() {

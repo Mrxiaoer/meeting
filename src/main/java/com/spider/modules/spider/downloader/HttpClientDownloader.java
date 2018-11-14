@@ -13,7 +13,8 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.protocol.BasicHttpContext;
-import org.apache.http.protocol.ExecutionContext;
+import org.apache.http.protocol.HttpCoreContext;
+import org.apache.http.protocol.HttpCoreContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 import org.openqa.selenium.Cookie;
@@ -131,8 +132,8 @@ public class HttpClientDownloader extends AbstractDownloader {
 		}
 		//获取重定向之后的主机地址信息
 		HttpContext httpContext = new BasicHttpContext();
-		HttpHost targetHost = (HttpHost) httpContext.getAttribute(ExecutionContext.HTTP_TARGET_HOST);
-		HttpUriRequest realRequest = (HttpUriRequest) httpContext.getAttribute(ExecutionContext.HTTP_REQUEST);
+		HttpHost targetHost = (HttpHost) httpContext.getAttribute(HttpCoreContext.HTTP_TARGET_HOST);
+		HttpUriRequest realRequest = (HttpUriRequest) httpContext.getAttribute(HttpCoreContext.HTTP_REQUEST);
 		page.setUrl(new PlainText(targetHost.toString() + realRequest.toString()));
 		page.setRequest(request);
 		page.setStatusCode(httpResponse.getStatusLine().getStatusCode());
