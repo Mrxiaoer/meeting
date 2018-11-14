@@ -74,9 +74,13 @@ public class LinkInfoController {
      */
     @PostMapping("/save")
     public R insert(@RequestBody LinkInfoEntity linkInfo){
-        
-        linkInfoService.save(linkInfo);
-        return R.ok();
+
+        if (!linkInfo.getLoginUrl().equals(linkInfo.getUrl())){
+            linkInfoService.save(linkInfo);
+            return R.ok();
+        }else {
+            return R.error("目标页与登录页url不能相同!");
+        }
     }
     
     /**
@@ -86,13 +90,19 @@ public class LinkInfoController {
      */
     @PostMapping("/update")
     public R update(@RequestBody LinkInfoEntity linkInfo){
-        if (linkInfo.getIsLogin() == Constant.VALUE_ONE){
-            linkInfo.setHasTarget(Constant.VALUE_ZERO);
-        }else{
-            linkInfo.setHasTarget(Constant.VALUE_ONE);
+
+        if (!linkInfo.getLoginUrl().equals(linkInfo.getUrl())){
+            if (linkInfo.getIsLogin() == Constant.VALUE_ONE){
+                linkInfo.setHasTarget(Constant.VALUE_ZERO);
+            }else{
+                linkInfo.setHasTarget(Constant.VALUE_ONE);
+            }
+            linkInfoService.update(linkInfo);
+            return R.ok();
+        }else {
+            return R.error("目标页与登录页url不能相同!");
         }
-        linkInfoService.update(linkInfo);
-        return R.ok();
+
     }
     
     /**

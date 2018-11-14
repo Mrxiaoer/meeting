@@ -37,7 +37,8 @@ public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobDao, Schedule
   /** 项目启动时，初始化定时器 */
   @PostConstruct
   public void init() {
-    List<ScheduleJobEntity> scheduleJobList = this.selectList(null);
+//    List<ScheduleJobEntity> scheduleJobList = this.selectList(null);
+    List<ScheduleJobEntity> scheduleJobList = this.selectList(new EntityWrapper<ScheduleJobEntity>().eq("del_state", Constant.VALUE_ONE));
     for (ScheduleJobEntity scheduleJob : scheduleJobList) {
       CronTrigger cronTrigger = ScheduleUtils.getCronTrigger(scheduler, scheduleJob.getJobId());
       // 如果不存在，则创建

@@ -1,5 +1,6 @@
 package com.spider.modules.job.task;
 
+import com.spider.common.utils.Constant;
 import com.spider.modules.business.entity.LinkInfoEntity;
 import com.spider.modules.business.entity.PageInfoEntity;
 import com.spider.modules.business.entity.ResultInfoEntity;
@@ -19,19 +20,18 @@ import com.spider.modules.spider.service.AnalogLoginService;
 import com.spider.modules.spider.service.SpiderRuleService;
 import com.spider.modules.spider.service.TemporaryRecordService;
 import com.spider.modules.spider.utils.MyStringUtil;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 /**
  * 自动爬取定时任务
@@ -88,56 +88,100 @@ public class AutoTask {
 		} else {
 			throw new Exception("定时任务参数异常！");
 		}
+		LinkInfoEntity linkInfoEntity = linkInfoService.queryById(Integer.parseInt(params));
+		if (linkInfoEntity.getHasTarget() == Constant.VALUE_ONE ) {
+			//根据定时任务中的params
+            AnalogLoginEntity analogLogin = analogLoginService.getOneByLinkId(linkInfoEntity.getLinkId());
+            //采用数据库中cookie尝试登录
+            Set<Cookie> cookies;
 
-		Integer linkId = Integer.parseInt(params);
-		SpiderRule spiderRule = new SpiderRule();
-		spiderRule.setIsGetText(false);
-		//模拟登录
-		Set<Cookie> cookies;
-		//模拟登录，获取cookie
-		PhantomJSDriver driver = phantomJSDriverPool.borrowPhantomJSDriver();
-		try {
-			cookies = loginAnalog.login(loginInfo.getId(), driver);
-			//获取目标页
-			SpiderClaim spiderClaim = new SpiderClaim();
-			spiderClaim.setCookieSet(cookies);
-			spiderClaim.setPhantomJSDriver(driver);
-			spiderClaim.setPipeline(spiderTemporaryRecordPipeline);
-			spiderPage.startSpider(linkId, loginInfo.getTargetUrl(), spiderClaim, spiderRule);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			phantomJSDriverPool.returnObject(driver);
+            Integer linkId = Integer.parseInt(params);
+			SpiderRule spiderRule = new SpiderRule();
+			spiderRule.setIsGetText(false);
+
+            //采用原先cookie采集
+            cookies = MyStringUtil.json2cookie(analogLogin.getCookie());
+
+            PhantomJSDriver driver = phantomJSDriverPool.borrowPhantomJSDriver();
+            try {
+                SpiderClaim spiderClaim = new SpiderClaim();
+                spiderClaim.setPhantomJSDriver(driver);
+                spiderClaim.setPipeline(spiderTemporaryRecordPipeline);
+                spiderClaim.setCookieSet(cookies);
+                spiderClaim.setSleepTime(3000);
+                spiderPage.startSpider(linkId, analogLogin.getTargetUrl(), spiderClaim, spiderRule);
+            }finally {
+                phantomJSDriverPool.returnObject(driver);
+            }
+
+            //判断目标页是否爬取成功
+            boolean flag = true;
+            TemporaryRecordEntity temporaryRecord = temporaryRecordService.queryBylinkId(linkId);
+            if (!MyStringUtil.urlCutParam(linkInfoEntity.getUrl()).equals(MyStringUtil.urlCutParam(temporaryRecord.getUrl()))) {
+                linkInfoEntity.setFailTimes(linkInfoEntity.getFailTimes() + 1);
+                linkInfoService.update(linkInfoEntity);
+                flag = false;
+                if (linkInfoEntity.getFailTimes() % 3 == 0) {
+                    linkInfoEntity.setHasTarget(Constant.VALUE_ZERO);
+                    linkInfoEntity.setFailTimes(Constant.VALUE_ZERO);
+                    linkInfoService.update(linkInfoEntity);
+                }
+            } else {
+                if (linkInfoEntity.getFailTimes() != 0) {
+                    linkInfoEntity.setFailTimes(Constant.VALUE_ZERO);
+                    linkInfoService.update(linkInfoEntity);
+                }
+            }
+            if(!flag){
+                //模拟登录，获取cookie
+                PhantomJSDriver todriver = phantomJSDriverPool.borrowPhantomJSDriver();
+                try {
+                    cookies = loginAnalog.login(loginInfo.getId(), todriver);
+                    //获取目标页
+                    SpiderClaim spiderClaim = new SpiderClaim();
+                    spiderClaim.setPhantomJSDriver(todriver);
+                    spiderClaim.setPipeline(spiderTemporaryRecordPipeline);
+                    spiderClaim.setCookieSet(cookies);
+                    spiderClaim.setSleepTime(3000);
+                    spiderPage.startSpider(linkId, loginInfo.getTargetUrl(), spiderClaim, spiderRule);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    phantomJSDriverPool.returnObject(todriver);
+                }
+            }
+
+			//取得目标页
+			LinkInfoEntity spiderLink = linkInfoService.queryById(linkId);
+			SpiderRule rule = spiderRuleService.getOneById(spiderLink.getRuleId());
+
+			//判断目标页是否采集成功
+
+
+			//组装解析表头信息
+			TemporaryRecordEntity te = new TemporaryRecordEntity();
+			te.setLinkId(linkId);
+			te.setUrl(spiderLink.getUrl());
+			List<String> spiderHead = htmlprocess.process(te, rule);
+			ResultInfoEntity resultInfo = new ResultInfoEntity();
+			resultInfo.setSystem(spiderLink.getSystem());
+			resultInfo.setModule(spiderLink.getModule());
+			resultInfo.setCreateTime(new Date());
+			resultInfo.setLinkId(spiderLink.getLinkId());
+			resultInfoService.save(resultInfo);
+
+			//采集到的表头插入数据库中
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+			String data = dateFormat.format(new Date());
+			String informationName = "自动采集信息" + data;
+			for (String vaule : spiderHead) {
+				PageInfoEntity pageInfo = new PageInfoEntity();
+				pageInfo.setNameCn(vaule);
+				pageInfo.setResultId(resultInfo.getId());
+				pageInfo.setInformationName(informationName);
+				pageInfo.setNameEn(MyStringUtil.getPinYinHeadChar(vaule));
+				pageInfoService.save(pageInfo);
+			}
 		}
-		//取得目标页
-		Map<String, Object> map = new HashMap<>();
-		LinkInfoEntity spiderLink = linkInfoService.queryById(linkId);
-		SpiderRule rule = spiderRuleService.getOneById(spiderLink.getRuleId());
-
-		//组装解析表头信息
-		TemporaryRecordEntity te = new TemporaryRecordEntity();
-		te.setLinkId(linkId);
-		te.setUrl(spiderLink.getUrl());
-		List<String> spiderHead = htmlprocess.process(te, rule);
-		ResultInfoEntity resultInfo = new ResultInfoEntity();
-		resultInfo.setSystem(spiderLink.getSystem());
-		resultInfo.setModule(spiderLink.getModule());
-		resultInfo.setCreateTime(new Date());
-		resultInfo.setLinkId(spiderLink.getLinkId());
-		resultInfoService.save(resultInfo);
-
-		//采集到的表头插入数据库中
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-		String data = dateFormat.format(new Date());
-		String informationName = "自动采集信息" + data;
-		for (String vaule : spiderHead) {
-			PageInfoEntity pageInfo = new PageInfoEntity();
-			pageInfo.setNameCn(vaule);
-			pageInfo.setResultId(resultInfo.getId());
-			pageInfo.setInformationName(informationName);
-			pageInfo.setNameEn(MyStringUtil.getPinYinHeadChar(vaule));
-			pageInfoService.save(pageInfo);
-		}
-
 	}
 }
