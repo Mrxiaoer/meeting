@@ -27,131 +27,133 @@ import us.codecraft.webmagic.utils.UrlUtils;
 @RequestMapping("spider")
 public class SpiderTestController {
 
-	private final AnalogLoginService analogLoginService;
-	private final LoginAnalog loginAnalog;
-	private final SpiderPage spiderPage;
-	private final JieTu jieTu;
-	private final SpiderTemporaryRecordPipeline spiderTemporaryRecordPipeline;
-	private final TemporaryRecordService temporaryRecordService;
-	@Autowired
-	PhantomJSDriverPool phantomJSDriverPool;
-	private Logger logger = LoggerFactory.getLogger(SpiderTestController.class);
+    private final AnalogLoginService analogLoginService;
+    private final LoginAnalog loginAnalog;
+    private final SpiderPage spiderPage;
+    private final JieTu jieTu;
+    private final SpiderTemporaryRecordPipeline spiderTemporaryRecordPipeline;
+    private final TemporaryRecordService temporaryRecordService;
+    @Autowired
+    PhantomJSDriverPool phantomJSDriverPool;
+    private Logger logger = LoggerFactory.getLogger(SpiderTestController.class);
 
-	@Autowired
-	public SpiderTestController(AnalogLoginService analogLoginService, LoginAnalog loginAnalog, SpiderPage spiderPage,
-			JieTu jieTu, SpiderTemporaryRecordPipeline spiderTemporaryRecordPipeline,
-			TemporaryRecordService temporaryRecordService) {
-		this.analogLoginService = analogLoginService;
-		this.loginAnalog = loginAnalog;
-		this.spiderPage = spiderPage;
-		this.jieTu = jieTu;
-		this.spiderTemporaryRecordPipeline = spiderTemporaryRecordPipeline;
-		this.temporaryRecordService = temporaryRecordService;
-	}
+    @Autowired
+    public SpiderTestController(AnalogLoginService analogLoginService, LoginAnalog loginAnalog, SpiderPage spiderPage,
+            JieTu jieTu, SpiderTemporaryRecordPipeline spiderTemporaryRecordPipeline,
+            TemporaryRecordService temporaryRecordService) {
+        this.analogLoginService = analogLoginService;
+        this.loginAnalog = loginAnalog;
+        this.spiderPage = spiderPage;
+        this.jieTu = jieTu;
+        this.spiderTemporaryRecordPipeline = spiderTemporaryRecordPipeline;
+        this.temporaryRecordService = temporaryRecordService;
+    }
 
-	//	@RequestMapping("/allProcess")
-	//	public void allProcess(String url, String loginButtonXpath, String usernameXpath, String passwordXpath,
-	//			String verifycodeXpath,
-	//			String verifyCodeUrl, String username, String password) {
-	//
-	//		Set<Cookie> cookies = this
-	//				.tryLogin(url, loginButtonXpath, usernameXpath, passwordXpath, verifycodeXpath, verifyCodeUrl, username,
-	//						password);
-	//
-	//		this.getPageByCookie(url, cookies);
-	//		System.out.println(phantomJSDriverPool.listAllObjects());
-	//		System.out.println(temporaryRecordService.getOneByUrl(url));
-	//	}
+    //	@RequestMapping("/allProcess")
+    //	public void allProcess(String url, String loginButtonXpath, String usernameXpath, String passwordXpath,
+    //			String verifycodeXpath,
+    //			String verifyCodeUrl, String username, String password) {
+    //
+    //		Set<Cookie> cookies = this
+    //				.tryLogin(url, loginButtonXpath, usernameXpath, passwordXpath, verifycodeXpath, verifyCodeUrl,
+	// username,
+    //						password);
+    //
+    //		this.getPageByCookie(url, cookies);
+    //		System.out.println(phantomJSDriverPool.listAllObjects());
+    //		System.out.println(temporaryRecordService.getOneByUrl(url));
+    //	}
 
-	//	private void getPageByCookie(String url, Set<Cookie> cookies) {
-	//
-	//		SpiderRule spiderRule = new SpiderRule();
-	//		spiderRule.setIsGetText(false);
-	//
-	//		spiderPage.startSpider(10086, url, false, false, spiderRule, cookies, spiderTemporaryRecordPipeline);
-	//
-	//	}
+    //	private void getPageByCookie(String url, Set<Cookie> cookies) {
+    //
+    //		SpiderRule spiderRule = new SpiderRule();
+    //		spiderRule.setIsGetText(false);
+    //
+    //		spiderPage.startSpider(10086, url, false, false, spiderRule, cookies, spiderTemporaryRecordPipeline);
+    //
+    //	}
 
-	//	@RequestMapping("/getPage")
-	//	public void getPage(String url, @RequestParam(required = false) int loginAnalogId) {
-	//
-	//		SpiderRule spiderRule = new SpiderRule();
-	//		spiderRule.setIsGetText(false);
-	//		analogLoginService.getOneById(loginAnalogId);
-	//
-	//		spiderPage.startSpider(10088, url, false, false, spiderRule, null, spiderTemporaryRecordPipeline);
-	//
-	//	}
+    //	@RequestMapping("/getPage")
+    //	public void getPage(String url, @RequestParam(required = false) int loginAnalogId) {
+    //
+    //		SpiderRule spiderRule = new SpiderRule();
+    //		spiderRule.setIsGetText(false);
+    //		analogLoginService.getOneById(loginAnalogId);
+    //
+    //		spiderPage.startSpider(10088, url, false, false, spiderRule, null, spiderTemporaryRecordPipeline);
+    //
+    //	}
 
-	//	@RequestMapping("/tryLogin")
-	//	public Set<Cookie> tryLogin(String loginUrl, String loginButtonXpath, String usernameXpath, String passwordXpath,
-	//			String verifycodeXpath,
-	//			String verifyCodeUrl, String username, String password) {
-	//
-	//		int id = this.saveLoginInfo(loginUrl, loginButtonXpath, usernameXpath, passwordXpath, verifycodeXpath,
-	//				verifyCodeUrl,
-	//				username, password);
-	//
-	//		return this.loginAnalog(id);
-	//	}
+    //	@RequestMapping("/tryLogin")
+    //	public Set<Cookie> tryLogin(String loginUrl, String loginButtonXpath, String usernameXpath, String
+	// passwordXpath,
+    //			String verifycodeXpath,
+    //			String verifyCodeUrl, String username, String password) {
+    //
+    //		int id = this.saveLoginInfo(loginUrl, loginButtonXpath, usernameXpath, passwordXpath, verifycodeXpath,
+    //				verifyCodeUrl,
+    //				username, password);
+    //
+    //		return this.loginAnalog(id);
+    //	}
 
-	@RequestMapping("/saveLoginInfo")
-	public int saveLoginInfo(String loginUrl, String loginButtonXpath, String usernameXpath, String passwordXpath,
-			String verifycodeXpath, String verifyCodeUrl, String username, String password) {
+    @RequestMapping("/saveLoginInfo")
+    public int saveLoginInfo(String loginUrl, String loginButtonXpath, String usernameXpath, String passwordXpath,
+            String verifycodeXpath, String verifyCodeUrl, String username, String password) {
 
-		AnalogLoginEntity analogLogin = new AnalogLoginEntity();
-		analogLogin.setTargetUrl(loginUrl);
-		analogLogin.setHost(UrlUtils.getHost(loginUrl));
-		analogLogin.setDomain(UrlUtils.getDomain(loginUrl));
-		analogLogin.setLoginButtonXpath(loginButtonXpath);
-		analogLogin.setUsernameXpath(usernameXpath);
-		analogLogin.setPasswordXpath(passwordXpath);
-		analogLogin.setVerifycodeXpath(verifycodeXpath);
-		analogLogin.setVerifycodeUrl(verifyCodeUrl);
-		analogLogin.setUsername(username);
-		analogLogin.setPassword(password);
+        AnalogLoginEntity analogLogin = new AnalogLoginEntity();
+        analogLogin.setTargetUrl(loginUrl);
+        analogLogin.setHost(UrlUtils.getHost(loginUrl));
+        analogLogin.setDomain(UrlUtils.getDomain(loginUrl));
+        analogLogin.setLoginButtonXpath(loginButtonXpath);
+        analogLogin.setUsernameXpath(usernameXpath);
+        analogLogin.setPasswordXpath(passwordXpath);
+        analogLogin.setVerifycodeXpath(verifycodeXpath);
+        analogLogin.setVerifycodeUrl(verifyCodeUrl);
+        analogLogin.setUsername(username);
+        analogLogin.setPassword(password);
 
-		return analogLoginService.saveAnalogLogin(analogLogin);
+        return analogLoginService.saveAnalogLogin(analogLogin);
 
-	}
+    }
 
-	//	@RequestMapping("/loginAnalog")
-	//	public Set<Cookie> loginAnalog(int id) {
-	//
-	//		Set<Cookie> cookies = null;
-	//		try {
-	//			cookies = loginAnalog.login(id);
-	//		} catch (Exception e) {
-	//			logger.error("模拟登录失败！Exception: " + e.getMessage());
-	//			e.printStackTrace();
-	//		}
-	//		return cookies;
-	//	}
+    //	@RequestMapping("/loginAnalog")
+    //	public Set<Cookie> loginAnalog(int id) {
+    //
+    //		Set<Cookie> cookies = null;
+    //		try {
+    //			cookies = loginAnalog.login(id);
+    //		} catch (Exception e) {
+    //			logger.error("模拟登录失败！Exception: " + e.getMessage());
+    //			e.printStackTrace();
+    //		}
+    //		return cookies;
+    //	}
 
-	@RequestMapping("/jietu")
-	public void jietu() {
+    @RequestMapping("/jietu")
+    public void jietu() {
 
-		try {
-			jieTu.savePage2Pic("http://115.233.227.46:18080/zqdata/login/verifyCode?random=0.7304289337922849", null,
-					"vc-" + System.currentTimeMillis());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+        try {
+            jieTu.savePage2Pic("http://115.233.227.46:18080/zqdata/login/verifyCode?random=0.7304289337922849", null,
+                    "vc-" + System.currentTimeMillis());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-	}
+    }
 
-	//	@RequestMapping("/getContent")
-	//	public void getContent() {
-	//
-	//		SpiderRule spiderRule = new SpiderRule();
-	//		spiderPage.startSpider(1, "https://tool.lu/", false, false, spiderRule, null, new SpiderContentPipeline());
-	//
-	//	}
+    //	@RequestMapping("/getContent")
+    //	public void getContent() {
+    //
+    //		SpiderRule spiderRule = new SpiderRule();
+    //		spiderPage.startSpider(1, "https://tool.lu/", false, false, spiderRule, null, new SpiderContentPipeline());
+    //
+    //	}
 
-	@RequestMapping("/pathTest")
-	public String pathTest() {
-		String p = FilePathUtil.getBasePath();
-		System.out.println(p);
-		return p;
-	}
+    @RequestMapping("/pathTest")
+    public String pathTest() {
+        String p = FilePathUtil.getBasePath();
+        System.out.println(p);
+        return p;
+    }
 }

@@ -2,6 +2,7 @@ package com.spider.modules.spider.downloader;
 
 import com.spider.modules.spider.config.PhantomJSDriverFactory;
 import com.spider.modules.spider.config.PhantomJSDriverPool;
+import com.spider.modules.spider.core.LoginCookies;
 import com.spider.modules.spider.entity.MyPage;
 import com.spider.modules.spider.entity.MySite;
 import com.spider.modules.spider.utils.MyStringUtil;
@@ -42,6 +43,8 @@ public class SeleniumDownloader implements Downloader, Closeable {
     private PhantomJSDriverPool phantomJSDriverPool;
     @Autowired
     private PhantomJSDriverFactory phantomJSDriverFactory;
+    @Autowired
+    private LoginCookies loginCookies;
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     private int sleepTime = 1500;
 
@@ -78,45 +81,10 @@ public class SeleniumDownloader implements Downloader, Closeable {
         boolean needChange = false;
         PhantomJSDriver oldDriver = null;
         try {
-            assert (driver != null);
-
-            //			driver.get(request.getUrl());
-            WebDriver.Options manage = driver.manage();
-            //			manage.deleteAllCookies();
-
-            logger.info("开始设置cookie");
-            long setCookieStartTime = System.currentTimeMillis();
-            if (site.getCookies() != null) {
-                for (Object o : site.getCookies().entrySet()) {
-                    Map.Entry<String, String> cookieEntry = (Map.Entry) o;
-                    Cookie cookie = new Cookie(cookieEntry.getKey(), cookieEntry.getValue());
-                    manage.addCookie(cookie);
-                }
-            }
-            if (site.getAllCookies() != null) {
-                Set<Map.Entry<String, Map<String, String>>> allCookieSet = site.getAllCookies().entrySet();
-
-                boolean canSet;
-                canSet = setCookies(manage, allCookieSet);
-                if (!canSet) {
-                    driver.get(request.getUrl());
-                    manage.deleteAllCookies();
-                    canSet = setCookies(manage, allCookieSet);
-                }
-            }
-            logger.info("设置cookie用时{}毫秒", System.currentTimeMillis() - setCookieStartTime);
-
-            logger.info("开始下载页面 -- {}", request.getUrl());
+            logger.info("开始获取并下载页面 -- {}", request.getUrl());
             long downloadStartTime = System.currentTimeMillis();
-            //			driver.get(request.getUrl());
-            Class[] paramClzs = {String.class};
-            Object[] paramObjs = {request.getUrl()};
-            int timeOut = 7500;
-            try {
-                RunTimeout.timeoutMethod(driver, "get", paramClzs, paramObjs, timeOut);
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-            }
+
+            loginCookies.loginByCookies(driver,site,request);
 
             //执行预定操作（暂时只支持点击事件）
             List<String> clickXpathList = site.getClickXpathList();
@@ -124,6 +92,7 @@ public class SeleniumDownloader implements Downloader, Closeable {
                 WebElement clickElement;
                 Class[] paramClzs1 = {};
                 Object[] paramObjs1 = {};
+                int timeOut = 7500;
                 for (String clickXpath : clickXpathList) {
                     try {
                         clickElement = driver.findElementByXPath(clickXpath);
@@ -142,8 +111,8 @@ public class SeleniumDownloader implements Downloader, Closeable {
             }
             //sleep
             try {
-                logger.info("sleep{}毫秒", task.getSite().getSleepTime());
-                Thread.sleep(task.getSite().getSleepTime());
+                logger.info("sleep{}毫秒", site.getSleepTime());
+                Thread.sleep(site.getSleepTime());
             } catch (InterruptedException var9) {
                 var9.printStackTrace();
             }
@@ -165,7 +134,7 @@ public class SeleniumDownloader implements Downloader, Closeable {
                     }
                 }
                 page.setUrlPath(urlPath);
-                logger.info("下载页面耗时{}毫秒", System.currentTimeMillis() - downloadStartTime);
+                logger.info("获取并下载页面耗时{}毫秒", System.currentTimeMillis() - downloadStartTime);
             } else {
                 logger.info("未获取到指定页面，耗时{}毫秒", System.currentTimeMillis() - downloadStartTime);
             }
@@ -202,30 +171,4 @@ public class SeleniumDownloader implements Downloader, Closeable {
         logger.info("close this downloader!");
     }
 
-    private boolean setCookies(WebDriver.Options manage, Set<Map.Entry<String, Map<String, String>>> allCookieSet) {
-        boolean canSet = true;
-        for (Map.Entry<String, Map<String, String>> cookiemap : allCookieSet) {
-            for (Map.Entry<String, String> cookieEntry : cookiemap.getValue().entrySet()) {
-                try {
-                    manage.addCookie(
-                            new Cookie(cookieEntry.getKey(), cookieEntry.getValue(), cookiemap.getKey(), "/", null));
-                } catch (Exception e) {
-                    try {
-                        if (cookiemap.getKey().startsWith(".")) {
-                            manage.addCookie(new Cookie(cookieEntry.getKey(), cookieEntry.getValue(),
-                                    cookiemap.getKey().substring(1, cookiemap.getKey().length() - 1), "/", null));
-                        } else {
-                            manage.addCookie(
-                                    new Cookie(cookieEntry.getKey(), cookieEntry.getValue(), "." + cookiemap.getKey(),
-                                            "/", null));
-                        }
-                    } catch (Exception ex) {
-                        canSet = false;
-                        return canSet;
-                    }
-                }
-            }
-        }
-        return canSet;
-    }
 }

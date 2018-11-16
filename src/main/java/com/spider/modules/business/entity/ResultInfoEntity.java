@@ -1,52 +1,45 @@
 package com.spider.modules.business.entity;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.Transient;
-
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
+import javax.persistence.Transient;
 
 @TableName("spider_result_info")
-public class ResultInfoEntity  implements Serializable{
+public class ResultInfoEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
     //编码
     @TableId
     private Integer id;
-    
     //系统名称
     private String system;
-    
     //模块名称
     private String module;
-    
     //创建时间
-    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss",locale="zh",timezone="GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss", locale = "zh", timezone = "GMT+8")
     private Date createTime;
-    
     //是否是模板
     private Integer isModel;
-    
     //链接信息表的主键
     private Integer linkId;
-
     //是否转化<0、未转化 1、转化未完全 2、转化完全>
     private Integer changeState;
-    //存在状态（1.存在;0.删除）
+    /**
+     * 存在状态（1.存在;0.删除）
+     */
     private Integer state;
-    
-    //引入pageInfoEntity
+    /**
+     * 引入pageInfoEntity
+     */
     @Transient
     private List<PageInfoEntity> pageInfo;
-    
+
     @Transient
     private List<ElementInfoEntity> elementInfo;
-
 
     public Integer getId() {
         return id;
