@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.spider.modules.business.dao.ResultInfoDao">
-	<resultMap type="com.spider.modules.business.entity.ResultInfoEntity" id="Base_ResultMap">
+<mapper namespace="com.meeting.modules.business.dao.ResultInfoDao">
+	<resultMap type="com.meeting.modules.business.entity.ResultInfoEntity" id="Base_ResultMap">
 		<id column="id" property="id"/>
 		<result column="system" property="system"/>
 		<result column="module" property="module"/>
@@ -14,7 +14,7 @@
 	</resultMap>
 	
 	<resultMap
-		type="com.spider.modules.business.entity.ResultInfoEntity" id="Page_ResultMap">
+            type="com.meeting.modules.business.entity.ResultInfoEntity" id="Page_ResultMap">
 		<id column="id" property="id"/>
 		<result column="system" property="system"/>
 		<result column="module" property="module"/>
@@ -23,7 +23,7 @@
 		<result column="link_id" property="linkId"/>
         <result column="change_state" property="changeState" />
 		<result column="state" property="state"/>
-		<collection property="pageInfo" ofType="com.spider.modules.business.entity.PageInfoEntity">
+		<collection property="pageInfo" ofType="com.meeting.modules.business.entity.PageInfoEntity">
 			<id column="page_id" property="pageId"/>
 			<result column="name_cn" property="nameCn"/>
 			<result column="name_en" property="nameEn"/>
@@ -36,7 +36,7 @@
 		</collection> 
 	</resultMap>
 	
-	<resultMap type="com.spider.modules.business.entity.ResultInfoEntity" id="Element_ResultMap">
+	<resultMap type="com.meeting.modules.business.entity.ResultInfoEntity" id="Element_ResultMap">
 		<id column="id" property="id"/>
 		<result column="system" property="system"/>
 		<result column="module" property="module"/>
@@ -45,7 +45,7 @@
 		<result column="link_id" property="linkId"/>
         <result column="change_state" property="changeState" />
 		<result column="state" property="state"/>
-		<collection property="elementInfo" ofType="com.spider.modules.business.entity.ElementInfoEntity">
+		<collection property="elementInfo" ofType="com.meeting.modules.business.entity.ElementInfoEntity">
 			<id column="element_id" property="elementId"/>
 			<result column="name_cn" property="nameCn"/>
 			<result column="name_en" property="nameEn"/>
@@ -81,7 +81,7 @@
 	</select>
 
 	<!--根据条件查看resultInfo表-->
-	<select id="selectByCustom" parameterType="com.spider.modules.business.entity.ResultInfoEntity" resultMap="Base_ResultMap">
+	<select id="selectByCustom" parameterType="com.meeting.modules.business.entity.ResultInfoEntity" resultMap="Base_ResultMap">
 		select
 		<include refid="Base_Column_List"/>
 		from spider_result_info
@@ -174,7 +174,7 @@
 	
 	<!-- 更新数据 -->
 	<update id="update"
-		parameterType="com.spider.modules.business.entity.ResultInfoEntity">
+		parameterType="com.meeting.modules.business.entity.ResultInfoEntity">
 		update spider_result_info
 		<set>
 			<if test="system != null and system.trim() != ''">
@@ -200,7 +200,7 @@
 	</update>
 	
 	<!-- 插入数据 -->
-	<insert id="insert" parameterType="com.spider.modules.business.entity.ResultInfoEntity" useGeneratedKeys="true" keyProperty="id">
+	<insert id="insert" parameterType="com.meeting.modules.business.entity.ResultInfoEntity" useGeneratedKeys="true" keyProperty="id">
 		insert into spider_result_info
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="id != null">

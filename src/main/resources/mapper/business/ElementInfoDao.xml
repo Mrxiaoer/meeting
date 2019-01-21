@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper
-	namespace="com.spider.modules.business.dao.ElementInfoDao">
+	namespace="com.meeting.modules.business.dao.ElementInfoDao">
 	<resultMap
-		type="com.spider.modules.business.entity.ElementInfoEntity"
+		type="com.meeting.modules.business.entity.ElementInfoEntity"
 		id="Base_ResultMap">
 		<id column="element_id" property="elementId"/>
 		<result column="page_id" property="pageId"/>
@@ -30,7 +30,7 @@
 		element_id = #{elementId}
 	</select>
 
-	<select id="selectOne" parameterType="com.spider.modules.business.entity.ElementInfoEntity" resultMap="Base_ResultMap">
+	<select id="selectOne" parameterType="com.meeting.modules.business.entity.ElementInfoEntity" resultMap="Base_ResultMap">
 		select
 		<include refid="Base_Column_List" />
 		from spider_element_info
@@ -61,7 +61,7 @@
 
 	<!-- 添加信息 -->
 	<insert id="insert"
-		parameterType="com.spider.modules.business.entity.ElementInfoEntity"
+		parameterType="com.meeting.modules.business.entity.ElementInfoEntity"
 		useGeneratedKeys="true" keyProperty="elementId">
 		insert into spider_element_info
 		<trim prefix="(" suffix=")" suffixOverrides=",">
@@ -144,7 +144,7 @@
 	
 	<!-- 更新数据 -->
 	<update id="update"
-		parameterType="com.spider.modules.business.entity.ElementInfoEntity">
+		parameterType="com.meeting.modules.business.entity.ElementInfoEntity">
 		update spider_element_info
 		<set>
 			<if test="pageId != null">

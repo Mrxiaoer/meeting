@@ -44,12 +44,12 @@
 
     <!-- 开发、测试环境 -->
     <springProfile name="dev,test">
-        <logger name="com.spider.modules.spider.dao" level="DEBUG"/>
-        <logger name="com.spider.modules.business.dao" level="DEBUG"/>
+        <logger name="com.meeting.modules.spider.dao" level="DEBUG"/>
+        <logger name="com.meeting.modules.business.dao" level="DEBUG"/>
 
         <logger name="org.springframework.web" level="INFO"/>
         <logger name="org.springboot.sample" level="INFO"/>
-        <logger name="com.spider" level="INFO"/>
+        <logger name="com.meeting" level="INFO"/>
 
     </springProfile>
 
@@ -57,7 +57,7 @@
     <springProfile name="prod">
         <logger name="org.springframework.web" level="ERROR"/>
         <logger name="org.springboot.sample" level="ERROR"/>
-        <logger name="com.spider" level="ERROR"/>
+        <logger name="com.meeting" level="ERROR"/>
     </springProfile>
 
 </configuration>

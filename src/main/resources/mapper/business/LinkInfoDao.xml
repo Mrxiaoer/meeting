@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.spider.modules.business.dao.LinkInfoDao">
+<mapper namespace="com.meeting.modules.business.dao.LinkInfoDao">
 	<resultMap
-		type="com.spider.modules.business.entity.LinkInfoEntity"
+		type="com.meeting.modules.business.entity.LinkInfoEntity"
 		id="resultMap">
 		<id column="link_id" property="linkId"/>
 		<result column="analog_id" property="analogId"/>
@@ -26,7 +26,7 @@
 
 	<!-- 树结构数据查询 -->
 	<select id="selectByHasTarget"
-		resultType="com.spider.modules.business.entity.LinkInfoEntity">
+		resultType="com.meeting.modules.business.entity.LinkInfoEntity">
 		SELECT
 		<include refid="Base_Column_List"/>
 		FROM
@@ -41,7 +41,7 @@
 
 	<!-- 根据主键id查询数据 -->
 	<select id="queryById" parameterType="java.lang.Integer"
-		resultType="com.spider.modules.business.entity.LinkInfoEntity">
+		resultType="com.meeting.modules.business.entity.LinkInfoEntity">
 		SELECT
 		<include refid="Base_Column_List"/>
 		FROM
@@ -53,7 +53,7 @@
 
 	<!-- 自动化采集显示专用 -->
 	<select id="selectById" parameterType="java.lang.Integer"
-			resultType="com.spider.modules.business.entity.LinkInfoEntity">
+			resultType="com.meeting.modules.business.entity.LinkInfoEntity">
 		SELECT
 		<include refid="Base_Column_List"/>
 		FROM
@@ -67,7 +67,7 @@
 
 	<!-- 根据自定义条件查询数据 -->
 	<select id="queryTerm"
-		parameterType="com.spider.modules.business.entity.LinkInfoEntity"
+		parameterType="com.meeting.modules.business.entity.LinkInfoEntity"
 		resultMap="resultMap">
 		SELECT
 		<include refid="Base_Column_List"/>
@@ -117,7 +117,7 @@
 
 	<!-- 添加数据 -->
 	<insert id="insert"
-		parameterType="com.spider.modules.business.entity.LinkInfoEntity"
+		parameterType="com.meeting.modules.business.entity.LinkInfoEntity"
 		useGeneratedKeys="true" keyProperty="linkId">
 		insert into spider_link_info
 		<trim prefix="(" suffix=")" suffixOverrides=",">
@@ -212,7 +212,7 @@
 
 	<!-- 更新数据 -->
 	<update id="update"
-		parameterType="com.spider.modules.business.entity.LinkInfoEntity">
+		parameterType="com.meeting.modules.business.entity.LinkInfoEntity">
 		UPDATE spider_link_info
 		<set>
 			<if test="system != null and system.trim() != ''">

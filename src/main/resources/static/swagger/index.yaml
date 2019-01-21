@@ -2,9 +2,9 @@ swagger: '2.0'
 info:
   description: spider是一个集业务系统和爬虫工具一体的平台框架
   version: 1.0.0
-  title: spider
+  title: meeting
 
-basePath: /spider
+basePath: /meeting
 
 schemes:
   - http

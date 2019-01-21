@@ -2,11 +2,11 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.spider</groupId>
-    <artifactId>spider</artifactId>
+    <groupId>com.meeting</groupId>
+    <artifactId>meeting</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
-    <description>spider</description>
+    <description>meeting</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -289,27 +289,6 @@
                     <skipTests>true</skipTests>
                 </configuration>
             </plugin>
-            <!--<plugin>-->
-                <!--<groupId>org.codehaus.mojo</groupId>-->
-                <!--<artifactId>wagon-maven-plugin</artifactId>-->
-                <!--<version>1.0</version>-->
-                <!--<configuration>-->
-                    <!--<fromFile>target/${pack-name}</fromFile>-->
-                    <!--<url><![CDATA[scp://${remote-username}:${remote-passwd}@${remote-addr}${service-path}]]></url>-->
-                    <!--<commands>-->
-                        <!--&lt;!&ndash; Kill Old Process &ndash;&gt;-->
-                        <!--<command>pkill -f ${pack-name}</command>-->
-                        <!--<command>rm -f ${service-path}/spider.log</command>-->
-                        <!--&lt;!&ndash; Restart jar package，write result into spider.log &ndash;&gt;-->
-                        <!--<command>-->
-                            <!--<![CDATA[nohup java -jar ${service-path}/${pack-name} &#45;&#45;spring.profiles.active=test > ${service-path}/renren.log 2>&1 & ]]></command>-->
-                        <!--<command><![CDATA[netstat -nptl]]></command>-->
-                        <!--<command><![CDATA[ps -ef | grep java | grep -v grep]]></command>-->
-                    <!--</commands>-->
-                    <!--&lt;!&ndash; 运行命令 mvn clean package wagon:upload-single wagon:sshexec &ndash;&gt;-->
-                    <!--<displayCommandOutputs>true</displayCommandOutputs>-->
-                <!--</configuration>-->
-            <!--</plugin>-->
 
             <plugin>
                 <groupId>com.spotify</groupId>

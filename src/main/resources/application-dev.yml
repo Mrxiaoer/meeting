@@ -3,12 +3,11 @@ spring:
         type: com.alibaba.druid.pool.DruidDataSource
         driverClassName: com.mysql.jdbc.Driver
         druid:
-            url: jdbc:mysql://localhost:3306/spider-data?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
-#            url: jdbc:mysql://localhost:3306/spider?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
-#            url: jdbc:mysql://115.233.227.46:3313/spider-data?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
+            url: jdbc:mysql://localhost:3306/meeting_data?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
+#            url: jdbc:mysql://115.233.227.46:13308/meeting_data?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
             username: root
-            password: 123456
-         #   password: root
+            password: 12345678
+#            password: gov@20130528
             initial-size: 10
             max-active: 100
             min-idle: 10
@@ -34,24 +33,3 @@ spring:
                 wall:
                     config:
                         multi-statement-allow: true
-
-webmagic:
-    selenuim_config: /selenium/config-win-dev.ini
-    #selenuim_config: /selenium/config-lin.ini
-    #selenuim_config: /selenium/config-mac.ini
-
-VcCode:
-    image:
-        #验证码存放位置
-        path: F:/test/spider/vc-image/before/
-        #path: /usr/local/vc-image/before/
-        #处理过的验证码存放位置
-        p-path: F:/test/spider/vc-image/after/
-        #path: /usr/local/vc-image/after/
-
-    chaojiying:
-        username: gov123
-        password: gov123
-        softId: 897003
-    #是否使用OCR识别验证码，准确率较低
-    useOcr: false

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.spider.modules.business.dao.PageInfoDao">
-    <resultMap id="Base_ResultMap" type="com.spider.modules.business.entity.PageInfoEntity">
+<mapper namespace="com.meeting.modules.business.dao.PageInfoDao">
+    <resultMap id="Base_ResultMap" type="com.meeting.modules.business.entity.PageInfoEntity">
         <id column="page_id" property="pageId"/>
         <result column="name_cn" property="nameCn"/>
         <result column="name_en" property="nameEn"/>
@@ -14,7 +14,7 @@
         <result column="state" property="state"/>
     </resultMap>
 	<resultMap
-		type="com.spider.modules.business.entity.PageInfoEntity" id="resultMap">
+            type="com.meeting.modules.business.entity.PageInfoEntity" id="resultMap">
 		<id column="page_id" property="pageId"/>
 		<result column="name_cn" property="nameCn"/>
 		<result column="name_en" property="nameEn"/>
@@ -24,7 +24,7 @@
 		<result column="is_change" property="isChange"/>
 		<result column="result_id" property="resultId"/>
 		<result column="state" property="state"/>
-		<association property="link" javaType="com.spider.modules.business.entity.LinkInfoEntity">
+		<association property="link" javaType="com.meeting.modules.business.entity.LinkInfoEntity">
 			<result column="system" property="system"/>
 			<result column="module" property="module"/>
 			<result column="url" property="url"/>
@@ -113,7 +113,7 @@
 	
 	<!-- 更新数据 -->
 	<update id="update"
-		parameterType="com.spider.modules.business.entity.PageInfoEntity">
+		parameterType="com.meeting.modules.business.entity.PageInfoEntity">
 		update spider_page_info
 		<set>
 			<if test="nameCn != null and nameCn.trim() != ''">
@@ -139,7 +139,7 @@
 	</update>
 	
 	<!-- 插入数据 -->
-	<insert id="insert" parameterType="com.spider.modules.business.entity.PageInfoEntity" useGeneratedKeys="true" keyProperty="pageId">
+	<insert id="insert" parameterType="com.meeting.modules.business.entity.PageInfoEntity" useGeneratedKeys="true" keyProperty="pageId">
 		insert into spider_page_info
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="pageId != null">
