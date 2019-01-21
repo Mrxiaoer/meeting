@@ -50,6 +50,10 @@ public class DailyTaskEntity implements Serializable {
    * 更新时间
    */
   private LocalDateTime modifiedTime;
+  /**
+   * 是否删除（0，未删除；1，已删除）
+   */
+  private Integer isDelete;
 
 
   public Integer getId() {
@@ -114,5 +118,13 @@ public class DailyTaskEntity implements Serializable {
 
   public void setModifiedTime(LocalDateTime modifiedTime) {
     this.modifiedTime = modifiedTime;
+  }
+
+  public Integer getIsDelete() {
+    return isDelete;
+  }
+
+  public void setIsDelete(Integer isDelete) {
+    this.isDelete = isDelete;
   }
 }

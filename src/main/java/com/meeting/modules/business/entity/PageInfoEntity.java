@@ -1,55 +1,50 @@
 package com.meeting.modules.business.entity;
 
-import java.io.Serializable;
-import java.util.Date;
-
-import javax.persistence.Transient;
-
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.io.Serializable;
+import java.util.Date;
+
 @TableName("spide_page_info")
-public class PageInfoEntity implements Serializable{
+public class PageInfoEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     //编码
     @TableId
     private Integer pageId;
-    
+
     //字段中文名
     private String nameCn;
-    
+
     //字段英文名
     private String nameEn;
-    
+
     //资源目录名
     private String informationName;
-    
-    
+
+
     //创建时间
     @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss", locale = "zh", timezone = "GMT+8")
     private Date createTime;
-    
+
     //更新时间
     @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss", locale = "zh", timezone = "GMT+8")
     private Date updateTime;
-    
+
     //是否转化
     private Integer isChange;
-    
+
     //结果表的主键
     private Integer resultId;
-    
+
     //存在状态(1、存在  2、删除)
     @JsonIgnore
     private Integer state;
 
-    @Transient
-    private LinkInfoEntity link;
-    
     public Integer getPageId() {
         return pageId;
     }
@@ -122,12 +117,4 @@ public class PageInfoEntity implements Serializable{
         this.state = state;
     }
 
-    public LinkInfoEntity getLink() {
-        return link;
-    }
-
-    public void setLink(LinkInfoEntity link) {
-        this.link = link;
-    }
-    
 }
