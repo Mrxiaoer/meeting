@@ -24,11 +24,6 @@
 		<result column="is_change" property="isChange"/>
 		<result column="result_id" property="resultId"/>
 		<result column="state" property="state"/>
-		<association property="link" javaType="com.meeting.modules.business.entity.LinkInfoEntity">
-			<result column="system" property="system"/>
-			<result column="module" property="module"/>
-			<result column="url" property="url"/>
-		</association>
 	</resultMap>
 	
 	<sql id="Base_Column_List">
