@@ -3,11 +3,11 @@ spring:
         type: com.alibaba.druid.pool.DruidDataSource
         driverClassName: com.mysql.jdbc.Driver
         druid:
-            url: jdbc:mysql://localhost:3306/meeting_data?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
-#            url: jdbc:mysql://115.233.227.46:13308/meeting_data?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
+#            url: jdbc:mysql://localhost:3306/meeting_data?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
+            url: jdbc:mysql://115.233.227.46:13308/meeting_data?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
             username: root
-            password: 12345678
-#            password: gov@20130528
+#            password: 12345678
+            password: gov@20130528
             initial-size: 10
             max-active: 100
             min-idle: 10
