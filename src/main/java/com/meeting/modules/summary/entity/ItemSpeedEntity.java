@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Data
 @TableName("met_item_speed")
-public class ItemSpeed implements Serializable {
+public class ItemSpeedEntity implements Serializable {
 
     /**
      * 主键

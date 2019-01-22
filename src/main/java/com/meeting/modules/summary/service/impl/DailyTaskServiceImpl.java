@@ -1,5 +1,6 @@
 package com.meeting.modules.summary.service.impl;
 
+import com.meeting.modules.summary.service.DailyTaskService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -10,6 +11,6 @@ import org.springframework.stereotype.Service;
  * @Date : 2019-01-21
  */
 @Service
-public class DailyTaskServiceImpl {
+public class DailyTaskServiceImpl implements DailyTaskService {
 
 }
