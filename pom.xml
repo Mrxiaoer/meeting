@@ -44,6 +44,7 @@
         <remote-addr>39.108.85.39:22</remote-addr>
         <remote-username>root</remote-username>
         <remote-passwd>kjq@940602</remote-passwd>
+        <lombok-version>1.18.2</lombok-version>
     </properties>
 
     <dependencies>
@@ -256,6 +257,14 @@
             <artifactId>tess4j</artifactId>
             <version>4.1.0</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok-version}</version>
+            <scope>provided</scope>
+        </dependency>
+
     </dependencies>
 
     <build>

@@ -3,6 +3,7 @@ package com.meeting.modules.summary.entity;
 
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
  * @Email : 806039077@qq.com
  * @Date : 2019-01-21
  */
+@Data
 @TableName("met_daily_task")
 public class DailyTaskEntity implements Serializable {
 
@@ -55,76 +57,4 @@ public class DailyTaskEntity implements Serializable {
    */
   private Integer isDelete;
 
-
-  public Integer getId() {
-    return id;
-  }
-
-  public void setId(Integer id) {
-    this.id = id;
-  }
-
-  public Integer getUserId() {
-    return userId;
-  }
-
-  public void setUserId(Integer userId) {
-    this.userId = userId;
-  }
-
-  public String getTitle() {
-    return title;
-  }
-
-  public void setTitle(String title) {
-    this.title = title;
-  }
-
-  public String getDate() {
-    return date;
-  }
-
-  public void setDate(String date) {
-    this.date = date;
-  }
-
-  public String getYestDaily() {
-    return yestDaily;
-  }
-
-  public void setYestDaily(String yestDaily) {
-    this.yestDaily = yestDaily;
-  }
-
-  public String getTodDaily() {
-    return todDaily;
-  }
-
-  public void setTodDaily(String todDaily) {
-    this.todDaily = todDaily;
-  }
-
-  public LocalDateTime getCreateTime() {
-    return createTime;
-  }
-
-  public void setCreateTime(LocalDateTime createTime) {
-    this.createTime = createTime;
-  }
-
-  public LocalDateTime getModifiedTime() {
-    return modifiedTime;
-  }
-
-  public void setModifiedTime(LocalDateTime modifiedTime) {
-    this.modifiedTime = modifiedTime;
-  }
-
-  public Integer getIsDelete() {
-    return isDelete;
-  }
-
-  public void setIsDelete(Integer isDelete) {
-    this.isDelete = isDelete;
-  }
 }
